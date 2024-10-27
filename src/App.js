@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Route, Router, Routes } from 'react-router-dom';
+
+import Home from './Routes/Home';
+import Contract from './Routes/Contract';
+import Dodge from './Routes/Dodge';
+import Game from './Routes/Game';
+import Ending from './Routes/Ending';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className={styles.App}>
+			<Routes>
+				<Route path="/" element={<Home></Home>}></Route>
+				<Route path="/contract" element={<Contract></Contract>}></Route>
+				<Route path="/dodge" element={<Dodge></Dodge>}></Route>
+				<Route path="/game" element={<Game></Game>}></Route>
+				<Route path="/end" element={<Ending></Ending>}></Route>
+			</Routes>
+		</div>
+	);
 }
 
 export default App;
