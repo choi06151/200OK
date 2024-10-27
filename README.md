@@ -1,3 +1,15 @@
+# 200OK
+
+캡스톤디자인SW : 김동혁 , 나유성 , 유정균 , 최재원
+
+**6팀프로젝트계획서.hwp**
+: 프로젝트 계획서입니다. 프로젝트의 자세한 설명이 들어가 있습니다.
+
+**6팀프로젝트계획서ppt.pdf**
+: 프로젝트 계획서의 내용이 담긴 발표용 ppt 입니다.
+
+발표링크: https://www.miricanvas.com/v/13qm5dl
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
