@@ -10,6 +10,8 @@
 
 발표링크: https://www.miricanvas.com/v/13qm5dl
 
+백엔드 깃허브 링크 :https://github.com/choi06151/200OK_BackEnd.git
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
