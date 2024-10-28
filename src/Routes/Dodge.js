@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
-//import styles from '../Css/Dodge.module.css'; // 필요한 경우 CSS 파일 추가
 
 const Dodge = () => {
     const [game, setGame] = useState(null);
     const [hp, setHp] = useState(5);
+    const [timeLeft, setTimeLeft] = useState(30);
     const [gameStarted, setGameStarted] = useState(false);
+    const [timerEvent, setTimerEvent] = useState(null);
 
     useEffect(() => {
         const config = {
@@ -32,21 +33,29 @@ const Dodge = () => {
 
         return () => {
             gameInstance.destroy(true);
+            if (timerEvent) {
+                timerEvent.remove();
+            }
         };
     }, []);
 
     const preload = function () {
-        this.load.image('player', 'assets/dog.png'); // 플레이어 이미지
-        this.load.image('bullet', 'assets/trash.png'); // 총알 이미지
-        this.load.image('background', 'assets/galaxy.avif'); // 배경 이미지
+        this.load.image('player', 'dog.png');
+        this.load.image('bullet', 'trash.png');
+        this.load.image('background', 'galaxy.png');
+        this.load.image('box', 'box.png');
     };
 
     const create = function () {
-        this.background = this.add.image(400, 300, 'background').setOrigin(0.5, 0.5);
-        this.player = this.physics.add.image(400, 300, 'player').setCollideWorldBounds(true);
+        this.background1 = this.add.image(400, 300, 'background').setOrigin(0.5, 0.5);
+        this.background2 = this.add.image(400, 900, 'background').setOrigin(0.5, 0.5);
+
+        this.player = this.physics.add.image(400, 300, 'player').setCollideWorldBounds(true).setScale(0.05);
         this.player.setDrag(100);
         this.bullets = this.physics.add.group();
+        this.boxes = this.physics.add.group();
 
+		this.input.setDefaultCursor('none');
         this.input.on('pointermove', (pointer) => {
             this.player.setPosition(pointer.x, pointer.y);
         });
@@ -59,11 +68,20 @@ const Dodge = () => {
         });
 
         this.physics.add.collider(this.player, this.bullets, hitBullet, null, this);
+
+        this.physics.add.overlap(this.boxes, this.bullets, null, null, this);
+
+        // 박스가 바닥에 닿으면 제거
+        this.physics.add.collider(this.boxes, this.physics.world.bounds.bottom, (box) => {
+            box.destroy();
+        });
+
+        startGame.call(this);
     };
 
     const createBullet = function () {
         const sides = ['top', 'left', 'right', 'bottom'];
-        const bulletCount = Phaser.Math.Between(1, 5);
+        const bulletCount = Phaser.Math.Between(1, 2);
 
         for (let i = 0; i < bulletCount; i++) {
             const side = Phaser.Math.RND.pick(sides);
@@ -89,15 +107,9 @@ const Dodge = () => {
             }
 
             const bullet = this.bullets.create(x, y, 'bullet');
-            bullet.setScale(0.5);
+            bullet.setScale(0.02);
             const angle = Phaser.Math.Angle.Between(x, y, this.player.x, this.player.y);
-            bullet.setVelocity(Math.cos(angle) * 200, Math.sin(angle) * 200);
-
-            this.time.addEvent({
-                delay: 5000,
-                callback: () => bullet.destroy(),
-                callbackScope: this,
-            });
+            bullet.setVelocity(Math.cos(angle) * 100, Math.sin(angle) * 100);
         }
     };
 
@@ -106,37 +118,102 @@ const Dodge = () => {
             const newHp = prevHp - 1;
             if (newHp <= 0) {
                 endGame.call(this);
+            } else {
+                dropBox.call(this);
             }
             return newHp;
         });
         bullet.destroy();
     };
 
+    const dropBox = function () {
+        const box = this.boxes.create(this.player.x, this.player.y, 'box');
+        box.setScale(0.03);
+        box.setGravityY(200);
+      
+    
+    };
+
     const endGame = function () {
         this.physics.pause();
         setGameStarted(false);
-    };
-
-    const update = function () {
-        if (gameStarted) {
-            // 추가적인 업데이트 로직이 필요하면 여기에 작성
+        this.bullets.clear(true, true);
+        this.boxes.clear(true, true);
+        if (timerEvent) {
+            timerEvent.remove();
         }
     };
 
-    const startGame = () => {
+    const update = function () {
+        this.background1.y += 5;
+        this.background2.y += 5;
+
+        if (this.background1.y > 600) {
+            this.background1.y = this.background2.y - 600;
+        }
+        if (this.background2.y > 600) {
+            this.background2.y = this.background1.y - 600;
+        }
+    };
+
+    const startGame = function () {
         setGameStarted(true);
         setHp(5);
-        this.player.setPosition(400, 300); // 플레이어 초기 위치 설정
+        setTimeLeft(30);
+
+        const event = this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                setTimeLeft(prevTime => {
+                    if (prevTime <= 1) {
+                        endGame.call(this);
+                        return 0;
+                    }
+                    return prevTime - 1;
+                });
+            },
+            loop: true,
+        });
+        setTimerEvent(event);
     };
 
     return (
-        <div>
-            <div id="phaser-game-container" style={{ width: '800px', height: '600px' }}></div>
-            <div style={{ color: 'white' }}>
-                HP: {hp}
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            backgroundColor: 'green'
+        }}>
+            <div id="phaser-game-container" style={{ width: '800px', height: '600px', position: 'relative' }}>
+                <div style={{
+                    position: 'absolute',
+                    top: 16,
+                    left: 16,
+                    color: 'white',
+                    zIndex: 10,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '5px',
+                    borderRadius: '5px',
+					cursor:'none'
+                }}>
+                    HP: {hp} | Time Left: {timeLeft}
+                </div>
+                {hp <= 0 && (
+                    <div style={{
+                        position: 'absolute',
+                        top: 50,
+                        left: 16,
+                        color: 'red',
+                        zIndex: 10,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        padding: '5px',
+                        borderRadius: '5px'
+                    }}>
+                        게임 오버!
+                    </div>
+                )}
             </div>
-            {!gameStarted && <button onClick={startGame}>게임 시작</button>}
-            {hp <= 0 && <div style={{ color: 'red' }}>게임 오버!</div>}
         </div>
     );
 };
