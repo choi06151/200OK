@@ -1,10 +1,22 @@
 body {
-  background-image: url('/public/jungle.jpg'); /* public 폴더에서 이미지 참조 */
-  background-size: cover; /* 배경 이미지를 완전히 채우도록 설정 */
-  background-position: center; /* 중앙 정렬 */
+  background-image: url('/public/jungle.jpg');
+  /* public 폴더에서 이미지 참조 */
+  background-size: cover;
+  /* 배경 이미지를 완전히 채우도록 설정 */
+  background-position: center;
+  /* 중앙 정렬 */
   margin: 0;
   height: 100vh;
   overflow: hidden;
+
+}
+
+.shadow {
+  background-color: rgba(0, 0, 0, 0.2);
+  /* 어두운 배경색 (검정색, 50% 투명도) */
+  z-index: 1;
+  /* 다른 요소 위에 보이도록 설정 */
+  align-content: center;
 }
 
 /* 콘텐츠 스타일 */
@@ -13,6 +25,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px); /* 헤더 높이만큼 제외 */
-  background-color: transparent; /* 콘텐츠 배경을 투명하게 설정 */
+  height: calc(100vh - 60px);
+  /* 헤더 높이만큼 제외 */
+  background-color: transparent;
+  /* 콘텐츠 배경을 투명하게 설정 */
 }

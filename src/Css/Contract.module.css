@@ -1,0 +1,230 @@
+.contractButton {
+  background-color: #f5f5f5;
+  /* 연한 회색 배경 */
+  color: #333;
+  /* 어두운 텍스트 색상 */
+  border: 1px solid #ddd;
+  /* 얇은 테두리 */
+  border-radius: 5px;
+  /* 둥근 모서리 */
+  padding: 10px 20px;
+  /* 버튼 패딩 */
+  font-size: 16px;
+  /* 폰트 크기 */
+  font-family: 'Times New Roman', serif;
+  /* 계약서 느낌의 서체 */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  /* 약간의 그림자 효과 */
+  cursor: pointer;
+  /* 클릭 가능한 커서 */
+  transition: background-color 0.3s, transform 0.2s;
+  /* 트랜지션 효과 */
+
+  margin-top: 3px;
+}
+
+.contractButton:hover {
+  background-color: #e0e0e0;
+  /* 호버 시 배경색 변화 */
+  transform: translateY(-2px);
+  /* 살짝 위로 올라가는 효과 */
+}
+
+.contractButton:active {
+  transform: translateY(2px);
+  /* 클릭 시 아래로 눌리는 효과 */
+}
+
+
+
+.portfoliocard {
+  position: relative;
+  height: 750px;
+  width: 600px;
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.1),
+    0px 2px 6px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  margin: 10% auto;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.portfoliocard .coverphoto {
+  width: 100%;
+  height: 40%;
+  background-size: cover;
+  background-image: url('/public/delivery.jpg');
+  background-position: center center;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0px 3px 20px rgba(255, 255, 255, 0.3),
+    1px 0px 2px rgba(255, 255, 255, 0.7);
+  z-index: 99;
+}
+
+
+.portfoliocard .right_col {
+  float: left;
+  height: 70%;
+}
+
+
+.portfoliocard .right_col {
+  width: 100%;
+  background: rgba(245, 245, 245, 1);
+  border-left: 1px solid rgba(230, 230, 230, 1);
+  box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.7);
+  margin-left: -1px;
+  border-bottom-right-radius: 5px;
+
+}
+
+.portfoliocard .right_col h2.name {
+  font-size: 30px;
+  font-weight: 300;
+  color: rgba(30, 30, 30, 1);
+  padding: 0;
+  margin: 0 auto;
+  margin-top: 5%;
+}
+
+.portfoliocard .right_col h3.location {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(170, 170, 170, 1);
+  padding: 0;
+  margin: -5px 10px 10px 30px;
+}
+
+.portfoliocard .right_col ul.contact_information {
+  margin-top: 20px;
+  padding-left: 30px;
+  list-style-type: none;
+  text-align: center;
+  align-items: center;
+  padding: 0;
+  /* 기본 여백 제거 */
+  list-style-type: none;
+  /* 기본 리스트 스타일 제거 */
+  display: flex;
+  /* Flexbox 사용 */
+  flex-direction: column;
+  /* 세로 방향으로 정렬 */
+  align-items: center;
+  /* 가로 방향으로 중앙 정렬 */
+  justify-content: center;
+  /* 세로 방향으로 중앙 정렬 */
+}
+
+.portfoliocard ul.contact_information li {
+  height: 25px;
+  width: 180px;
+  line-height: 25px;
+  font-weight: 300;
+  font-size: 15px;
+  color: rgba(140, 140, 140, 1);
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+  padding: 5px 0px;
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.6);
+  cursor: default;
+
+}
+
+.portfoliocard ul.contact_information li:before {
+  content: "";
+  width: 25px;
+  height: 25px;
+  display: block;
+  float: left;
+  background-position: center;
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+  opacity: 0.7;
+}
+
+.portfoliocard ul.contact_information li:hover:before {
+  opacity: 1;
+}
+
+
+.genderToggle {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.genderToggle:hover {
+  background-color: #e0e0e0;
+}
+
+.inputGroup {
+  margin-bottom: 15px;
+  /* 각 입력 그룹 사이에 여백 추가 */
+}
+
+.textField {
+  margin-left: 10px;
+  margin-top: 3%;
+  /* 이름 입력 필드와 레이블 사이의 여백 */
+  padding: 5px;
+  width: 7%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.genderToggle {
+  margin-left: 10px;
+  /* 성별 버튼과 레이블 사이의 여백 */
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.signatureCanvas {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  /* 서명 캔버스와 레이블 사이의 여백 */
+}
+
+.signatureCanvas {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  /* 서명 캔버스와 레이블 사이의 여백 */
+  height: 100px;
+  /* 캔버스의 높이 설정 */
+}
+
+
+
+/*not using properties*/
+
+/*
+}
+
+.portfoliocard .profile_picture {
+  width: 110px;
+  height: 110px;
+  background: rgba(255, 255, 255, 1);
+  position: absolute;
+  top: 65px;
+  left: 40px;
+  border-radius: 100%;
+  background-image: url('http://cache.spreadshirt.net/Public/Common/images/profile-pic-placeholder_130x130.png');
+  background-size: 100% 100%;
+  padding: 7px;
+  border: 4px solid rgba(255, 255, 255, 1)
+}
+
+
+*/
