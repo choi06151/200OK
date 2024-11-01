@@ -1,26 +1,27 @@
-import styles from './App.module.css';
-
-
-import { Route, Router, Routes } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
 import Home from './Routes/Home';
-import Contract from './Routes/Contract';
 import Dodge from './Routes/Dodge';
 import Game from './Routes/Game';
 import Ending from './Routes/Ending';
+import styles from './App.module.css';
 
 function App() {
-	return (
-		<div className={styles.App}>
-			<Routes>
-				<Route path="/" element={<Home></Home>}></Route>
-				<Route path="/contract" element={<Contract></Contract>}></Route>
-				<Route path="/dodge" element={<Dodge></Dodge>}></Route>
-				<Route path="/game" element={<Game></Game>}></Route>
-				<Route path="/end" element={<Ending></Ending>}></Route>
-			</Routes>
-		</div>
-	);
+  const location = useLocation();
+
+  return (
+    <div className={styles.App}>
+      <header className={styles.Header}>
+        <div className={styles.WhiteBar}></div>
+      </header>
+
+      <main>
+        {location.pathname === '/' && <Home />}
+        {location.pathname === '/dodge' && <Dodge />}
+        {location.pathname === '/game' && <Game />}
+        {location.pathname === '/end' && <Ending />}
+      </main>
+    </div>
+  );
 }
 
 export default App;

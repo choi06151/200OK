@@ -14,6 +14,10 @@ const Dodge = () => {
             type: Phaser.AUTO,
             width: 800,
             height: 600,
+            scale: {
+                mode: Phaser.Scale.ENVELOP, // 화면을 완전히 채우도록 조정
+                autoCenter: Phaser.Scale.CENTER_BOTH, // 화면 중앙에 배치
+            },
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -29,8 +33,11 @@ const Dodge = () => {
             parent: 'phaser-game-container',
         };
 
+        
         const gameInstance = new Phaser.Game(config);
         setGame(gameInstance);
+
+        
 
         return () => {
             gameInstance.destroy(true);
@@ -104,7 +111,7 @@ const Dodge = () => {
         });
     
         // 플레이어 생성 (화면 밖에 위치)
-        this.player = this.physics.add.image(-50, 300, 'player').setCollideWorldBounds(true).setScale(0.05).setAlpha(0);
+        this.player = this.physics.add.image(-50, 300, 'player').setCollideWorldBounds(true).setScale(0.03).setAlpha(0);
         this.player.setDrag(100);
         this.bullets = this.physics.add.group();
         this.boxes = this.physics.add.group();
@@ -128,7 +135,7 @@ const Dodge = () => {
                 const check = this.add.image(targetX, targetY, 'check').setOrigin(0.5, 0.5).setScale(0);
                 this.tweens.add({
                     targets: check,
-                    scale: 0.01, // 스케일을 1로 증가
+                    scale: 0.02, // 스케일을 1로 증가
                     duration: 250, // 0.25초 동안 증가
                     ease: 'Linear',
                     yoyo: true, // 다시 줄어들게
@@ -379,6 +386,7 @@ const Dodge = () => {
         });
         setTimerEvent(event);
     };
+    
     return (
         <div style={{
             display: 'flex',
@@ -387,7 +395,7 @@ const Dodge = () => {
             height: '100vh',
             backgroundColor: 'green'
         }}>
-            <div id="phaser-game-container" style={{ width: '800px', height: '600px', position: 'relative' }}>
+             <div id="phaser-game-container" style={{ width: '100%', height: '100%', position: 'relative' }}>
                 <div style={{
                     position: 'absolute',
                     top: 16,

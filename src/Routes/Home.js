@@ -1,47 +1,96 @@
+import { useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from '../Css/Home.module.css';
-import Button from 'react-bootstrap/Button';
 
 function Home() {
-	const navigate = useNavigate();
+  const scrollRef = useRef(null);
+  const navigate = useNavigate();
+  const [isFading, setIsFading] = useState(false); // 페이드 상태
 
-	return (
-		<div className={styles.div}>
-			<h2>홈화면임</h2>
-			<div
-				style={{
-					width: '60%',
-					margin: '0 auto',
-					height: '40vh',
-					border: '1px solid red',
-				}}
-			>
-				로고임
-			</div>
-			<div>
-				<h4 style={{ color: 'white' }}>
-					2XXX년, 인류는 화성으로의 진출에 성공한다. 이제는 지구와 화성 간
-					왕복이 당연해진 시대. 그에 따라 ‘스페이스 딜리버리’ 서비스가 성행하게
-					된다. ‘스페이스 딜리버리’, 화성에 원하는 배달도 언제든 보내주는 진짜
-					로켓배송! 당신은 스페이스 딜리버리 서비스의 우수 비행사! 오늘도
-					어김없이 화성으로의 로켓 배송을 떠나는 중, 예상치 못한 결함으로
-					비상착륙을 하게 된다. 불행히도 착륙한 곳은 아마존의 깊은 밀림 속. 이제
-					당신은 제한된 자원으로 생존을 위해 고군분투해야 한다.
-				</h4>
-			</div>
+  const handleButtonClick = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-			<div>
-				<Button
-					variant="primary"
-					onClick={() => {
-						navigate('/contract');
-					}}
-				>
-					취직하기
-				</Button>
-			</div>
-		</div>
-	);
+  const changeGender = () => {
+    // 성별 변경 로직 (필요시 추가)
+  };
+
+  const handleToDodge = () => {
+    setIsFading(true); // 페이드 상태를 true로 설정
+    setTimeout(() => {
+      navigate('/dodge'); // 2초 후에 페이지 이동
+    }, 2000);
+  };
+
+  return (
+    <div className={styles.div}>
+      {/* 상단 헤더와 로고 */}
+      <header className={styles.Header}>
+        <div className={styles.Logo}>
+          <img src="logo.png" alt="게임 로고" />
+          <h1>게임 이름</h1>
+        </div>
+      </header>
+
+      <h2>홈화면입니다.</h2>
+      <div style={{ width: '60%', margin: '0 auto', height: '40vh', border: '1px solid red' }}>
+        로고임
+      </div>
+      <div>
+        <h4 style={{ color: 'white' }}>
+          2XXX년, 인류는 화성으로의 진출에 성공한다. 이제는 지구와 화성 간 왕복이 당연해진 시대...
+        </h4>
+      </div>
+      <Button variant="primary" onClick={handleButtonClick}>
+        취직하기
+      </Button>
+
+      {/* 계약 섹션 */}
+      <div ref={scrollRef} style={{ marginTop: '100vh', color: 'white' }}>
+        <h2>계약 화면입니다.</h2>
+        <div style={{ width: '60%', margin: '0 auto', height: '40vh', border: '1px solid red' }}>
+          <h2>로고입니다.</h2>
+        </div>
+        <div className="mt-3 mb-3">
+          성별: <Button variant="light" onClick={changeGender}>남</Button>
+        </div>
+        <Button onClick={handleToDodge}>To Dodge</Button>
+      </div>
+
+      {isFading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'black',
+          opacity: 0,
+          transition: 'opacity 2s ease',
+          zIndex: 1000,
+          animation: 'fade 2s forwards'
+        }} />
+      )}
+
+      <style>
+        {`
+          @keyframes fade {
+            to {
+              opacity: 1;
+            }
+          }
+          .Header {
+            background-image: url('your-background-image.jpg'); /* 이미지 파일 경로 */
+            background-size: cover; /* 배경 이미지를 완전히 채우도록 설정 */
+            background-position: center; /* 배경 이미지 위치 중앙 */
+          }
+        `}
+      </style>
+    </div>
+  );
 }
 
 export default Home;
