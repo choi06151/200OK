@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import mainstyle from '../App.module.css';
 import styles from '../Css/Home.module.css';
 import Contract from '../Components/Contract';
 
@@ -18,7 +19,7 @@ function Home() {
 	};
 
 	return (
-		<div className={styles.div}>
+		<div className={mainstyle.div}>
 			<div style={{ margin: '0 auto' }}>
 				<img className={styles.logo} src="amazonLogo2.png" alt="게임 로고" />
 			</div>
