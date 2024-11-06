@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Phaser from 'phaser';
-import mainstyle from '../App.module.css';
 import styles from '../Css/Game.module.css';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import mainstyle from '../App.module.css';
 
 function Game({ water, food }) {
   const navigate = useNavigate();
   const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
+
+  let [choice, setChoice] = useState();
+  let [content, setContent] = useState();
 
   useEffect(() => {
     // Phaser 게임 인스턴스를 설정하고 배경 음악을 재생하는 설정
@@ -71,41 +72,83 @@ function Game({ water, food }) {
   console.log('Food:', food);
 
   return (
-    <div className={styles.div}>
-      <h2>게임 화면임</h2>
+    <>
+      <div className={mainstyle.div}>
+        <div className={styles.imgdiv}>
+          {' '}
+          이미지 영역
+          <img alt="img"></img>
+        </div>
+        <div className={styles.textdiv}>{content}</div>
 
-      {/* 버튼 1, 2, 3 클릭 시 사운드 효과 및 페이지 이동 */}
-      <button className="btn btn-info me-2" onClick={handleButtonClick}>
-        btn 1
-      </button>
-      <button className="btn btn-info me-2" onClick={handleButtonClick}>
-        btn 2
-      </button>
-      <button className="btn btn-info" onClick={handleButtonClick}>
-        btn 3
-      </button>
+        {/* 선택지 영역 */}
+        <div className={styles.choiceContainer}>
+          <div
+            className={styles.choice}
+            onClick={() => {
+              setChoice(1);
+              handleButtonClick();
+            }}
+          >
+            <input type="radio" id="choice1" name="choices" defaultChecked />
+            <label htmlFor="choice1">선택지 1: 가까운 강에서 물을 찾는다</label>
+          </div>
+          <div
+            className={styles.choice}
+            onClick={() => {
+              setChoice(2);
+              handleButtonClick();
+            }}
+          >
+            <input type="radio" id="choice2" name="choices" />
+            <label htmlFor="choice2">
+              선택지 2: 주변에 먹을 만한 과일을 찾아본다
+            </label>
+          </div>
+          <div
+            className={styles.choice}
+            onClick={() => {
+              setChoice(3);
+              handleButtonClick();
+            }}
+          >
+            <input type="radio" id="choice3" name="choices" />
+            <label htmlFor="choice3">선택지 3: 쉬면서 체력을 회복한다</label>
+          </div>
+        </div>
 
-      <div
-        style={{
-          marginTop: '60%',
-          marginLeft: '60%',
-          border: '1px solid green',
-        }}
-      >
-        <h2>엔딩보기</h2>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            navigate('/end');
-          }}
-        >
-          To ending
-        </button>
+        <div className={styles.userdiv}>
+          <div className={styles.statusdiv}>
+            <img src="/water.png" alt="Water" className={styles.statusImage} />
+            물: 5
+            <img src="/food.png" alt="Food" className={styles.statusImage} />
+            <p>식량: 3</p>
+          </div>
+          <div className={styles.choicediv}>
+            <button
+              className={`${styles.submitButton}`}
+              onClick={() => {
+                // 서버 전송 로직 작성
+                console.log('선택지를 서버에 전송합니다.');
+              }}
+            >
+              선택
+            </button>
+            <button
+              className={styles.submitButton}
+              onClick={() => {
+                navigate('/end');
+              }}
+            >
+              엔딩보기
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* 클릭 효과음 오디오 요소 */}
       <audio ref={clickSoundRef} src="Sounds/click-button.mp3" />
-    </div>
+    </>
   );
 }
 
