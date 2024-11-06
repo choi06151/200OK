@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const Dodge = ({ water, food, timeLeft, setWater, setFood, setTimeLeft }) => {
+const Dodge = () => {
   const [game, setGame] = useState(null);
+
+  let [water, setWater] = useState(5);
+  let [food, setFood] = useState(5);
+  let [timeLeft, setTimeLeft] = useState(30);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [timerEvent, setTimerEvent] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const config = {
       type: Phaser.AUTO,

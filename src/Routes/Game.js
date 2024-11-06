@@ -76,10 +76,12 @@ function Game({ water, food }) {
       <div className={mainstyle.div}>
         <div className={styles.imgdiv}>
           {' '}
-          이미지 영역
-          <img alt="img"></img>
+          <img alt="img" className={styles.img} src="/jungleexample.jpg"></img>
         </div>
-        <div className={styles.textdiv}>{content}</div>
+        <div className={styles.textdiv}>
+          정글 한가운데, 습하고 숨 막히는 더위 속에서 날카로운 야생의 소리가
+          사방에서 들려온다. 은신처를 찾는 것이 급선무다.
+        </div>
 
         {/* 선택지 영역 */}
         <div className={styles.choiceContainer}>
@@ -87,7 +89,6 @@ function Game({ water, food }) {
             className={styles.choice}
             onClick={() => {
               setChoice(1);
-              handleButtonClick();
             }}
           >
             <input type="radio" id="choice1" name="choices" defaultChecked />
@@ -97,7 +98,6 @@ function Game({ water, food }) {
             className={styles.choice}
             onClick={() => {
               setChoice(2);
-              handleButtonClick();
             }}
           >
             <input type="radio" id="choice2" name="choices" />
@@ -109,7 +109,6 @@ function Game({ water, food }) {
             className={styles.choice}
             onClick={() => {
               setChoice(3);
-              handleButtonClick();
             }}
           >
             <input type="radio" id="choice3" name="choices" />
@@ -119,7 +118,12 @@ function Game({ water, food }) {
 
         <div className={styles.userdiv}>
           <div className={styles.statusdiv}>
-            <img src="/water.png" alt="Water" className={styles.statusImage} />
+            <img
+              src="/water.png"
+              alt="Water"
+              className={styles.statusImage}
+              style={{ border: '1px solid green' }}
+            />
             물: 5
             <img src="/food.png" alt="Food" className={styles.statusImage} />
             <p>식량: 3</p>
@@ -128,20 +132,21 @@ function Game({ water, food }) {
             <button
               className={`${styles.submitButton}`}
               onClick={() => {
-                // 서버 전송 로직 작성
+                handleButtonClick();
+
                 console.log('선택지를 서버에 전송합니다.');
               }}
             >
               선택
             </button>
-            <button
+            {/* <button
               className={styles.submitButton}
               onClick={() => {
                 navigate('/end');
               }}
             >
               엔딩보기
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
