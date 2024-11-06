@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import mainstyle from '../App.module.css';
 import styles from '../Css/Home.module.css';
 import Contract from '../Components/Contract';
 
@@ -16,7 +17,7 @@ function Home() {
     if (clickSoundRef.current) {
       clickSoundRef.current.play(); // 버튼 클릭 시 사운드 재생
     }
-    
+
     setModal(!modal);
     console.log(modal);
   };
@@ -26,7 +27,7 @@ function Home() {
   };
 
   return (
-    <div className={styles.div}>
+    <div className={mainstyle.div}>
       <div style={{ margin: '0 auto' }}>
         <img className={styles.logo} src="amazonLogo2.png" alt="게임 로고" />
       </div>
@@ -43,9 +44,6 @@ function Home() {
       <div className={`${styles.modal} ${modal ? styles.show : ''}`}>
         <Contract />
       </div>
-
-      {/* 클릭 사운드 오디오 요소 */}
-      <audio ref={clickSoundRef} src="Sounds/click-button.mp3" />
     </div>
   );
 }
