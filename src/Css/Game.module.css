@@ -9,7 +9,7 @@
 .textdiv {
   width: 80%;
   /* 너비 */
-  height: auto;
+  height: 10vh;
   /* 높이를 자동으로 설정 */
   margin: 0 auto;
   /* 가운데 정렬 */
@@ -32,7 +32,6 @@
   line-height: 1.5;
   /* 줄 간격 조정 */
 }
-
 
 .choiceContainer {
   display: flex;
