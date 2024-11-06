@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
 import { useNavigate } from 'react-router-dom';
 
-const Dodge = () => {
+const Dodge = ({ water, food, timeLeft, setWater, setFood, setTimeLeft }) => {
     const [game, setGame] = useState(null);
-    const [hp, setHp] = useState(5);
-    const [timeLeft, setTimeLeft] = useState(30);
+
     const [gameStarted, setGameStarted] = useState(false);
     const [timerEvent, setTimerEvent] = useState(null);
     const navigate = useNavigate();
@@ -48,15 +47,23 @@ const Dodge = () => {
     }, []);
 
     const preload = function () {
-        this.load.image('player', 'dog.png');
+        this.load.image('player', 'player.png');
         this.load.image('bullet', 'trash.png');
         this.load.image('background', 'galaxy.png');
         this.load.image('World', 'World.jpeg');
         this.load.image('box', 'box.png');
+        this.load.image('water', 'water.png');
+        this.load.image('food', 'food.png');
         this.load.image('flame', 'BulletEffect.png');
         this.load.image('parachute', 'parachute.png'); // 낙하산 이미지 로드
         this.load.image('cursor', 'cursor.png');
         this.load.image('check', 'check.png');
+        this.load.audio('hitSound', 'Sounds/HitPlayer.mp3'); 
+        this.load.audio('Click', 'Sounds/Click.mp3');
+        this.load.audio('backgroundMusic', 'Sounds/background-music.mp3');
+        this.load.audio('PlayerComing', 'Sounds/PlayerComing.mp3');
+        this.load.audio('PlayerDie', 'Sounds/playerdie.mp3');
+        this.load.audio('PlayerFall', 'Sounds/playerfall.mp3');
     };
 
     const create = function () {
@@ -67,6 +74,8 @@ const Dodge = () => {
         this.blackScreen = this.add.rectangle(400, 300, 800, 600, 0x000000).setOrigin(0.5, 0.5);
         this.blackScreen.setAlpha(1); // 처음에는 완전 불투명
     
+        this.backgroundMusic = this.sound.add('backgroundMusic', { loop: true }); 
+
         // 블랙 스크린 페이드 아웃 애니메이션
         this.tweens.add({
             targets: this.blackScreen,
@@ -80,6 +89,8 @@ const Dodge = () => {
                 
                 // 카메라 줌 인
                 this.cameras.main.setZoom(2); // 초기 줌 인
+                const Sound = this.sound.add('PlayerComing');  // 로드한 'hitSound'를 불러오기
+             
                 this.tweens.add({
                     targets: this.player,
                     alpha: 1, // 애니메이션 동안 알파를 1로 변경하여 보이게 함
@@ -87,12 +98,15 @@ const Dodge = () => {
                     ease: 'Power2',
                     onComplete: () => {
                         // 중앙으로 이동
+
+                        Sound.play();  // 효과음 재생
                         this.tweens.add({
                             targets: this.player,
                             x: 400, // 중앙으로 이동
                             duration: 1000, // 애니메이션 지속 시간
                             ease: 'Power2',
                             onComplete: () => {
+                                
                                 // 카메라 줌 아웃
                                 this.tweens.add({
                                     targets: this.cameras.main,
@@ -111,11 +125,12 @@ const Dodge = () => {
         });
     
         // 플레이어 생성 (화면 밖에 위치)
-        this.player = this.physics.add.image(-50, 300, 'player').setCollideWorldBounds(true).setScale(0.03).setAlpha(0);
+        this.player = this.physics.add.image(-50, 300, 'player').setCollideWorldBounds(true).setScale(0.06).setAlpha(0);
         this.player.setDrag(100);
         this.bullets = this.physics.add.group();
         this.boxes = this.physics.add.group();
-    
+        this.waters=this.physics.add.group();
+        this.foods=this.physics.add.group();
         this.cursor = this.add.image(0, 0, 'cursor').setOrigin(0.5, 0.5).setScale(0.05); // 크기 조정
         this.cursor.setDepth(1); // 커서를 다른 요소들 위에 표시
         
@@ -128,10 +143,17 @@ const Dodge = () => {
 
         this.input.on('pointerdown', (pointer) => {
             if (pointer.leftButtonDown()) {
+                const hitSound = this.sound.add('Click');  // 로드한 'hitSound'를 불러오기
+                hitSound.play();  // 효과음 재생
                 const targetX = pointer.x;
                 const targetY = pointer.y;
                 this.physics.moveTo(this.player, targetX, targetY, 200); // 속도 설정 (200)
 
+                // 목표 지점까지의 각도 계산
+                const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, targetX, targetY);
+        
+                // 플레이어의 회전값을 목표 지점의 각도에 맞게 설정 (rad -> deg)
+                this.player.rotation = angle;
                 const check = this.add.image(targetX, targetY, 'check').setOrigin(0.5, 0.5).setScale(0);
                 this.tweens.add({
                     targets: check,
@@ -150,6 +172,14 @@ const Dodge = () => {
         this.physics.add.collider(this.player, this.bullets, hitBullet, null, this);
         this.physics.add.overlap(this.boxes, this.bullets, null, null, this);
         this.physics.add.collider(this.boxes, this.physics.world.bounds.bottom, (box) => {
+            box.destroy();
+        });
+        this.physics.add.overlap(this.waters, this.bullets, null, null, this);
+        this.physics.add.collider(this.waters, this.physics.world.bounds.bottom, (box) => {
+            box.destroy();
+        });
+        this.physics.add.overlap(this.foods, this.bullets, null, null, this);
+        this.physics.add.collider(this.foods, this.physics.world.bounds.bottom, (box) => {
             box.destroy();
         });
     };
@@ -184,7 +214,7 @@ const Dodge = () => {
             const bullet = this.bullets.create(x, y, 'bullet');
             bullet.setScale(0.02);
             const angle = Phaser.Math.Angle.Between(x, y, this.player.x, this.player.y);
-            bullet.setVelocity(Math.cos(angle) * 100, Math.sin(angle) * 100);
+            bullet.setVelocity(Math.cos(angle) * 90, Math.sin(angle) * 90);
 
             const createFlame = () => {
                 const flame = this.add.image(bullet.x, bullet.y, 'flame').setScale(0.04);
@@ -210,21 +240,61 @@ const Dodge = () => {
         }
     };
 
+  
+
     const hitBullet = function (player, bullet) {
         this.cameras.main.shake(200, 0.02); // 화면 흔들기
+        const hitSound = this.sound.add('hitSound');  // 로드한 'hitSound'를 불러오기
+        hitSound.play();  // 효과음 재생
+      
+        // 랜덤으로 Water 또는 Food 중 하나를 감소시킴
+        const randomChoice = Math.random() < 0.5 ? 'water' : 'food'; // 50% 확률로 Water 또는 Food 선택
+      
+        if (randomChoice === 'water') {
+          setWater(prevWater => {
+            const newWater = prevWater - 1;
+            dropWater.call(this); // 박스 드랍
+            if (newWater <= 0) {
+              // Water가 0 이하로 내려갔을 때 Food도 확인
+              setFood(prevFood => {
+                if (prevFood <= 0) {
+                  this.input.off('pointermove');
+                  endGame.call(this); // Water와 Food 둘 다 0일 때 게임 종료
 
-        setHp(prevHp => {
-            const newHp = prevHp - 1;
-            if (newHp <= 0) {
-                this.input.off('pointermove');
-                endGame.call(this);
-            } else {
-                dropBox.call(this);
+                } else {
+                  // Water가 0 이하일 때 Food가 0 이하가 아니면 Food를 줄임
+                  const newFood = prevFood - 1;
+                  dropFood.call(this); // 박스 드랍
+                  return newFood;
+                } 
+                return prevFood;
+              });
             }
-            return newHp;
-        });
-        bullet.destroy();
-    };
+            return newWater;
+          });
+        } else {
+          setFood(prevFood => {
+            const newFood = prevFood - 1;
+            dropFood.call(this); // 박스 드랍
+            if (newFood <= 0) {
+              // Food가 0 이하로 내려갔을 때 Water도 확인
+              setWater(prevWater => {
+                if (prevWater <= 0) {
+                  this.input.off('pointermove');
+                  endGame.call(this); // Water와 Food 둘 다 0일 때 게임 종료
+                }
+                return prevWater;
+              });
+              dropWater.call(this); // 박스 드랍
+            }
+            return newFood;
+          });
+        }
+      
+        bullet.destroy(); // 총알 제거
+      };
+    
+    
 
     const dropBox = function () {
         const box = this.boxes.create(this.player.x, this.player.y, 'box');
@@ -232,13 +302,29 @@ const Dodge = () => {
         box.setGravityY(200);
     };
 
+    const dropWater = function () {
+        const water = this.waters.create(this.player.x, this.player.y, 'water');
+        water.setScale(0.03);
+        water.setGravityY(200);
+    };
+
+    const dropFood = function () {
+        const food = this.foods.create(this.player.x, this.player.y, 'food');
+        food.setScale(0.03);
+        food.setGravityY(200);
+    };
+
     const endGame = function () {
+        const dieSound = this.sound.add('PlayerDie');  // 로드한 'hitSound'를 불러오기
+        dieSound.play();  // 효과음 재생
         setGameStarted(false);
         this.bullets.clear(true, true);
         this.boxes.clear(true, true);
-
+        this.waters.clear(true, true);
+        this.foods.clear(true, true);
+        this.backgroundMusic.stop(); 
+        
         let initialY = this.player.y;
-
         // 우측 상단으로 이동하는 애니메이션
         this.tweens.add({
             targets: this.player,
@@ -248,6 +334,8 @@ const Dodge = () => {
             ease: 'Power2',
             onComplete: () => {
                 // 아래로 떨어지는 애니메이션 (조금만 떨어지고 멈춤)
+                const fallSound = this.sound.add('PlayerFall');  // 로드한 'hitSound'를 불러오기
+                fallSound.play();  // 효과음 재생
                 this.tweens.add({
                     targets: this.player,
                     y: initialY - 50, // 약간 떨어진 위치로 설정
@@ -309,8 +397,23 @@ const Dodge = () => {
                                     ease: 'Linear', // 선형 애니메이션
                                     onComplete: () => {
                                             
-                                            navigate('/game'); // 검은색 화면이 끝난 후 이동
-                                        // 게임 오버 화면 처리 등 추가 로직
+                                        setWater(prevWater => {
+                                            const newWater = prevWater - 1; // Water 값 업데이트
+                                            setFood(prevFood => {
+                                                const newFood = prevFood - 1; // Food 값 업데이트
+                                                if (newWater <= 0 && newFood <= 0) {
+                                                    this.input.off('pointermove');
+                                                    endGame.call(this); // 게임 종료
+                                                } else {
+                                                    dropBox.call(this); // 박스 드랍
+                                                }
+                        
+                                                // water와 food의 최신 값을 navigate로 전달
+                                                navigate('/game');
+                                                return newFood;
+                                            });
+                                            return newWater;
+                                        });
                                     }
                                 });
                             }
@@ -347,6 +450,7 @@ const Dodge = () => {
     };
 
     const update = function () {
+ 
         this.background1.y += 5;
         this.background2.y += 5;
 
@@ -359,13 +463,17 @@ const Dodge = () => {
     };
 
     const startGame = function () {
+        this.backgroundMusic.play();
         setGameStarted(true);
-        setHp(5);
+        setWater(5);   // Set initial water to 5
+        setFood(5); 
         setTimeLeft(30);
     
+        
+
         // 총알 생성 이벤트
         this.time.addEvent({
-            delay: 200, // 총알 생성 주기
+            delay: 400, // 총알 생성 주기
             callback: createBullet,
             callbackScope: this,
             loop: true,
@@ -407,9 +515,9 @@ const Dodge = () => {
                     borderRadius: '5px',
                     cursor: 'none'
                 }}>
-                    HP: {hp} | Time Left: {timeLeft}
+                        Water: {water} | Food: {food} | Time Left: {timeLeft}
                 </div>
-                {hp <= 0 && (
+                {water <= 0 && food<=0 &&(
                     <div style={{
                         position: 'absolute',
                         top: 50,
