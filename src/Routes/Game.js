@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Phaser from 'phaser';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
@@ -10,6 +10,7 @@ function Game({ water, food }) {
 
   let [choice, setChoice] = useState();
   let [content, setContent] = useState();
+  let [game, setGame] = useState(null); // Phaser 게임 객체 상태로 관리
 
   useEffect(() => {
     // Phaser 게임 인스턴스를 설정하고 배경 음악을 재생하는 설정
@@ -25,7 +26,8 @@ function Game({ water, food }) {
     };
 
     // Phaser 게임 인스턴스를 생성
-    const game = new Phaser.Game(config);
+    const newGame = new Phaser.Game(config);
+    setGame(newGame); // Phaser 인스턴스를 상태로 관리
 
     // Phaser preload 함수 - 배경 음악 로드
     function preload() {
@@ -34,24 +36,44 @@ function Game({ water, food }) {
 
     // Phaser create 함수 - 배경 음악 재생
     function create() {
+      // 사운드 객체가 완전히 초기화된 후에 재생 시작
       this.sound.play('backgroundMusic', {
         loop: true, // 반복 재생
         volume: 0.5, // 볼륨 조절
+      });
+
+      // 게임이 준비되었을 때만 stopAll() 호출
+      this.game.events.once('shutdown', () => {
+        // 게임 종료 이벤트가 발생했을 때 stopAll을 안전하게 호출
+        if (this.sound && typeof this.sound.stopAll === 'function') {
+          try {
+            this.sound.stopAll(); // 모든 음악을 멈추고, Phaser 인스턴스를 종료
+          } catch (error) {
+            console.error('Error stopping sounds:', error);
+          }
+        }
       });
     }
 
     // 컴포넌트 언마운트 시 음악 멈추기
     return () => {
-      if (game.sound && game.sound.stopAll) {
-        try {
-          game.sound.stopAll(); // 모든 음악을 멈추고, Phaser 인스턴스를 종료
-        } catch (error) {
-          console.error('Error stopping sounds:', error);
+      if (newGame) {
+        // Phaser 게임 종료 시점에 sound.stopAll()을 호출
+        if (newGame.sound && typeof newGame.sound.stopAll === 'function') {
+          try {
+            newGame.sound.stopAll(); // 모든 음악을 멈추고, Phaser 인스턴스를 종료
+          } catch (error) {
+            console.error('Error stopping sounds:', error);
+          }
+        } else {
+          console.warn('Phaser sound manager is not initialized correctly.');
         }
-      } else {
-        console.warn('Phaser sound manager is not initialized correctly.');
+
+        // Phaser 게임 인스턴스 종료
+        if (newGame) {
+          newGame.destroy(true); // Phaser 인스턴스와 그에 따른 리소스 정리
+        }
       }
-      game.destroy(true);
     };
   }, []); // 빈 배열을 넣어 컴포넌트가 마운트/언마운트될 때만 실행되도록 함
 
