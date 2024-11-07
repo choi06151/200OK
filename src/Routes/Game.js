@@ -3,13 +3,56 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Phaser from 'phaser';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setUserId,
+  setChoice,
+  setChoice1,
+  setChoice2,
+  setChoice3,
+} from '../store/gameSlice';
+import { createUser, initStory } from '../service/service';
 
-function Game({ water, food }) {
+function Game() {
   const navigate = useNavigate();
   const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
 
-  let [choice, setChoice] = useState();
+  let { userId, name, water, food, hp, choice, choice1, choice2, choice3 } =
+    useSelector((state) => state.status);
+  const dispatch = useDispatch();
+
   let [content, setContent] = useState();
+
+  function setDatas(res) {
+    setContent(res.data.content);
+    setChoice1(res.data.choice1);
+    setChoice2(res.data.choice2);
+    setChoice3(res.data.choice3);
+  }
+
+  async function initUser() {
+    let user = {
+      name: name,
+      water: water,
+      food: food,
+      hp: hp,
+    };
+    console.log(user);
+    const response = await createUser(user);
+    return response.data.id;
+  }
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (!storedUserId) {
+      initUser().then((res) => {
+        dispatch(setUserId(res));
+        localStorage.setItem('userId', res); // 로컬 스토리지에 저장
+      });
+    } else {
+    }
+    console.log(userId);
+  }, []);
 
   useEffect(() => {
     // Phaser 게임 인스턴스를 설정하고 배경 음악을 재생하는 설정
@@ -78,41 +121,36 @@ function Game({ water, food }) {
           {' '}
           <img alt="img" className={styles.img} src="/jungleexample.jpg"></img>
         </div>
-        <div className={styles.textdiv}>
-          정글 한가운데, 습하고 숨 막히는 더위 속에서 날카로운 야생의 소리가
-          사방에서 들려온다. 은신처를 찾는 것이 급선무다.
-        </div>
+        <div className={styles.textdiv}>{content}</div>
 
         {/* 선택지 영역 */}
         <div className={styles.choiceContainer}>
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(1);
+              dispatch(setChoice(1));
             }}
           >
             <input type="radio" id="choice1" name="choices" defaultChecked />
-            <label htmlFor="choice1">선택지 1: 가까운 강에서 물을 찾는다</label>
+            <label htmlFor="choice1">{choice1}</label>
           </div>
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(2);
+              dispatch(setChoice(2));
             }}
           >
             <input type="radio" id="choice2" name="choices" />
-            <label htmlFor="choice2">
-              선택지 2: 주변에 먹을 만한 과일을 찾아본다
-            </label>
+            <label htmlFor="choice2">{choice2}</label>
           </div>
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(3);
+              dispatch(setChoice(3));
             }}
           >
             <input type="radio" id="choice3" name="choices" />
-            <label htmlFor="choice3">선택지 3: 쉬면서 체력을 회복한다</label>
+            <label htmlFor="choice3">{choice3}</label>
           </div>
         </div>
 
