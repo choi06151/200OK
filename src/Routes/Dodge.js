@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import Phaser from 'phaser';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setWater,
+  setFood,
+  setTimeLeft,
+  decreaseWater,
+  decreaseFood,
+} from '../store/gameSlice';
 
 const Dodge = () => {
   const [game, setGame] = useState(null);
 
-  let [water, setWater] = useState(5);
-  let [food, setFood] = useState(5);
-  let [timeLeft, setTimeLeft] = useState(30);
+  let { water, food, timeLeft } = useSelector((state) => state.status);
+
+  useEffect(() => {
+    console.log(water);
+    console.log(food);
+  }, [water, food]);
 
   const [gameStarted, setGameStarted] = useState(false);
   const [timerEvent, setTimerEvent] = useState(null);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const config = {
@@ -39,6 +52,8 @@ const Dodge = () => {
 
     const gameInstance = new Phaser.Game(config);
     setGame(gameInstance);
+
+    console.log('game set done');
 
     return () => {
       gameInstance.destroy(true);
@@ -289,43 +304,26 @@ const Dodge = () => {
     const randomChoice = Math.random() < 0.5 ? 'water' : 'food'; // 50% 확률로 Water 또는 Food 선택
 
     if (randomChoice === 'water') {
-      setWater((prevWater) => {
-        const newWater = prevWater - 1;
+      if (water <= 0) {
+        dispatch(decreaseFood());
+        dropFood.call(this);
+      } else {
+        dispatch(decreaseWater());
         dropWater.call(this); // 박스 드랍
-        if (newWater <= 0) {
-          // Water가 0 이하로 내려갔을 때 Food도 확인
-          setFood((prevFood) => {
-            if (prevFood <= 0) {
-              this.input.off('pointermove');
-              endGame.call(this); // Water와 Food 둘 다 0일 때 게임 종료
-            } else {
-              // Water가 0 이하일 때 Food가 0 이하가 아니면 Food를 줄임
-              const newFood = prevFood - 1;
-              dropFood.call(this); // 박스 드랍
-              return newFood;
-            }
-            return prevFood;
-          });
-        }
-        return newWater;
-      });
+      }
     } else {
-      setFood((prevFood) => {
-        const newFood = prevFood - 1;
+      if (food <= 0) {
+        dispatch(decreaseWater());
+        dropFood.call(this);
+      } else {
+        dispatch(decreaseFood());
         dropFood.call(this); // 박스 드랍
-        if (newFood <= 0) {
-          // Food가 0 이하로 내려갔을 때 Water도 확인
-          setWater((prevWater) => {
-            if (prevWater <= 0) {
-              this.input.off('pointermove');
-              endGame.call(this); // Water와 Food 둘 다 0일 때 게임 종료
-            }
-            return prevWater;
-          });
-          dropWater.call(this); // 박스 드랍
-        }
-        return newFood;
-      });
+      }
+    }
+
+    if (water <= 0 && food <= 0) {
+      this.input.off('pointermove');
+      endGame.call(this);
     }
 
     bullet.destroy(); // 총알 제거
@@ -350,6 +348,7 @@ const Dodge = () => {
   };
 
   const endGame = function () {
+    console.log('endgame called');
     const dieSound = this.sound.add('PlayerDie'); // 로드한 'hitSound'를 불러오기
     dieSound.play(); // 효과음 재생
     setGameStarted(false);
@@ -360,6 +359,7 @@ const Dodge = () => {
     this.backgroundMusic.stop();
 
     let initialY = this.player.y;
+
     // 우측 상단으로 이동하는 애니메이션
     this.tweens.add({
       targets: this.player,
@@ -368,23 +368,23 @@ const Dodge = () => {
       duration: 1500,
       ease: 'Power2',
       onComplete: () => {
-        // 아래로 떨어지는 애니메이션 (조금만 떨어지고 멈춤)
-        const fallSound = this.sound.add('PlayerFall'); // 로드한 'hitSound'를 불러오기
+        const fallSound = this.sound.add('PlayerFall');
         fallSound.play(); // 효과음 재생
+
         this.tweens.add({
           targets: this.player,
-          y: initialY - 50, // 약간 떨어진 위치로 설정
-          duration: 500, // 짧은 시간 동안 떨어짐
+          y: initialY - 50,
+          duration: 500,
           ease: 'Linear',
           onComplete: () => {
-            this.physics.pause(); // 애니메이션이 끝난 후 물리 엔진 정지
+            this.physics.pause(); // 물리 엔진 정지
 
-            this.cameras.main.setZoom(1); // 초기 줌 레벨
+            this.cameras.main.setZoom(1);
             this.tweens.add({
               targets: this.cameras.main,
-              zoom: 1.5, // 줌인 비율 설정
-              duration: 1000, // 줌인 애니메이션 지속 시간
-              ease: 'Power2', // 부드러운 애니메이션을 위한 easing
+              zoom: 1.5,
+              duration: 1000,
+              ease: 'Power2',
             });
 
             // 새로운 배경 생성
@@ -399,49 +399,50 @@ const Dodge = () => {
             this.newBackground3 = this.add
               .image(400, 2100, 'World')
               .setOrigin(0.5, 0.5)
-              .setScale(1.5); // 세 번째 배경
+              .setScale(1.5);
             this.newBackground1.setDepth(0);
             this.newBackground2.setDepth(0);
             this.newBackground3.setDepth(0);
             this.player.setDepth(1);
 
-            // 배경 스크롤 로직 시작
+            // 배경 스크롤 효과
             this.time.addEvent({
               delay: 50,
               callback: () => {
-                this.newBackground1.y -= 5; // 첫 번째 배경 스크롤
-                this.newBackground2.y -= 5; // 두 번째 배경 스크롤
-                this.newBackground3.y -= 5; // 세 번째 배경 스크롤
+                this.newBackground1.y -= 5;
+                this.newBackground2.y -= 5;
+                this.newBackground3.y -= 5;
 
                 // 위치 초기화
                 if (
                   this.newBackground1.y < -this.newBackground1.displayHeight
                 ) {
                   this.newBackground1.y =
-                    this.newBackground3.y + this.newBackground1.displayHeight; // 첫 번째 배경을 세 번째 배경 위로
+                    this.newBackground3.y + this.newBackground1.displayHeight;
                 }
                 if (
                   this.newBackground2.y < -this.newBackground2.displayHeight
                 ) {
                   this.newBackground2.y =
-                    this.newBackground1.y + this.newBackground2.displayHeight; // 두 번째 배경을 첫 번째 배경 위로
+                    this.newBackground1.y + this.newBackground2.displayHeight;
                 }
                 if (
                   this.newBackground3.y < -this.newBackground3.displayHeight
                 ) {
                   this.newBackground3.y =
-                    this.newBackground2.y + this.newBackground3.displayHeight; // 세 번째 배경을 두 번째 배경 위로
+                    this.newBackground2.y + this.newBackground3.displayHeight;
                 }
               },
               loop: true,
             });
+
             const blackScreen = this.add.graphics({
               fillStyle: { color: 0x000000 },
             });
             blackScreen.fillRect(0, 0, 800, 600);
-            blackScreen.setAlpha(0); // 처음에는 보이지 않게 설정
+            blackScreen.setAlpha(0);
 
-            // 6초 후에 검은색으로 변하는 애니메이션
+            // 기존 코드 내 setWater와 setFood 업데이트 부분 수정
             this.time.addEvent({
               delay: 6000, // 6초 후
               callback: () => {
@@ -451,46 +452,40 @@ const Dodge = () => {
                   duration: 2000, // 2초 동안 애니메이션
                   ease: 'Linear', // 선형 애니메이션
                   onComplete: () => {
-                    setWater((prevWater) => {
-                      const newWater = prevWater - 1; // Water 값 업데이트
-                      setFood((prevFood) => {
-                        const newFood = prevFood - 1; // Food 값 업데이트
-                        if (newWater <= 0 && newFood <= 0) {
-                          this.input.off('pointermove');
-                          endGame.call(this); // 게임 종료
-                        } else {
-                          dropBox.call(this); // 박스 드랍
-                        }
+                    // 상태 업데이트가 완료된 후에 경로 이동
+                    dispatch(decreaseWater());
+                    dispatch(decreaseFood());
 
-                        // water와 food의 최신 값을 navigate로 전달
-                        navigate('/game');
-                        return newFood;
-                      });
-                      return newWater;
-                    });
+                    // water와 food가 0 이하인지 체크 후 navigate 호출
+                    if (water - 1 <= 0 && food - 1 <= 0) {
+                      this.input.off('pointermove');
+                      endGame.call(this); // 게임 종료
+                      navigate('/game'); // 종료 후 이동
+                    } else {
+                      dropBox.call(this); // 박스 드랍
+                    }
                   },
                 });
               },
             });
-            // 낙하산 생성
+
+            // 낙하산 생성 및 플레이어 천천히 아래로 이동
             const parachute = this.add
               .image(this.player.x, this.player.y - 50, 'parachute')
               .setOrigin(0.5, 0.5)
               .setScale(0.2);
 
-            // 2초 후에 플레이어를 천천히 아래로 떨어뜨리기
             this.time.addEvent({
-              delay: 2000, // 2초 후
+              delay: 2000,
               callback: () => {
                 this.tweens.add({
                   targets: this.player,
-                  y: initialY + 500, // 아래로 떨어질 위치
-                  duration: 3000, // 천천히 떨어지는 시간
-                  ease: 'Power2', // 부드러운 애니메이션을 위한 easing
+                  y: initialY + 500,
+                  duration: 3000,
+                  ease: 'Power2',
                   onUpdate: () => {
-                    // 플레이어 위치에 따라 낙하산 위치 업데이트
                     parachute.x = this.player.x;
-                    parachute.y = this.player.y - 50; // 플레이어 위에 위치
+                    parachute.y = this.player.y - 50;
                   },
                 });
               },
