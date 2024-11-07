@@ -1,22 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from '../Css/Contract.module.css'; // CSS 모듈 임포트
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setName } from '../store/gameSlice';
 
 function Contract() {
-  const [name, setName] = useState('');
   const [gender, setGender] = useState('남');
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
   const lastX = useRef(0);
   const lastY = useRef(0);
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  let { name } = useSelector((state) => state.status);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // 계약서 제출 로직 추가 (예: 이름, 성별 처리)
-    console.log(`이름: ${name}, 성별: ${gender}`);
-  };
+  useEffect(() => {
+    console.log(name);
+  }, [name]);
+
+  const navigate = useNavigate();
 
   const handleGenderToggle = () => {
     setGender((prevGender) => (prevGender === '남' ? '여' : '남'));
@@ -74,14 +76,16 @@ function Contract() {
         <div className={styles.right_col}>
           <h2 className={styles.name}>계약서</h2>
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className={styles.inputGroup}>
               <label>
                 이름:
                 <input
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    dispatch(setName(e.target.value));
+                  }}
                   required
                   className={styles.textField}
                 />
@@ -138,7 +142,7 @@ function Contract() {
               type="submit"
               className={styles.contractButton}
               onClick={() => {
-                navigate('/dodge', { state: { name: name } });
+                navigate('/dodge');
               }}
             >
               계약하기
