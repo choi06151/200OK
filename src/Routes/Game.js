@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Phaser from 'phaser';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
@@ -210,6 +210,7 @@ function Game() {
 							선택
 						</button>
 						{/* <button
+
               className={styles.submitButton}
               onClick={() => {
                 navigate('/end');
