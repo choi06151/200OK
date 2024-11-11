@@ -6,6 +6,12 @@ const initialState = {
   hp: 10,
   timeLeft: 30,
   name: 'Guest',
+  userId: -1,
+  content: '',
+  choice: 1,
+  choice1: '',
+  choice2: '',
+  choice3: '',
 };
 
 const statusSlice = createSlice({
@@ -36,6 +42,24 @@ const statusSlice = createSlice({
     setName: (state, action) => {
       state.name = action.payload;
     },
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
+    setContent: (state, action) => {
+      state.content = action.payload;
+    },
+    setChoice: (state, action) => {
+      state.choice = action.payload;
+    },
+    setChoice1: (state, action) => {
+      state.choice1 = action.payload;
+    },
+    setChoice2: (state, action) => {
+      state.choice2 = action.payload;
+    },
+    setChoice3: (state, action) => {
+      state.choice3 = action.payload;
+    },
     resetStatus: () => initialState,
   },
 });
@@ -50,5 +74,11 @@ export const {
   decreaseWater,
   decreaseTimeLeft,
   resetStatus,
+  setContent,
+  setChoice,
+  setChoice1,
+  setChoice2,
+  setChoice3,
+  setUserId,
 } = statusSlice.actions;
 export default statusSlice.reducer;
