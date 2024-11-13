@@ -1,0 +1,80 @@
+/* 오버레이 스타일 */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 9999;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* 중앙 텍스트 스타일 */
+.text-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 이미지 컨테이너 스타일 */
+.image-container {
+  display: flex;
+  gap: 1rem;
+}
+
+/* 동물 이미지 스타일 */
+.animal-image {
+  width: 50px;
+  transition: transform 1s ease-in-out;
+}
+
+.animal-image.grow {
+  animation: growShrink 1.5s ease-in-out infinite alternate;
+}
+
+.animal-image.shrink {
+  animation: growShrink 1.5s ease-in-out infinite alternate-reverse;
+}
+
+/* 서서히 어두워지며 나타나고 밝아지며 사라지는 페이드 인/아웃 애니메이션 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 모달이 사라질 때 fade-out 효과 적용 */
+.fade-out {
+  animation: fadeOut 1s ease forwards;
+}
+
+/* 커졌다 작아지는 애니메이션 */
+@keyframes growShrink {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.5);
+  }
+}
