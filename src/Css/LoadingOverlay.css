@@ -1,4 +1,4 @@
-/* 오버레이 스타일 */
+/* overlay 기본 스타일 */
 .overlay {
   position: fixed;
   top: 0;
@@ -12,13 +12,47 @@
   justify-content: center;
   color: white;
   z-index: 9999;
-  opacity: 0;
   animation: fadeIn 1s ease forwards;
+}
+
+/* fade-out 효과 */
+.overlay.fade-out {
+  animation: fadeOut 1s ease forwards;
+}
+
+/* 페이드 인 애니메이션 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* 페이드 아웃 애니메이션 */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* 중앙 텍스트 스타일 */
 .text-container h1 {
   font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.text-container .random-text {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #ddd;
   margin-bottom: 1.5rem;
 }
 
@@ -34,47 +68,30 @@
   transition: transform 1s ease-in-out;
 }
 
-.animal-image.grow {
-  animation: growShrink 1.5s ease-in-out infinite alternate;
-}
-
-.animal-image.shrink {
-  animation: growShrink 1.5s ease-in-out infinite alternate-reverse;
-}
-
-/* 서서히 어두워지며 나타나고 밝아지며 사라지는 페이드 인/아웃 애니메이션 */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
+/* 각 이미지가 순서대로 위아래로 파도타기하는 애니메이션 */
+@keyframes wave {
+  0%,
   100% {
-    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
+/* 각 이미지에 다르게 애니메이션 적용 */
+.wave-0 {
+  animation: wave 1s ease-in-out infinite;
 }
-
-/* 모달이 사라질 때 fade-out 효과 적용 */
-.fade-out {
-  animation: fadeOut 1s ease forwards;
+.wave-1 {
+  animation: wave 1s ease-in-out infinite 0.2s;
 }
-
-/* 커졌다 작아지는 애니메이션 */
-@keyframes growShrink {
-  0% {
-    transform: scale(1);
-  }
-
-  100% {
-    transform: scale(1.5);
-  }
+.wave-2 {
+  animation: wave 1s ease-in-out infinite 0.4s;
+}
+.wave-3 {
+  animation: wave 1s ease-in-out infinite 0.6s;
+}
+.wave-4 {
+  animation: wave 1s ease-in-out infinite 0.8s;
 }
