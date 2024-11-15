@@ -123,7 +123,7 @@ function Game() {
 	// 버튼 클릭 시 효과음 재생 및 페이지 이동
 	const handleButtonClick = async () => {
 		let obj = {
-			choice: choice,
+			choice: choices[choice],
 		};
 
 		setModal(true); // 모달 열기
@@ -151,7 +151,7 @@ function Game() {
 					<div
 						className={styles.choice}
 						onClick={() => {
-							setChoice(1);
+							setChoice(0);
 							//playsound('scared'); // 예시: 'scared' 효과음 재생
 						}}
 					>
@@ -161,7 +161,7 @@ function Game() {
 					<div
 						className={styles.choice}
 						onClick={() => {
-							setChoice(2);
+							setChoice(1);
 							//playsound('peaceful'); // 예시: 'peaceful' 효과음 재생
 						}}
 					>
@@ -171,7 +171,7 @@ function Game() {
 					<div
 						className={styles.choice}
 						onClick={() => {
-							setChoice(3);
+							setChoice(2);
 							//playsound('tense'); // 예시: 'tense' 효과음 재생
 						}}
 					>
