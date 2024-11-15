@@ -46,6 +46,17 @@
   }
 }
 
+
+/* 텍스트 페이드 인 애니메이션 */
+.fade_in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* 텍스트 페이드 아웃 애니메이션 */
+.fade_out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
 /* 중앙 텍스트 스타일 */
 .text_container h1 {
   font-size: 2rem;
