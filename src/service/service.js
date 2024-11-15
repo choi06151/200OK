@@ -13,10 +13,6 @@ export const initStory = async (userId) => {
 	});
 };
 
-export const generateStory = (userId) => {
-	axios.post(`${AMAZON_API_BASE_URL}/story/generate/${userId}`);
-};
-
 export const getStory = async (userId) => {
 	try {
 		return await axios.get(
@@ -26,7 +22,6 @@ export const getStory = async (userId) => {
 		// 스토리가 없을 경우 초기화하여 생성
 
 		if (e.response && e.response.status === 404) {
-			console.warn('스토리가 없어서 초기화합니다.');
 			await initStory(userId);
 			return await axios.get(
 				`${AMAZON_API_BASE_URL}/story/currentStory/${userId}`
