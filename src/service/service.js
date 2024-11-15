@@ -38,3 +38,7 @@ export const getNextStory = async (userId, choice) => {
 		choice
 	);
 };
+
+export const getMonologue = async (userId) => {
+	return await axios.get(`${AMAZON_API_BASE_URL}/story/monologue/${userId}`);
+};

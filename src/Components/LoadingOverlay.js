@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../Css/LoadingOverlay.module.css';
 
-const LoadingOverlay = ({ show }) => {
+const LoadingOverlay = ({ show, text }) => {
 	const [isFadingOut, setIsFadingOut] = useState(false);
-	const [text, setText] = useState('');
-
-	const textArray = [
-		'너무 춥다..',
-		'너무 무섭다..',
-		'기분이 이상하다..',
-		'이상한 일이 일어났어..',
-		'뭐가 있을까..',
-		'정말 놀랐다..',
-		'우리는 어디로 가야 할까..',
-	];
+	const [index, setIndex] = useState(0);
+	const [isTextFadingOut, setIsTextFadingOut] = useState(false);
 
 	useEffect(() => {
-		const randomNumber = Math.floor(Math.random() * 7);
-		setText(textArray[randomNumber]);
 		if (show) {
-			setIsFadingOut(false); // 모달이 열릴 때 fade-out 상태 초기화
+			setIsFadingOut(false);
 		} else {
-			setIsFadingOut(true); // 모달이 닫힐 때 fade-out 시작
-
-			// 1초 후에 fade-out을 초기화하여 컴포넌트를 완전히 숨김
+			setIsFadingOut(true);
 			const timer = setTimeout(() => {
 				setIsFadingOut(false);
-			}, 1000); // fade-out 애니메이션 시간과 일치
-
-			return () => clearTimeout(timer); // 타이머 정리
+			}, 1000);
+			return () => clearTimeout(timer);
 		}
 	}, [show]);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setIsTextFadingOut(true);
+			setTimeout(() => {
+				setIndex((index) => (index + 1) % text.length);
+				setIsTextFadingOut(false);
+			}, 500); // 텍스트가 바뀔 때의 fade-out 시간
+		}, 3500);
+
+		return () => clearInterval(interval);
+	}, [text]);
 
 	return (
 		<div
@@ -38,8 +36,12 @@ const LoadingOverlay = ({ show }) => {
 				isFadingOut ? styles.overlay_fade_out : ''
 			}`}
 		>
-			<div className={styles.text_container}>
-				<h1>{text}</h1>
+			<div
+				className={`${styles.text_container} ${
+					isTextFadingOut ? styles.fade_out : styles.fade_in
+				}`}
+			>
+				<h1>{text[index]}</h1>
 			</div>
 			<div className={styles.image_container}>
 				{[

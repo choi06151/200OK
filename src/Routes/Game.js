@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUserId } from '../store/gameSlice';
 import {
 	createUser,
+	getMonologue,
 	getNextStory,
 	getStory,
 	initStory,
@@ -30,6 +31,7 @@ function Game() {
 	let [imageUrl, setImageUrl] = useState();
 	const [isLoading, setIsLoading] = useState(false);
 	const [modal, setModal] = useState(false);
+	const [text, setText] = useState(['Loading...']);
 
 	async function fetchOrCreateUser() {
 		setModal(true);
@@ -69,6 +71,10 @@ function Game() {
 				link = JSON.parse(link);
 				setImageUrl(link.image_url);
 			});
+			const monologue = await getMonologue(sessionStorage.getItem('userId'));
+			console.log(monologue);
+			setText(monologue.data.monologue);
+			console.log(text);
 			setModal(false);
 		}
 	}
@@ -128,6 +134,7 @@ function Game() {
 
 		setModal(true); // 모달 열기
 		await getNextStory(sessionStorage.getItem('userId'), obj);
+
 		await fetchOrCreateUser();
 		setModal(false); // 모달 닫기
 
@@ -138,7 +145,7 @@ function Game() {
 
 	return (
 		<>
-			{modal && <LoadingOverlay show={modal} />}
+			{modal && <LoadingOverlay show={modal} text={text} />}
 			<div className={mainstyle.div}>
 				<div className={styles.imgdiv}>
 					{' '}
