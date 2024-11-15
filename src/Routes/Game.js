@@ -14,6 +14,7 @@ import {
 	initStory,
 } from '../service/service';
 import LoadingOverlay from '../Components/LoadingOverlay';
+import BackgroundMusicController from '../Components/BackgroundMusicController';
 
 function Game() {
 	const navigate = useNavigate();
@@ -27,7 +28,50 @@ function Game() {
 	let [choice, setChoice] = useState(1);
 	let [choices, setChoices] = useState([]);
 	let [imageUrl, setImageUrl] = useState();
-	let [modal, setModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [modal, setModal] = useState(false);
+
+	async function fetchOrCreateUser() {
+		setModal(true);
+		const storedUserId = sessionStorage.getItem('userId');
+		console.log(`로컬 저장된 사용자 ID: ${storedUserId}`);
+		try {
+			let userId = storedUserId;
+
+			// 저장된 사용자 ID가 없다면 초기화하여 생성
+			if (!userId) {
+				userId = await initUser();
+				sessionStorage.setItem('userId', userId);
+				dispatch(setUserId(userId));
+			}
+
+			// 사용자 ID로 스토리 가져오기 시도
+			await getStory(userId);
+		} catch (e) {
+			console.log(e);
+			if (e.response && e.response.status === 404) {
+				// 스토리가 없을 경우 초기화하여 생성
+				const newUserId = await initUser();
+				sessionStorage.setItem('userId', newUserId);
+				dispatch(setUserId(newUserId));
+			} else {
+				console.error('스토리를 가져오는 중 오류 발생:', e);
+			}
+		} finally {
+			await getStory(storedUserId).then((response) => {
+				setContent(response.data.content);
+				setChoices([
+					response.data.choice1,
+					response.data.choice2,
+					response.data.choice3,
+				]);
+				let link = atob(response.data.image);
+				link = JSON.parse(link);
+				setImageUrl(link.image_url);
+			});
+			setModal(false);
+		}
+	}
 
 	async function initUser() {
 		let user = {
@@ -44,48 +88,7 @@ function Game() {
 	}
 
 	useEffect(() => {
-		const storedUserId = localStorage.getItem('userId');
-		console.log(`로컬 저장된 사용자 ID: ${storedUserId}`);
-
 		// 사용자 ID가 있는지 확인하고, 없는 경우 초기화
-		async function fetchOrCreateUser() {
-			try {
-				let userId = storedUserId;
-
-				// 저장된 사용자 ID가 없다면 초기화하여 생성
-				if (!userId) {
-					userId = await initUser();
-					localStorage.setItem('userId', userId);
-					dispatch(setUserId(userId));
-				}
-
-				// 사용자 ID로 스토리 가져오기 시도
-				await getStory(userId);
-			} catch (e) {
-				console.log(e);
-				if (e.response && e.response.status === 404) {
-					// 스토리가 없을 경우 초기화하여 생성
-					const newUserId = await initUser();
-					localStorage.setItem('userId', newUserId);
-					dispatch(setUserId(newUserId));
-					await initStory(newUserId);
-				} else {
-					console.error('스토리를 가져오는 중 오류 발생:', e);
-				}
-			} finally {
-				await getStory(storedUserId).then((response) => {
-					setContent(response.data.content);
-					setChoices([
-						response.data.choice1,
-						response.data.choice2,
-						response.data.choice3,
-					]);
-					let link = atob(response.data.image);
-					link = JSON.parse(link);
-					setImageUrl(link.image_url);
-				});
-			}
-		}
 
 		fetchOrCreateUser();
 	}, []);
@@ -123,10 +126,10 @@ function Game() {
 			choice: choice,
 		};
 
-		setModal(true);
-		await getNextStory(localStorage.getItem('userId'), obj);
-		await getStory(localStorage.getItem('userId'), obj);
-		setModal(false);
+		setModal(true); // 모달 열기
+		await getNextStory(sessionStorage.getItem('userId'), obj);
+		await fetchOrCreateUser();
+		setModal(false); // 모달 닫기
 
 		// 버튼 클릭 시 사운드 재생
 
@@ -135,7 +138,7 @@ function Game() {
 
 	return (
 		<>
-			{modal ? <LoadingOverlay></LoadingOverlay> : <></>}
+			{modal && <LoadingOverlay show={modal} />}
 			<div className={mainstyle.div}>
 				<div className={styles.imgdiv}>
 					{' '}
@@ -177,17 +180,45 @@ function Game() {
 					</div>
 				</div>
 
+				<BackgroundMusicController modal={modal}></BackgroundMusicController>
 				<div className={styles.userdiv}>
-					<div className={styles.statusdiv}>
-						<img
-							src="/water.png"
-							alt="Water"
-							className={styles.statusImage}
-							style={{ border: '1px solid green' }}
-						/>
-						물: 5
-						<img src="/food.png" alt="Food" className={styles.statusImage} />
-						<p>식량: 3</p>
+					<div className={styles.statusDiv}>
+						{/* Water Status */}
+						<div className={styles.statusItem}>
+							<img
+								src="/water.png"
+								alt="Water"
+								className={styles.statusImage}
+							/>
+
+							<div className={styles.barContainer}>
+								<div
+									className={styles.bar}
+									style={{
+										width: `${(water / 10) * 100}%`, // water 상태에 따라 너비 조정
+										backgroundColor: '#4d9ffb',
+									}}
+								></div>
+							</div>
+							<></>
+							<div style={{ color: 'white', marginLeft: '3px' }}>{water}</div>
+						</div>
+
+						{/* Food Status */}
+						<div className={styles.statusItem}>
+							<img src="/food.png" alt="Food" className={styles.statusImage} />
+
+							<div className={styles.barContainer}>
+								<div
+									className={styles.bar}
+									style={{
+										width: `${(food / 10) * 100}%`, // food 상태에 따라 너비 조정
+										backgroundColor: '#ffcc00',
+									}}
+								></div>
+							</div>
+							<div style={{ color: 'white', marginLeft: '3px' }}>{food}</div>
+						</div>
 					</div>
 					<div className={styles.choicediv}>
 						<button
@@ -203,6 +234,7 @@ function Game() {
 			</div>
 
 			{/* 클릭 효과음 오디오 요소 */}
+
 			<audio ref={clickSoundRef} src="Sounds/click-button.mp3" />
 		</>
 	);
