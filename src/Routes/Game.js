@@ -1,7 +1,7 @@
 // Game.js
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 import Phaser from 'phaser';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
@@ -15,13 +15,15 @@ import {
 } from '../service/service';
 import LoadingOverlay from '../Components/LoadingOverlay';
 
-function Game() {
+function Game(props) {
   const navigate = useNavigate();
   const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
   const situationSoundRef = useRef(null); // 상황에 맞는 효과음 재생을 위한 useRef
 
-  let { userId, name, water, food, hp } = useSelector((state) => state.status);
+  let { name, hp } = useSelector((state) => state.status);
   const dispatch = useDispatch();
+
+  const { state } = useLocation();
 
   let [content, setContent] = useState();
   let [choice, setChoice] = useState(1);
@@ -32,8 +34,8 @@ function Game() {
   async function initUser() {
     let user = {
       name: name,
-      water: water,
-      food: food,
+      water: state.water,
+      food: state.food,
       alive: true,
       hp: 10,
       probability: 1,
