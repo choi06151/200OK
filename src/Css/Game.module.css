@@ -215,3 +215,36 @@
   color: white;
   /* 텍스트 색상 */
 }
+
+.statusDiv {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+}
+
+.statusImage {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.barContainer {
+  width: 100%;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-left: 10px;
+  flex-grow: 1;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 10px;
+}

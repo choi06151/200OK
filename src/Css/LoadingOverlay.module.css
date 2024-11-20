@@ -16,7 +16,7 @@
 }
 
 /* fade-out 효과 */
-.overlay.fade-out {
+.overlay_fade_out {
   animation: fadeOut 1s ease forwards;
 }
 
@@ -25,9 +25,11 @@
   0% {
     opacity: 0;
   }
+
   80% {
     opacity: 1;
   }
+
   100% {
     opacity: 1;
   }
@@ -38,18 +40,30 @@
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
 }
 
+
+/* 텍스트 페이드 인 애니메이션 */
+.fade_in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* 텍스트 페이드 아웃 애니메이션 */
+.fade_out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
 /* 중앙 텍스트 스타일 */
-.text-container h1 {
+.text_container h1 {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-.text-container .random-text {
+.text_container .random_text {
   font-size: 1.2rem;
   font-style: italic;
   color: #ddd;
@@ -57,41 +71,47 @@
 }
 
 /* 이미지 컨테이너 스타일 */
-.image-container {
+.image_container {
   display: flex;
   gap: 1rem;
 }
 
 /* 동물 이미지 스타일 */
-.animal-image {
+.animal_image {
   width: 50px;
   transition: transform 1s ease-in-out;
 }
 
 /* 각 이미지가 순서대로 위아래로 파도타기하는 애니메이션 */
 @keyframes wave {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 /* 각 이미지에 다르게 애니메이션 적용 */
-.wave-0 {
+.wave_0 {
   animation: wave 1s ease-in-out infinite;
 }
-.wave-1 {
+
+.wave_1 {
   animation: wave 1s ease-in-out infinite 0.2s;
 }
-.wave-2 {
+
+.wave_2 {
   animation: wave 1s ease-in-out infinite 0.4s;
 }
-.wave-3 {
+
+.wave_3 {
   animation: wave 1s ease-in-out infinite 0.6s;
 }
-.wave-4 {
+
+.wave_4 {
   animation: wave 1s ease-in-out infinite 0.8s;
 }

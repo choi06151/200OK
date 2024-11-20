@@ -1,56 +1,45 @@
-// Game.js
-
 import React, { useEffect, useRef, useState } from 'react';
-import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
-import Phaser from 'phaser';
+import { useFetcher, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserId } from '../store/gameSlice';
 import {
   createUser,
+  getMonologue,
   getNextStory,
   getStory,
   initStory,
 } from '../service/service';
 import LoadingOverlay from '../Components/LoadingOverlay';
+import BackgroundMusicController from '../Components/BackgroundMusicController';
 
-function Game(props) {
+function Game() {
+  const { state } = useLocation();
   const navigate = useNavigate();
   const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
-  const situationSoundRef = useRef(null); // 상황에 맞는 효과음 재생을 위한 useRef
 
-  let { name, hp } = useSelector((state) => state.status);
+  let { name } = useSelector((state) => state.status);
   const dispatch = useDispatch();
-
-  const { state } = useLocation();
 
   let [content, setContent] = useState();
   let [choice, setChoice] = useState(1);
   let [choices, setChoices] = useState([]);
   let [imageUrl, setImageUrl] = useState();
-  let [modal, setModal] = useState(false);
+  let [water, setWater] = useState();
+  let [food, setFood] = useState();
+  const [modal, setModal] = useState(false);
+  const [text, setText] = useState(['Loading...']);
 
-  async function initUser() {
-    let user = {
-      name: name,
-      water: state.water,
-      food: state.food,
-      alive: true,
-      hp: 10,
-      probability: 1,
-      day: 1,
-    };
-    const response = await createUser(user);
-    return response.data.id;
-  }
+  useEffect(() => {
+    setWater(state.water);
+    setWater(state.food);
+  }, [state]);
 
-  // 사용자 ID가 있는지 확인하고, 없는 경우 초기화
   async function fetchOrCreateUser() {
     setModal(true);
     const storedUserId = sessionStorage.getItem('userId');
     console.log(`로컬 저장된 사용자 ID: ${storedUserId}`);
-
     try {
       let userId = storedUserId;
 
@@ -85,9 +74,26 @@ function Game(props) {
         link = JSON.parse(link);
         setImageUrl(link.image_url);
       });
+      const monologue = await getMonologue(sessionStorage.getItem('userId'));
+      console.log(monologue);
+      setText(monologue.data.monologue);
+      console.log(text);
+      setModal(false);
     }
+  }
 
-    setModal(false);
+  async function initUser() {
+    let user = {
+      name,
+      water: state.water,
+      food: state.food,
+      alive: true,
+      hp: 10,
+      probability: 1,
+      day: 1,
+    };
+    const response = await createUser(user);
+    return response.data.id;
   }
 
   useEffect(() => {
@@ -124,18 +130,23 @@ function Game(props) {
   // 버튼 클릭 시 효과음 재생 및 페이지 이동
   const handleButtonClick = async () => {
     let obj = {
-      choice: choice,
+      choice: choices[choice],
     };
 
-    setModal(true);
+    setModal(true); // 모달 열기
     await getNextStory(sessionStorage.getItem('userId'), obj);
-    fetchOrCreateUser();
-    setModal(false);
+
+    await fetchOrCreateUser();
+    setModal(false); // 모달 닫기
+
+    // 버튼 클릭 시 사운드 재생
+
+    // 1초 후에 "wait.js"로 이동
   };
 
   return (
     <>
-      {modal && <LoadingOverlay text="Loading..." show={modal} />}
+      {modal && <LoadingOverlay show={modal} text={text} />}
       <div className={mainstyle.div}>
         <div className={styles.imgdiv}>
           {' '}
@@ -148,7 +159,7 @@ function Game(props) {
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(1);
+              setChoice(0);
               //playsound('scared'); // 예시: 'scared' 효과음 재생
             }}
           >
@@ -158,7 +169,7 @@ function Game(props) {
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(2);
+              setChoice(1);
               //playsound('peaceful'); // 예시: 'peaceful' 효과음 재생
             }}
           >
@@ -168,7 +179,7 @@ function Game(props) {
           <div
             className={styles.choice}
             onClick={() => {
-              setChoice(3);
+              setChoice(2);
               //playsound('tense'); // 예시: 'tense' 효과음 재생
             }}
           >
@@ -177,17 +188,45 @@ function Game(props) {
           </div>
         </div>
 
+        <BackgroundMusicController modal={modal}></BackgroundMusicController>
         <div className={styles.userdiv}>
-          <div className={styles.statusdiv}>
-            <img
-              src="/water.png"
-              alt="Water"
-              className={styles.statusImage}
-              style={{ border: '1px solid green' }}
-            />
-            물: 5
-            <img src="/food.png" alt="Food" className={styles.statusImage} />
-            <p>식량: 3</p>
+          <div className={styles.statusDiv}>
+            {/* Water Status */}
+            <div className={styles.statusItem}>
+              <img
+                src="/water.png"
+                alt="Water"
+                className={styles.statusImage}
+              />
+
+              <div className={styles.barContainer}>
+                <div
+                  className={styles.bar}
+                  style={{
+                    width: `${(water / 10) * 100}%`, // water 상태에 따라 너비 조정
+                    backgroundColor: '#4d9ffb',
+                  }}
+                ></div>
+              </div>
+              <></>
+              <div style={{ color: 'white', marginLeft: '3px' }}>{water}</div>
+            </div>
+
+            {/* Food Status */}
+            <div className={styles.statusItem}>
+              <img src="/food.png" alt="Food" className={styles.statusImage} />
+
+              <div className={styles.barContainer}>
+                <div
+                  className={styles.bar}
+                  style={{
+                    width: `${(food / 10) * 100}%`, // food 상태에 따라 너비 조정
+                    backgroundColor: '#ffcc00',
+                  }}
+                ></div>
+              </div>
+              <div style={{ color: 'white', marginLeft: '3px' }}>{food}</div>
+            </div>
           </div>
           <div className={styles.choicediv}>
             <button
@@ -203,6 +242,7 @@ function Game(props) {
       </div>
 
       {/* 클릭 효과음 오디오 요소 */}
+
       <audio ref={clickSoundRef} src="Sounds/click-button.mp3" />
     </>
   );

@@ -1,38 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import '../Css/LoadingOverlay.css';
+import styles from '../Css/LoadingOverlay.module.css';
 
-const LoadingOverlay = ({ text, show }) => {
-  const [visible, setVisible] = useState(show); // 컴포넌트의 DOM 상태
-  const [isFadingOut, setIsFadingOut] = useState(false); // 애니메이션 상태
+const LoadingOverlay = ({ show, text }) => {
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [isTextFadingOut, setIsTextFadingOut] = useState(false);
 
   useEffect(() => {
     if (show) {
-      setVisible(true); // 모달이 열릴 때 visible을 true로 설정
-      setIsFadingOut(false); // fade-out 효과 초기화
-    } else if (visible) {
-      setIsFadingOut(true); // show가 false일 때 fade-out 시작
+      setIsFadingOut(false);
+    } else {
+      setIsFadingOut(true);
+      const timer = setTimeout(() => {
+        setIsFadingOut(false);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [show, visible]);
+  }, [show]);
 
-  // 애니메이션 종료 시점에 컴포넌트를 DOM에서 제거
-  const handleAnimationEnd = () => {
-    if (isFadingOut) {
-      setVisible(false); // fade-out이 완료되면 컴포넌트 제거
-    }
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsTextFadingOut(true);
+      setTimeout(() => {
+        setIndex((index) => (index + 1) % text.length);
+        setIsTextFadingOut(false);
+      }, 500); // 텍스트가 바뀔 때의 fade-out 시간
+    }, 3500);
 
-  // visible이 false일 때 컴포넌트를 렌더링하지 않음
-  if (!visible) return null;
+    return () => clearInterval(interval);
+  }, [text]);
 
   return (
     <div
-      className={`overlay ${isFadingOut ? 'fade-out' : ''}`}
-      onAnimationEnd={handleAnimationEnd} // 애니메이션 종료 후 DOM에서 제거
+      className={`${styles.overlay} ${
+        isFadingOut ? styles.overlay_fade_out : ''
+      }`}
     >
-      <div className="text-container">
-        <h1>{text}</h1>
+      <div
+        className={`${styles.text_container} ${
+          isTextFadingOut ? styles.fade_out : styles.fade_in
+        }`}
+      >
+        <h1>{text[index]}</h1>
       </div>
-      <div className="image-container">
+      <div className={styles.image_container}>
         {[
           'frog.png',
           'crocodile.png',
@@ -44,7 +55,7 @@ const LoadingOverlay = ({ text, show }) => {
             key={index}
             src={src}
             alt={`animal-${index}`}
-            className={`animal-image wave-${index}`}
+            className={`${styles.animal_image} ${styles[`wave_${index}`]}`}
           />
         ))}
       </div>
