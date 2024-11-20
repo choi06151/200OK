@@ -103,18 +103,36 @@ function Game() {
 	const playsound = (situation) => {
 		let soundKey = '';
 		switch (situation) {
-			case 'scared':
-				soundKey = 'scared';
+			case 'Peaceful':
+				soundKey = 'Peaceful';
 				break;
-			case 'peaceful':
-				soundKey = 'peaceful';
+			case 'Tense':
+				soundKey = 'Tense';
 				break;
-			case 'tense':
-				soundKey = 'tense';
+			case 'Dangerous':
+				soundKey = 'Dangerous';
 				break;
-			case 'adventure':
-				soundKey = 'adventure';
+			case 'Scary':
+				soundKey = 'Scary';
 				break;
+			case 'Jungle Sounds':
+				soundKey = 'Jungle Sounds';
+				break;
+			case 'Animal Sounds':
+				soundKey = 'Animal Sounds';
+				break;
+			case 'River Sounds':
+				soundKey = 'River Sounds';
+				break;				
+			case 'Battle':
+				soundKey = 'Battle';
+				break;	
+			case 'Sad':
+				soundKey = 'Sad';
+				break;	
+			case 'Lonely':
+				soundKey = 'Lonely';
+				break;	
 			default:
 				console.log('Unknown situation:', situation);
 				return;
