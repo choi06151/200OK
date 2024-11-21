@@ -17,6 +17,18 @@
 
 /* fade-out 효과 */
 .overlay_fade_out {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 9999;
   animation: fadeOut 1s ease forwards;
 }
 
@@ -25,11 +37,6 @@
   0% {
     opacity: 0;
   }
-
-  80% {
-    opacity: 1;
-  }
-
   100% {
     opacity: 1;
   }
@@ -40,26 +47,55 @@
   0% {
     opacity: 1;
   }
-
   100% {
     opacity: 0;
   }
 }
 
+/* 텍스트 컨테이너 */
+.text_container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
 
 /* 텍스트 페이드 인 애니메이션 */
 .fade_in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeInText 0.5s ease forwards;
 }
 
 /* 텍스트 페이드 아웃 애니메이션 */
 .fade_out {
-  animation: fadeOut 0.5s ease forwards;
+  animation: fadeOutText 0.5s ease forwards;
+}
+
+/* 텍스트 페이드 인 키프레임 */
+@keyframes fadeInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 텍스트 페이드 아웃 키프레임 */
+@keyframes fadeOutText {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 /* 중앙 텍스트 스타일 */
 .text_container h1 {
   font-size: 2rem;
+  font-weight: bold;
   margin-bottom: 1rem;
 }
 
@@ -74,22 +110,21 @@
 .image_container {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 /* 동물 이미지 스타일 */
 .animal_image {
   width: 50px;
-  transition: transform 1s ease-in-out;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
 /* 각 이미지가 순서대로 위아래로 파도타기하는 애니메이션 */
 @keyframes wave {
-
   0%,
   100% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-10px);
   }
@@ -97,21 +132,26 @@
 
 /* 각 이미지에 다르게 애니메이션 적용 */
 .wave_0 {
-  animation: wave 1s ease-in-out infinite;
+  animation: wave 1.5s ease-in-out infinite;
 }
 
 .wave_1 {
-  animation: wave 1s ease-in-out infinite 0.2s;
+  animation: wave 1.5s ease-in-out infinite 0.2s;
 }
 
 .wave_2 {
-  animation: wave 1s ease-in-out infinite 0.4s;
+  animation: wave 1.5s ease-in-out infinite 0.4s;
 }
 
 .wave_3 {
-  animation: wave 1s ease-in-out infinite 0.6s;
+  animation: wave 1.5s ease-in-out infinite 0.6s;
 }
 
 .wave_4 {
-  animation: wave 1s ease-in-out infinite 0.8s;
+  animation: wave 1.5s ease-in-out infinite 0.8s;
+}
+
+/* 이미지 페이드 아웃 애니메이션 (옵션) */
+.animal_image_fade_out {
+  opacity: 0;
 }
