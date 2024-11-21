@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useFetcher, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from '../Css/Game.module.css';
 import mainstyle from '../App.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,10 +11,11 @@ import {
   getStory,
   getUser,
   initStory,
+  editFood,
+  editWater,
 } from '../service/service';
 import LoadingOverlay from '../Components/LoadingOverlay';
 import BackgroundMusicController from '../Components/BackgroundMusicController';
-import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
 
 function Game() {
   const { state } = useLocation();
@@ -30,9 +31,14 @@ function Game() {
   let [imageUrl, setImageUrl] = useState();
   let [water, setWater] = useState();
   let [food, setFood] = useState();
+  let [hp, setHp] = useState();
+
   const [modal, setModal] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [text, setText] = useState(['Loading...']);
+
+  const [isWaterActive, setIsWaterActive] = useState(true);
+  const [isFoodActive, setIsFoodActive] = useState(true);
 
   useEffect(() => {
     setWater(state.water);
@@ -41,47 +47,40 @@ function Game() {
 
   async function fetchOrCreateUser() {
     const storedUserId = sessionStorage.getItem('userId');
-    try {
-      let userId = storedUserId;
 
-      // 저장된 사용자 ID가 없다면 초기화하여 생성
-      if (!userId) {
-        userId = await initUser();
-        sessionStorage.setItem('userId', userId);
-        dispatch(setUserId(userId));
-      }
+    let userId = storedUserId;
 
-      // 사용자 ID로 스토리 가져오기 시도
-      await getStory(userId);
-    } catch (e) {
-      if (e.response && e.response.status === 404) {
-        // 스토리가 없을 경우 초기화하여 생성
-        const newUserId = await initUser();
-        sessionStorage.setItem('userId', newUserId);
-        dispatch(setUserId(newUserId));
-      } else {
-        console.error('스토리를 가져오는 중 오류 발생:', e);
-      }
-    } finally {
-      await getStory(storedUserId).then((response) => {
-        setContent(response.data.content);
-        setChoices([
-          response.data.choice1,
-          response.data.choice2,
-          response.data.choice3,
-        ]);
-        let link = atob(response.data.image);
-        link = JSON.parse(link);
-        setImageUrl(link.image_url);
-      });
-      await getUser(storedUserId).then((response) => {
-        setWater(response.data.water);
-        setFood(response.data.food);
-      });
-      const monologue = await getMonologue(sessionStorage.getItem('userId'));
-      setText(monologue.data.monologue);
+    // 저장된 사용자 ID가 없다면 초기화하여 생성
+    if (!userId) {
+      userId = await initUser();
+      sessionStorage.setItem('userId', userId);
+      await initStory(userId);
     }
+    await getUser(storedUserId).then((response) => {
+      setFood(response.data.food);
+      setWater(response.data.water);
+      setHp(response.data.hp);
+    });
+
+    await getStory(storedUserId).then((response) => {
+      setContent(response.data.content);
+      setChoices([
+        response.data.choice1,
+        response.data.choice2,
+        response.data.choice3,
+      ]);
+      let link = atob(response.data.image);
+      link = JSON.parse(link);
+      setImageUrl(link.image_url);
+    });
+    await getUser(storedUserId).then((response) => {
+      setWater(response.data.water);
+      setFood(response.data.food);
+    });
+    const monologue = await getMonologue(sessionStorage.getItem('userId'));
+    setText(monologue.data.monologue);
   }
+
   const modalOff = () => {
     setFadingOut(true); // FadingOut 상태 활성화
     setTimeout(() => {
@@ -105,7 +104,12 @@ function Game() {
   }
 
   useEffect(() => {
-    fetchOrCreateUser();
+    setModal(true);
+    fetchOrCreateUser().then(() => {
+      setTimeout(() => {
+        setModal(false);
+      }, 1000);
+    });
   }, []);
 
   // 상황에 맞는 사운드를 재생하는 함수
@@ -140,14 +144,29 @@ function Game() {
     let obj = {
       choice: choices[choice],
     };
+
+    let userId = sessionStorage.getItem('userId');
+    if (isWaterActive) {
+      await editWater(userId, -1);
+    }
+    if (isFoodActive) {
+      await editFood(userId, -1);
+    }
+
     setModal(true); // 모달 열기
+    await getUser(sessionStorage.getItem('userId')).then((response) => {
+      console.log(response);
+      if (response.data.alive == false) {
+        sessionStorage.removeItem('userId');
+        navigate('/end');
+      }
+    });
 
     (async () => {
       try {
         await getNextStory(sessionStorage.getItem('userId'), obj);
         await fetchOrCreateUser();
       } catch (error) {
-
       } finally {
         setTimeout(() => {
           modalOff();
@@ -210,6 +229,7 @@ function Game() {
                 alt="Water"
                 className={styles.statusImage}
               />
+              <div style={{ color: 'white', marginLeft: '8px' }}>{water}</div>
 
               <div className={styles.barContainer}>
                 <div
@@ -220,13 +240,22 @@ function Game() {
                   }}
                 ></div>
               </div>
-              <></>
-              <div style={{ color: 'white', marginLeft: '3px' }}>{water}</div>
+
+              {/* Toggle Button */}
+              <div
+                className={`${styles.toggleSwitch} ${
+                  isWaterActive ? styles.activew : ''
+                }`}
+                onClick={() => setIsWaterActive(!isWaterActive)} // 이벤트 리스너는 나중에 추가
+              >
+                <div className={styles.toggleKnob}></div>
+              </div>
             </div>
 
             {/* Food Status */}
             <div className={styles.statusItem}>
               <img src="/food.png" alt="Food" className={styles.statusImage} />
+              <div style={{ color: 'white', marginLeft: '3px' }}>{food}</div>
 
               <div className={styles.barContainer}>
                 <div
@@ -237,14 +266,22 @@ function Game() {
                   }}
                 ></div>
               </div>
-              <div style={{ color: 'white', marginLeft: '3px' }}>{food}</div>
+
+              {/* Toggle Button */}
+              <div
+                className={`${styles.toggleSwitch} ${
+                  isFoodActive ? styles.activef : ''
+                }`}
+                onClick={() => setIsFoodActive(!isFoodActive)} // 이벤트 리스너는 나중에 추가
+              >
+                <div className={styles.toggleKnob}></div>
+              </div>
             </div>
           </div>
           <div className={styles.choicediv}>
             <button
               className={`${styles.submitButton}`}
               onClick={() => {
-                console.log(fadingOut);
                 handleButtonClick();
               }}
             >
@@ -253,10 +290,6 @@ function Game() {
           </div>
         </div>
       </div>
-
-      {/* 클릭 효과음 오디오 요소 */}
-
-      <audio ref={clickSoundRef} src="Sounds/click-button.mp3" />
     </>
   );
 }

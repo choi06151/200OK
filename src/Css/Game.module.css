@@ -248,3 +248,45 @@
   height: 100%;
   border-radius: 10px;
 }
+/* Toggle Switch 기본 스타일 */
+.toggleSwitch {
+  width: 60px;
+  height: 25px;
+  background-color: #ccc; /* 기본 배경색 (비활성 상태) */
+  border-radius: 25px;
+  margin-left: 5px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* 활성화된 Toggle Switch */
+.toggleSwitch.activew {
+  background-color: #4d9ffb; /* 활성화 상태의 배경색 (파란색) */
+}
+
+.toggleSwitch.activef {
+  background-color: #ffcc00; /* 활성화 상태의 배경색 (파란색) */
+}
+
+/* Knob 스타일 */
+.toggleKnob {
+  width: 23px;
+  height: 23px;
+  background-color: white; /* Knob 색상 */
+  border-radius: 50%;
+  position: absolute;
+  top: 1px; /* 상단 여백 */
+  left: 1px; /* 비활성 상태의 기본 위치 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+  transition: left 0.3s ease; /* 위치 변경 애니메이션 */
+}
+
+/* 활성화된 Knob 위치 */
+.toggleSwitch.activew .toggleKnob {
+  left: 15px; /* 활성화 상태의 위치 */
+}
+
+.toggleSwitch.activef .toggleKnob {
+  left: 15px; /* 활성화 상태의 위치 */
+}
