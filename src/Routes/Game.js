@@ -35,14 +35,12 @@ function Game() {
   const [text, setText] = useState(['Loading...']);
 
   useEffect(() => {
-    console.log(state);
     setWater(state.water);
     setFood(state.food);
   }, [state]);
 
   async function fetchOrCreateUser() {
     const storedUserId = sessionStorage.getItem('userId');
-    console.log(`로컬 저장된 사용자 ID: ${storedUserId}`);
     try {
       let userId = storedUserId;
 
@@ -56,7 +54,6 @@ function Game() {
       // 사용자 ID로 스토리 가져오기 시도
       await getStory(userId);
     } catch (e) {
-      console.log(e);
       if (e.response && e.response.status === 404) {
         // 스토리가 없을 경우 초기화하여 생성
         const newUserId = await initUser();
@@ -67,7 +64,6 @@ function Game() {
       }
     } finally {
       await getStory(storedUserId).then((response) => {
-        console.log(response);
         setContent(response.data.content);
         setChoices([
           response.data.choice1,
@@ -83,13 +79,10 @@ function Game() {
         setFood(response.data.food);
       });
       const monologue = await getMonologue(sessionStorage.getItem('userId'));
-      console.log(monologue);
       setText(monologue.data.monologue);
-      console.log(text);
     }
   }
   const modalOff = () => {
-    console.log(`modaloff called`);
     setFadingOut(true); // FadingOut 상태 활성화
     setTimeout(() => {
       setFadingOut(false); // FadingOut 종료
@@ -151,17 +144,11 @@ function Game() {
 
     (async () => {
       try {
-        console.log('Calling getNextStory...');
         await getNextStory(sessionStorage.getItem('userId'), obj);
-        console.log('getNextStory completed');
-
-        console.log('Calling fetchOrCreateUser...');
         await fetchOrCreateUser();
-        console.log('fetchOrCreateUser completed');
       } catch (error) {
-        console.error('Error occurred:', error);
+
       } finally {
-        console.log('Closing modal...');
         setTimeout(() => {
           modalOff();
         }, 1000);
