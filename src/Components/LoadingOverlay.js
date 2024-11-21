@@ -1,22 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../Css/LoadingOverlay.module.css';
 
-const LoadingOverlay = ({ show, text }) => {
-  const [isFadingOut, setIsFadingOut] = useState(false);
+const LoadingOverlay = ({ fadingOut, text }) => {
   const [index, setIndex] = useState(0);
   const [isTextFadingOut, setIsTextFadingOut] = useState(false);
-
-  useEffect(() => {
-    if (show) {
-      setIsFadingOut(false);
-    } else {
-      setIsFadingOut(true);
-      const timer = setTimeout(() => {
-        setIsFadingOut(false);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [show]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,7 +20,7 @@ const LoadingOverlay = ({ show, text }) => {
   return (
     <div
       className={`${styles.overlay} ${
-        isFadingOut ? styles.overlay_fade_out : ''
+        fadingOut ? styles.overlay_fade_out : ''
       }`}
     >
       <div

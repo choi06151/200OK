@@ -330,6 +330,9 @@ const Dodge = () => {
   };
 
   const endGame = function () {
+    console.log(
+      `water:${this.registry.get('water')} food:${this.registry.get('food')}`
+    );
     const dieSound = this.sound.add('PlayerDie'); // 로드한 'hitSound'를 불러오기
     dieSound.play(); // 효과음 재생
     setGameStarted(false);
@@ -432,7 +435,11 @@ const Dodge = () => {
                   duration: 2000, // 2초 동안 애니메이션
                   ease: 'Linear', // 선형 애니메이션
                   onComplete: () => {
-                    navigate('/game', { state: { water, food } }); // 종료 후 이동
+                    let waterprop = this.registry.get('water');
+                    let foodprop = this.registry.get('food');
+                    navigate('/game', {
+                      state: { water: waterprop, food: foodprop },
+                    }); // 종료 후 이동
                   },
                 });
               },

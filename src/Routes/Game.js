@@ -9,10 +9,12 @@ import {
   getMonologue,
   getNextStory,
   getStory,
+  getUser,
   initStory,
 } from '../service/service';
 import LoadingOverlay from '../Components/LoadingOverlay';
 import BackgroundMusicController from '../Components/BackgroundMusicController';
+import { responsivePropType } from 'react-bootstrap/esm/createUtilityClasses';
 
 function Game() {
   const { state } = useLocation();
@@ -29,15 +31,16 @@ function Game() {
   let [water, setWater] = useState();
   let [food, setFood] = useState();
   const [modal, setModal] = useState(false);
+  const [fadingOut, setFadingOut] = useState(false);
   const [text, setText] = useState(['Loading...']);
 
   useEffect(() => {
+    console.log(state);
     setWater(state.water);
-    setWater(state.food);
+    setFood(state.food);
   }, [state]);
 
   async function fetchOrCreateUser() {
-    setModal(true);
     const storedUserId = sessionStorage.getItem('userId');
     console.log(`로컬 저장된 사용자 ID: ${storedUserId}`);
     try {
@@ -64,6 +67,7 @@ function Game() {
       }
     } finally {
       await getStory(storedUserId).then((response) => {
+        console.log(response);
         setContent(response.data.content);
         setChoices([
           response.data.choice1,
@@ -74,13 +78,24 @@ function Game() {
         link = JSON.parse(link);
         setImageUrl(link.image_url);
       });
+      await getUser(storedUserId).then((response) => {
+        setWater(response.data.water);
+        setFood(response.data.food);
+      });
       const monologue = await getMonologue(sessionStorage.getItem('userId'));
       console.log(monologue);
       setText(monologue.data.monologue);
       console.log(text);
-      setModal(false);
     }
   }
+  const modalOff = () => {
+    console.log(`modaloff called`);
+    setFadingOut(true); // FadingOut 상태 활성화
+    setTimeout(() => {
+      setFadingOut(false); // FadingOut 종료
+      setModal(false);
+    }, 1000); // 1초 후 모달 완전히 닫기
+  };
 
   async function initUser() {
     let user = {
@@ -132,21 +147,31 @@ function Game() {
     let obj = {
       choice: choices[choice],
     };
-
     setModal(true); // 모달 열기
-    await getNextStory(sessionStorage.getItem('userId'), obj);
 
-    await fetchOrCreateUser();
-    setModal(false); // 모달 닫기
+    (async () => {
+      try {
+        console.log('Calling getNextStory...');
+        await getNextStory(sessionStorage.getItem('userId'), obj);
+        console.log('getNextStory completed');
 
-    // 버튼 클릭 시 사운드 재생
-
-    // 1초 후에 "wait.js"로 이동
+        console.log('Calling fetchOrCreateUser...');
+        await fetchOrCreateUser();
+        console.log('fetchOrCreateUser completed');
+      } catch (error) {
+        console.error('Error occurred:', error);
+      } finally {
+        console.log('Closing modal...');
+        setTimeout(() => {
+          modalOff();
+        }, 1000);
+      }
+    })();
   };
 
   return (
     <>
-      {modal && <LoadingOverlay show={modal} text={text} />}
+      {modal && <LoadingOverlay fadingOut={fadingOut} text={text} />}
       <div className={mainstyle.div}>
         <div className={styles.imgdiv}>
           {' '}
@@ -232,6 +257,7 @@ function Game() {
             <button
               className={`${styles.submitButton}`}
               onClick={() => {
+                console.log(fadingOut);
                 handleButtonClick();
               }}
             >

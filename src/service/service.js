@@ -2,10 +2,14 @@ import axios from 'axios';
 
 const AMAZON_API_BASE_URL = 'http://localhost:8080/amazon';
 
-export const createUser = (user) =>
+export const createUser = async (user) =>
   axios.post(`${AMAZON_API_BASE_URL}/user`, user, {
     headers: { 'Content-Type': 'application/json' },
   });
+
+export const getUser = async (userId) => {
+  return await axios.get(`${AMAZON_API_BASE_URL}/user/userInfo/${userId}`);
+};
 
 export const initStory = async (userId) => {
   await axios.get(`${AMAZON_API_BASE_URL}/story/init/${userId}`, {
