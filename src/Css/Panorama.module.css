@@ -1,0 +1,27 @@
+.blackWhiteScreen {
+    background-color: rgb(33, 32, 32);
+    color: white;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    position: relative;  /* This makes sure the images are positioned relative to this container */
+}
+
+.filmImage {
+    position: absolute;  /* Position the film PNG absolutely within the container */
+    z-index: 10;  /* Ensures the film image is on top of the rotating images */
+    max-width: 200%;  /* Adjust the size of the film PNG */
+    max-height:160%; /* Adjust the size of the film PNG */
+}
+
+.dynamicImage {
+    position: absolute;  /* Position the dynamically changing images absolutely */
+    z-index: 1;  /* Makes sure the rotating images appear under the film PNG */
+    max-width: 90%;  /* Adjust the size of the rotating images */
+    max-height:75%; /* Adjust the size of the rotating images */
+    top: 8%;
+    left: 24%; 
+}
