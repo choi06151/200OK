@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import LoadingOverlay from '../Components/LoadingOverlay';
 import BackgroundMusicController from '../Components/BackgroundMusicController';
@@ -18,13 +18,17 @@ import {
 } from '../service/service';
 
 import { HiOutlineSpeakerWave, HiOutlineSpeakerXMark } from 'react-icons/hi2';
+import { addFood, addWater } from '../store/gameSlice';
 
 function Game() {
 	const { state } = useLocation();
 	const navigate = useNavigate();
 	const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
+	const dispatch = useDispatch();
 
 	let { name } = useSelector((state) => state.status);
+	let globwater = useSelector((state) => state.status.water);
+	let globfood = useSelector((state) => state.status.food);
 
 	let [content, setContent] = useState();
 	let [choice, setChoice] = useState(1);
@@ -49,7 +53,6 @@ function Game() {
 
 	async function fetchOrCreateUser() {
 		let storedUserId = sessionStorage.getItem('userId');
-
 		let userId = storedUserId;
 
 		// 저장된 사용자 ID가 없다면 초기화하여 생성
@@ -107,40 +110,13 @@ function Game() {
 	}
 
 	useEffect(() => {
-		// setModal(true);
-		// fetchOrCreateUser().then(() => {
-		// 	setTimeout(() => {
-		// 		setModal(false);
-		// 	}, 1000);
-		// });
+		setModal(true);
+		fetchOrCreateUser().then(() => {
+			setTimeout(() => {
+				setModal(false);
+			}, 1000);
+		});
 	}, []);
-
-	// 상황에 맞는 사운드를 재생하는 함수
-	const playsound = (situation) => {
-		let soundKey = '';
-		switch (situation) {
-			case 'scared':
-				soundKey = 'scared';
-				break;
-			case 'peaceful':
-				soundKey = 'peaceful';
-				break;
-			case 'tense':
-				soundKey = 'tense';
-				break;
-			case 'adventure':
-				soundKey = 'adventure';
-				break;
-			default:
-				console.log('Unknown situation:', situation);
-				return;
-		}
-
-		// 상황에 맞는 효과음 재생
-		if (soundKey && this.sound) {
-			this.sound.add(soundKey).play();
-		}
-	};
 
 	// 버튼 클릭 시 효과음 재생 및 페이지 이동
 	const handleButtonClick = async () => {
@@ -150,17 +126,17 @@ function Game() {
 
 		let userId = sessionStorage.getItem('userId');
 		if (isWaterActive) {
+			dispatch(addWater());
 			await editWater(userId, -1);
 		}
 		if (isFoodActive) {
+			dispatch(addFood());
 			await editFood(userId, -1);
 		}
 
 		setModal(true); // 모달 열기
 		await getUser(sessionStorage.getItem('userId')).then((response) => {
-			console.log(response);
 			if (response.data.alive == false) {
-				sessionStorage.removeItem('userId');
 				navigate('/end');
 			}
 		});
@@ -296,7 +272,7 @@ function Game() {
 						<button
 							className={`${styles.submitButton}`}
 							onClick={() => {
-								//handleButtonClick();
+								handleButtonClick();
 							}}
 						>
 							선택

@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
 	name: 'Guest',
 	imgs: [],
+	water: 0,
+	food: 0,
 };
 
 const statusSlice = createSlice({
@@ -13,10 +15,16 @@ const statusSlice = createSlice({
 			state.name = action.payload;
 		},
 		setImg: (state, action) => {
-			state.imgs.add(action.payload);
+			state.imgs.push(action.payload);
+		},
+		addWater: (state) => {
+			state.water = state.water + 1;
+		},
+		addFood: (state) => {
+			state.food = state.food + 1;
 		},
 	},
 });
 
-export const { setName, setImg } = statusSlice.actions;
+export const { setName, setImg, addWater, addFood } = statusSlice.actions;
 export default statusSlice.reducer;
