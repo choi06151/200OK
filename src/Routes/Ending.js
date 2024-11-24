@@ -16,10 +16,10 @@ function Ending() {
 	const [day, setDay] = useState();
 
 	useEffect(() => {
-		getUser(15).then((response) => {
+		const id = sessionStorage.getItem('userId');
+		getUser(id).then((response) => {
 			setDay(response.data.day);
 		});
-		sessionStorage.removeItem('userId');
 
 		getRanking().then((response) => {
 			setRankingData(response.data);
@@ -36,7 +36,7 @@ function Ending() {
 				<div>{`당신이 먹은 음식의 수 : ${food}`}</div>
 			</div>
 
-			<div>
+			<div style={{ width: '50%', height: '30%', margin: '0 auto' }}>
 				<Panorama></Panorama>
 			</div>
 

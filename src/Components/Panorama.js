@@ -1,6 +1,7 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css'; // 기본 스타일
 import 'slick-carousel/slick/slick-theme.css'; // 테마 스타일
+import { useSelector } from 'react-redux';
 
 export default function Panorama() {
 	let settings = {
@@ -15,17 +16,36 @@ export default function Panorama() {
 		slidesToScroll: 1, // 한 번에 넘길 슬라이드 수
 	};
 
-	const obj = [1, 2, 3, 4, 5, 6];
+	const { imgs } = useSelector((state) => state.status);
+	console.log(imgs);
+
 	return (
-		<div>
+		<div style={{ width: '100%', position: 'relative', paddingTop: '15%' }}>
 			<Slider {...settings}>
-				{obj.map((item) => {
-					return (
-						<div>
-							<h3 style={{ color: 'white' }}>{item}</h3>
-						</div>
-					);
-				})}
+				{imgs.map((img, index) => (
+					<div
+						key={index}
+						style={{
+							width: '100%',
+							height: '100%',
+							position: 'absolute', // 부모 크기 맞춤
+							top: 0,
+							left: 0,
+							overflow: 'hidden',
+						}}
+					>
+						<img
+							src={img}
+							alt={`slider-img-${index}`}
+							style={{
+								width: '100%',
+								height: '100%',
+								objectFit: 'contain',
+								borderRadius: '10px',
+							}}
+						/>
+					</div>
+				))}
 			</Slider>
 		</div>
 	);

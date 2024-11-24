@@ -18,15 +18,15 @@ import {
 } from '../service/service';
 
 import { HiOutlineSpeakerWave, HiOutlineSpeakerXMark } from 'react-icons/hi2';
-import { addFood, addWater } from '../store/gameSlice';
+import { addFood, addWater, setImg } from '../store/gameSlice';
 
 function Game() {
 	const { state } = useLocation();
 	const navigate = useNavigate();
-	const clickSoundRef = useRef(null); // 클릭 효과음 재생을 위한 useRef
 	const dispatch = useDispatch();
 
 	let { name } = useSelector((state) => state.status);
+	let check = useSelector((state) => state.status);
 	let globwater = useSelector((state) => state.status.water);
 	let globfood = useSelector((state) => state.status.food);
 
@@ -77,6 +77,8 @@ function Game() {
 			]);
 			let link = atob(response.data.image);
 			link = JSON.parse(link);
+			dispatch(setImg(link.image_url));
+			console.log(check);
 			setImageUrl(link.image_url);
 		});
 		await getUser(storedUserId).then((response) => {
@@ -160,7 +162,7 @@ function Game() {
 			<div className={mainstyle.div}>
 				<div className={styles.imgdiv}>
 					{' '}
-					<img alt="img" className={styles.img} src="dog.png"></img>
+					<img alt="img" className={styles.img} src={imageUrl}></img>
 					<div
 						className={styles.muteIconContainer}
 						onClick={() => setMute(!mute)}
