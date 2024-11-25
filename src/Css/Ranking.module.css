@@ -1,0 +1,83 @@
+/* 배경 */
+.modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 컨테이너 */
+.modalContainer {
+  background-color: #222;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+  color: white;
+  text-align: center;
+  transform: translateY(100%);
+  /* 초기 위치 (화면 아래) */
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 아래에서 위로 등장 */
+.slideUp {
+  transform: translateY(0);
+  /* 화면 중앙 */
+}
+
+/* 위에서 아래로 사라짐 */
+.slideDown {
+  transform: translateY(100%);
+  /* 화면 아래 */
+}
+
+/* 테이블 스타일 */
+.rankingTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.rankingTable th,
+.rankingTable td {
+  padding: 12px;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+.rankingTable th {
+  background-color: #333;
+}
+
+.rankingTable tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+.rankingTable tr:nth-child(odd) {
+  background-color: #1e1e1e;
+}
+
+/* 닫기 버튼 */
+.closeBtn {
+  background: none;
+  border: 1px solid #555;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.closeBtn:hover {
+  background-color: #444;
+}
+

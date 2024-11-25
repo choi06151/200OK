@@ -3,46 +3,47 @@ import axios from 'axios';
 const AMAZON_API_BASE_URL = 'http://localhost:8080/amazon';
 
 export const createUser = async (user) =>
-  axios.post(`${AMAZON_API_BASE_URL}/user`, user, {
-    headers: { 'Content-Type': 'application/json' },
-  });
+	axios.post(`${AMAZON_API_BASE_URL}/user`, user, {
+		headers: { 'Content-Type': 'application/json' },
+	});
 
 export const getUser = async (userId) => {
-  return await axios.get(`${AMAZON_API_BASE_URL}/user/userInfo/${userId}`);
+	return await axios.get(`${AMAZON_API_BASE_URL}/user/userInfo/${userId}`);
 };
 
 export const initStory = async (userId) => {
-  await axios.get(`${AMAZON_API_BASE_URL}/story/init/${userId}`, {
-    headers: { 'Content-Type': 'application/json' },
-  });
+	await axios.get(`${AMAZON_API_BASE_URL}/story/init/${userId}`, {
+		headers: { 'Content-Type': 'application/json' },
+	});
 };
 
 export const getStory = async (userId) => {
-  try {
-    return await axios.get(
-      `${AMAZON_API_BASE_URL}/story/currentStory/${userId}`
-    );
-  } catch (e) {
-    // 스토리가 없을 경우 초기화하여 생성
-
-    if (e.response && e.response.status === 404) {
-      await initStory(userId);
-      return await axios.get(
-        `${AMAZON_API_BASE_URL}/story/currentStory/${userId}`
-      );
-    } else {
-      throw e; // 다른 오류가 발생할 경우 다시 던짐
-    }
-  }
+	return await axios.get(`${AMAZON_API_BASE_URL}/story/currentStory/${userId}`);
 };
 
 export const getNextStory = async (userId, choice) => {
-  return await axios.post(
-    `${AMAZON_API_BASE_URL}/story/generate/${userId}`,
-    choice
-  );
+	return await axios.post(
+		`${AMAZON_API_BASE_URL}/story/generate/${userId}`,
+		choice
+	);
 };
 
 export const getMonologue = async (userId) => {
-  return await axios.get(`${AMAZON_API_BASE_URL}/story/monologue/${userId}`);
+	return await axios.get(`${AMAZON_API_BASE_URL}/story/monologue/${userId}`);
+};
+
+export const editWater = async (userId, quantity) => {
+	axios.patch(
+		`${AMAZON_API_BASE_URL}/user/userInfo/editWater/${userId}/${quantity}`
+	);
+};
+
+export const editFood = async (userId, quantity) => {
+	await axios.patch(
+		`${AMAZON_API_BASE_URL}/user/userInfo/editFood/${userId}/${quantity}`
+	);
+};
+
+export const getRanking = async () => {
+	return await axios.get(`${AMAZON_API_BASE_URL}/rank`);
 };

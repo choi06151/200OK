@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-const BackgroundMusicController = ({ modal }) => {
+const BackgroundMusicController = ({ modal, mute }) => {
 	const audioRef = useRef(null);
 	const backgroundmusic = `${process.env.PUBLIC_URL}/Sounds/gameost.mp3`;
 	const loadingmusic = `${process.env.PUBLIC_URL}/Sounds/jungle-background.mp3`;
@@ -9,9 +9,13 @@ const BackgroundMusicController = ({ modal }) => {
 
 	useEffect(() => {
 		if (audioRef.current) {
-			audioRef.current.volume = 0.05; // 초기 볼륨 설정
+			audioRef.current.volume = 0.035; // 초기 볼륨 설정
 		}
 	}, []);
+
+	useEffect(() => {
+		mute ? (audioRef.current.volume = 0) : (audioRef.current.volume = 0.035);
+	}, [mute]);
 
 	useEffect(() => {
 		// modal 상태에 따라 nowPlaying 설정

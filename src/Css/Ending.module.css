@@ -1,0 +1,69 @@
+/* 버튼 컨테이너 스타일 */
+.button_container {
+  display: flex;
+  justify-content: center;
+  /* 버튼을 중앙 정렬 */
+  gap: 15px;
+  /* 버튼들 사이의 간격을 15px로 줄임 */
+  margin-top: 30px;
+  /* 상단 여백 */
+}
+
+/* 기본 버튼 스타일 */
+.modern_button {
+  padding: 10px 24px;
+  /* 상하 10px, 좌우 24px로 크기 조정 */
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #333333;
+  /* Dark background */
+  color: #fff;
+  /* White text */
+  border: 2px solid #444444;
+  /* Subtle border */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* Smooth transition */
+}
+
+.modern_button:hover {
+  background-color: #444444;
+  /* Slightly lighter background */
+  border-color: #888888;
+  /* Lighter border on hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  /* Hover shadow effect */
+}
+
+.modern_button:active {
+  transform: scale(0.98);
+  /* Slightly shrink button on click */
+}
+
+/* 홈으로 버튼 스타일 */
+.home_button {
+  background-color: #2a2a2a;
+  /* Slightly darker for home */
+  border-color: #555555;
+  /* Border color for home button */
+}
+
+.home_button:hover {
+  background-color: #383838;
+  /* Lighter dark on hover */
+}
+
+/* 랭킹 버튼 스타일 */
+.ranking_button {
+  background-color: #2a2a2a;
+  /* Slightly different color for ranking */
+  border-color: #666666;
+  /* Border color for ranking button */
+}
+
+.ranking_button:hover {
+  background-color: #383838;
+  /* Lighter dark on hover */
+}
