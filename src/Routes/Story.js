@@ -3,6 +3,7 @@ import styles from '../Css/Story.module.css';
 function Story() {
   // Array of image sources
   const images = [
+    '0.png',
     '1.png',
     '2.png',
     '3.png',

@@ -1,20 +1,18 @@
 /* Container for the entire page to enable scrolling */
 .scrollContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centers the images horizontally */
-    overflow-y: auto; /* Enables vertical scrolling */
-    height: 100vh; /* Full viewport height */
-    padding: 20px;
-    background-color: #f8f8f8; /* Light background for contrast */
-  }
-  
-  /* Style for each image */
-  .image {
-    width: 50%; /* Scale images to 70% of the container's width */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 20px; /* Space between images */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the images horizontally */
+  overflow-y: auto; /* Enables vertical scrolling */
+  height: 100vh; /* Full viewport height */
+  padding: 0px;
+  background-color: #ffffff; /* Replace with the PNG background color */
+}
 
-  
+/* Style for each image */
+.image {
+  width: 50%; /* Scale images to 50% of the container's width */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 140px; /* Space between images */
+  background-color: #ffffff; /* Replace with the PNG background color */
+}
