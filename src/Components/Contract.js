@@ -142,7 +142,7 @@ function Contract() {
               type="submit"
               className={styles.contractButton}
               onClick={() => {
-                navigate('/dodge');
+                navigate('/story');
               }}
             >
               계약하기
