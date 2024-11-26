@@ -17,7 +17,6 @@ function Story() {
     '8.png',
     '9.png',
     '10.png',
-    '11.png',
   ];
 
   // State for the current image index
