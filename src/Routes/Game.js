@@ -161,7 +161,7 @@ function Game() {
   return (
     <>
       {modal && <LoadingOverlay fadingOut={fadingOut} text={text} />}
-      <div className={mainstyle.div}>
+      <div className={styles.div}>
         <div className={styles.imgdiv}>
           {' '}
           <img alt="img" className={styles.img} src={imageUrl}></img>
@@ -284,15 +284,8 @@ function Game() {
                 setChoice(0);
               }}
             >
-              <label htmlFor="choice1">
-                <input
-                  type="radio"
-                  id="choice1"
-                  name="choices"
-                  defaultChecked
-                />
-                {`${choices[0]}`}
-              </label>
+              <input type="radio" id="choice1" name="choices" defaultChecked />
+              <label htmlFor="choice1">{`${choices[0]}`}</label>
             </div>
             <div
               className={styles.choice}
@@ -300,10 +293,8 @@ function Game() {
                 setChoice(1);
               }}
             >
-              <label htmlFor="choice2">
-                <input type="radio" id="choice2" name="choices" />
-                {`${choices[1]}`}
-              </label>
+              <input type="radio" id="choice2" name="choices" />
+              <label htmlFor="choice2">{`${choices[1]}`}</label>
             </div>
             <div
               className={styles.choice}
@@ -311,10 +302,8 @@ function Game() {
                 setChoice(2);
               }}
             >
-              <label htmlFor="choice3">
-                <input type="radio" id="choice3" name="choices" />
-                {`${choices[2]}`}
-              </label>
+              <input type="radio" id="choice3" name="choices" />
+              <label htmlFor="choice3">{`${choices[2]}`}</label>
             </div>
           </div>
         </div>
