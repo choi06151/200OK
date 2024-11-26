@@ -8,6 +8,7 @@ function Story() {
 	const [modalComplete, setModalComplete] = useState(false); // 모달 완료 상태
 	const navigate = useNavigate();
 
+
 	// 이미지 배열
 	const images = [
 		'0.png',
