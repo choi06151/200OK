@@ -530,36 +530,72 @@ const Dodge = () => {
 				<div
 					style={{
 						position: 'absolute',
-						top: 16,
-						left: 16,
+						top: '2%',
+						left: '50%', // 화면의 가로 중앙
+						transform: 'translate(-50%, -50%)', // 정확히 중앙에 배치
+						fontSize: '40px',
 						color: 'white',
 						zIndex: 10,
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						padding: '5px',
+						padding: '10px', // 여백을 살짝 늘림
 						borderRadius: '5px',
+						margin: '0 auto',
 						cursor: 'none',
+						textAlign: 'center', // 텍스트 정렬
 					}}
 				>
-					Time Left: {timeLeft}
-					water: {water}
-					food: {food}
+					Time Left : {timeLeft}
+					<br />
+					{timeLeft <= 0 && (
+						<div
+							style={{
+								position: 'absolute',
+								top: 80,
+								left: 33,
+								color: 'red',
+								zIndex: 10,
+								backgroundColor: 'rgba(0, 0, 0, 0.5)',
+								padding: '5px',
+								borderRadius: '5px',
+							}}
+						>
+							게임 종료!
+						</div>
+					)}
 				</div>
-				{timeLeft <= 0 && (
-					<div
-						style={{
-							position: 'absolute',
-							top: 50,
-							left: 16,
-							color: 'red',
-							zIndex: 10,
-							backgroundColor: 'rgba(0, 0, 0, 0.5)',
-							padding: '5px',
-							borderRadius: '5px',
-						}}
-					>
-						게임 오버!
-					</div>
-				)}
+				``
+				<div
+					style={{
+						position: 'absolute',
+						top: '93%',
+						left: '50%', // 화면의 가로 중앙
+						transform: 'translate(-50%, -50%)', // 정확히 중앙에 배치
+						fontSize: '40px',
+						color: 'white',
+						zIndex: 10,
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+						padding: '10px', // 여백을 살짝 늘림
+						borderRadius: '5px',
+						margin: '0 auto',
+						cursor: 'none',
+						textAlign: 'center', // 텍스트 정렬
+						verticalAlign: 'center',
+						display: 'flex' /* Flexbox 사용 */,
+						alignItems: 'center' /* 수직 중앙 정렬 */,
+					}}
+				>
+					<img
+						src="/UI/water.png"
+						style={{ width: '40px', height: '40px' }}
+					></img>
+					: {`${water}`}
+					<br></br>
+					<img
+						src="/UI/food.png"
+						style={{ width: '40px', height: '40px' }}
+					></img>
+					: {food}
+				</div>
 			</div>
 		</div>
 	);
