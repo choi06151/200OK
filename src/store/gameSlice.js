@@ -18,10 +18,10 @@ const statusSlice = createSlice({
 			state.imgs.push(action.payload);
 		},
 		addWater: (state) => {
-			state.water = state.water + 1;
+			state.water += 1;
 		},
 		addFood: (state) => {
-			state.food = state.food + 1;
+			state.food += 1;
 		},
 	},
 });

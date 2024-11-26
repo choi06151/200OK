@@ -7,29 +7,24 @@ import Story from './Routes/Story';
 import Wait from './Routes/Wait';
 import Ending from './Routes/Ending';
 import styles from './App.module.css';
-
-const imageList = [
-  'jungleexample.jpg',
-  'junglewoodback.avif',
-  'jungle.jpg',
-  'World.jpeg', // Add as many images as you want
-];
+import DodgeTutorial from './Routes/DodgeTutorial';
 
 function App() {
-  return (
-    <div className={styles.App}>
-      <div className={styles.shadow}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dodge" element={<Dodge />} />
-          <Route path="/game" element={<Game />} />
-          <Route path="/wait" element={<Wait />} />
-          <Route path="/end" element={<Ending />} />
-          <Route path="/story" element={<Story />} />
-        </Routes>
-      </div>
-    </div>
-  );
+	return (
+		<div className={styles.App}>
+			<div className={styles.shadow}>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/dodge" element={<Dodge />} />
+					<Route path="/game" element={<Game />} />
+					<Route path="/wait" element={<Wait />} />
+					<Route path="/end" element={<Ending />} />
+					<Route path="/story" element={<Story />} />
+					<Route path="/dodgetutorial" element={<DodgeTutorial />}></Route>
+				</Routes>
+			</div>
+		</div>
+	);
 }
 
 export default App;

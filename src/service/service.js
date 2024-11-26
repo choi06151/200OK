@@ -33,13 +33,13 @@ export const getMonologue = async (userId) => {
 };
 
 export const editWater = async (userId, quantity) => {
-	axios.patch(
+	return axios.patch(
 		`${AMAZON_API_BASE_URL}/user/userInfo/editWater/${userId}/${quantity}`
 	);
 };
 
 export const editFood = async (userId, quantity) => {
-	await axios.patch(
+	return await axios.patch(
 		`${AMAZON_API_BASE_URL}/user/userInfo/editFood/${userId}/${quantity}`
 	);
 };
