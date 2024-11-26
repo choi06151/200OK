@@ -6,6 +6,7 @@ function Story() {
   // Array of image sources
   const navigate = useNavigate();
   const images = [
+    '0.png',
     '1.png',
     '2.png',
     '3.png',
