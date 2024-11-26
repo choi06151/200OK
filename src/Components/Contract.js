@@ -142,6 +142,9 @@ function Contract() {
               type="submit"
               className={styles.contractButton}
               onClick={() => {
+                if (sessionStorage.getItem('userId')) {
+                  sessionStorage.removeItem('userId');
+                }
                 navigate('/story');
               }}
             >

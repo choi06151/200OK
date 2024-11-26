@@ -1,65 +1,79 @@
 .img {
-  width: 100%;
-  height: 100%;
+  width: 44%;
+  height: 70%;
+  margin-right: 18%;
+  margin-top: 10%;
+  object-fit: cover;
 }
 
 .imgdiv {
-  width: 45%;
-  height: 35vh;
-  margin: 0 auto;
+  background-image: url('/public/UI/imgBack.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 55%;
+  height: 40vh;
+  margin-left: 27%;
   color: white;
 }
 
-.textdiv {
-  width: 85%;
-  /* 너비 */
-  box-sizing: border-box;
-  height: 15vh;
-  /* 높이를 자동으로 설정 */
+.innertext {
+  width: 70%;
+  height: 12vh;
+  pad: 10%;
   margin: 0 auto;
-  /* 가운데 정렬 */
-  border: 1px solid #444;
-  /* 테두리 색상 */
-  background-color: #333;
-  /* 반투명 배경색 */
-  color: #fff;
-  /* 글자 색상 */
-  margin-top: 2%;
-  /* 상단 여백 */
-  padding: 15px;
-  /* 패딩 추가 */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  /* 그림자 추가 */
+  overflow: auto; /* 콘텐츠가 넘치면 스크롤바가 나타남 */
+}
+
+/* 웹킷 기반 브라우저에서 스크롤바 숨기기 */
+.innertext::-webkit-scrollbar {
+  width: 0px; /* 수평 스크롤바의 경우 height: 0px */
+  height: 0px; /* 수직 스크롤바 */
+}
+
+.innertext::-webkit-scrollbar-thumb {
+  background: transparent; /* 스크롤바 thumb을 투명하게 설정 */
+}
+
+.innertext::-webkit-scrollbar-track {
+  background: transparent; /* 스크롤바 트랙을 투명하게 설정 */
+}
+
+.textdiv {
+  width: 100%;
+  height: 30vh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  align-content: center;
   border-radius: 8px;
-  /* 모서리 둥글게 */
-  font-size: 1.1rem;
-  /* 폰트 크기 조정 */
-  line-height: 1.5;
-  /* 줄 간격 조정 */
+  color: #fff;
+  background-image: url('/public/UI/backpanel.png'); /* public 경로일 경우 */
+  background-size: contain;
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
 .choiceContainer {
+  margin-top: 4%;
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 85%;
-  margin: 20px auto;
-  background-color: #333;
-  padding: 15px 20px;
+  width: 50%;
+  height: 50vh;
   /* 양쪽 padding 추가 */
   border-radius: 8px;
 }
 
 .choice {
+  width: 100%;
+  height: 20vh;
+  background-image: url('/public/UI/choice.png');
+  background-size: contain;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   width: calc(100% - 20px);
   /* 오른쪽 여백을 확보 */
-  padding: 10px;
-  margin: 5px 0;
-  background-color: #444;
+  margin-left: 5%;
   border-radius: 5px;
   color: white;
   cursor: pointer;
@@ -67,16 +81,11 @@
   position: relative;
 }
 
-.choice:hover {
-  background-color: #555;
-}
-
 /* Custom radio button styling */
 .choice input[type='radio'] {
   appearance: none;
   width: 20px;
   height: 20px;
-  border: 2px solid #888;
   border-radius: 50%;
   background-color: #333;
   margin-right: 10px;
@@ -86,8 +95,8 @@
 }
 
 .choice input[type='radio']:checked {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #61380b;
+  border-color: #61380b;
 }
 
 .choice input[type='radio']::before {
@@ -113,114 +122,28 @@
   cursor: pointer;
 }
 
-.submitButton {
-  width: 80%;
-  /* 버튼 너비 */
-  padding: 12px;
-  /* 버튼 안쪽 여백 */
-  color: #fff;
-  /* 글자 색 */
-  background-color: #444;
-  /* 버튼 배경색 */
-  border: none;
-  /* 테두리 없애기 */
-  border-radius: 5px;
-  /* 둥근 모서리 */
-  font-size: 18px;
-  /* 글자 크기 */
-  font-weight: bold;
-  /* 글자 두께 */
-  cursor: pointer;
-  /* 커서 모양 변경 */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  /* 효과 */
-  display: block;
-  /* 블록 형태로 쌓이게 */
-  margin: 10px auto;
-  /* 가운데 정렬 */
-  text-align: center;
-  /* 텍스트 가운데 정렬 */
-}
-
-.submitButton:hover {
-  background-color: #555;
-  /* 마우스 오버 시 배경색 */
-  transform: scale(1.05);
-  /* 마우스 오버 시 살짝 커짐 */
-}
-
-.submitButton:active {
-  transform: scale(0.95);
-  /* 클릭 시 눌린 효과 */
-}
-
 .userdiv {
+  display: flex;
+  width: 100%;
+  height: 30vh;
   box-sizing: border-box;
-
-  display: flex;
-  /* 가로로 나란히 배치 */
-  justify-content: space-between;
-  /* 양 끝으로 정렬 */
-  align-items: center;
-  /* 수직 중앙 정렬 */
-  width: 85%;
-  /* 너비 */
-  height: 15vh;
-  /* 높이 설정 */
-  margin: 20px auto;
-  /* 가운데 정렬 */
-  /* 전체 div의 테두리 */
-  padding: 10px;
-  /* 여백 */
-  background-color: #333;
-  /* 배경색 */
   border-radius: 8px;
-  /* 모서리 둥글게 */
-}
-
-.statusdiv {
-  display: flex;
-  /* 내부 요소들을 가로로 배치 */
-  flex-direction: column;
-  /* 세로로 정렬 */
-  align-items: flex-start;
-  /* 왼쪽 정렬 */
-  color: white;
-  /* 텍스트 색상 */
-}
-
-.statusImage {
-  width: 30px;
-  /* 이미지 크기 조정 */
-  height: 30px;
-  /* 이미지 크기 조정 */
-  margin-right: 5px;
-  /* 오른쪽 여백 */
-}
-
-.statusdiv p {
-  margin: 5px 0;
-  /* 텍스트 간격 조정 */
-}
-
-.choicediv {
-  display: flex;
-  /* 내부 요소들을 가로로 배치 */
-  flex-direction: column;
-  /* 세로로 정렬 */
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #fff;
   align-items: center;
-  /* 가운데 정렬 */
-  width: 40%;
-  /* 너비 조정 */
-  color: white;
-  /* 텍스트 색상 */
+  background-image: url('/public/UI/backpanel.png'); /* public 경로일 경우 */
+  background-size: contain;
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
 .statusDiv {
   width: 50%;
   display: flex;
   flex-direction: column;
+  margin-left: 15%;
   gap: 10px;
+  margin-bottom: 14px;
 }
 
 .statusItem {
@@ -229,9 +152,9 @@
 }
 
 .statusImage {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
 }
 
 .barContainer {
@@ -251,7 +174,7 @@
 
 /* Toggle Switch 기본 스타일 */
 .toggleSwitch {
-  width: 60px;
+  width: 85px;
   height: 25px;
   background-color: #ccc;
   /* 기본 배경색 (비활성 상태) */
