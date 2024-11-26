@@ -17,11 +17,11 @@ const statusSlice = createSlice({
 		setImg: (state, action) => {
 			state.imgs.push(action.payload);
 		},
-		addWater: (state, action) => {
-			state.water = state.water + action.payload;
+		addWater: (state) => {
+			state.water += 1;
 		},
-		addFood: (state, action) => {
-			state.food = state.food + action.p;
+		addFood: (state) => {
+			state.food += 1;
 		},
 	},
 });

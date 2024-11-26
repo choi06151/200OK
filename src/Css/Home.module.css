@@ -36,53 +36,9 @@
   /* 클릭할 때 살짝 줄어드는 효과 */
 }
 
-.modal {
-  position: fixed;
-  top: 50%;
-  right: -100%;
-  /* 처음에 화면 밖에 있도록 설정 */
-  transform: translateY(-50%);
-  width: var(--modal-width);
-
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  opacity: 0;
-  /* 초기 상태에서 보이지 않도록 설정 */
-  transition: right 0.5s ease-in-out, opacity 0.5s ease-in-out;
-  z-index: 100;
-  /* 모달이 항상 위에 있도록 설정 */
-}
-
-.modal.show {
-  right: calc(50% + var(--modal-width) / 4);
-  /* 화면 중앙으로 이동 */
-  transform: translate(50%, -50%);
-  opacity: 1;
-  /* 보이도록 설정 */
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 1;
-  z-index: 90;
-  /* 오버레이는 모달보다 뒤에 있도록 설정 */
-}
-
-/* 오버레이가 활성화되었을 때 */
-.overlay.show {
-  opacity: 1;
-  /* 오버레이를 보이도록 설정 */
-}
 
 .logo {
-  width: 50%;
-  height: 20%;
-  margin: 0 auto;
+  width: 45%;
   height: 40vh;
+  margin-top: 10%;
 }

@@ -223,7 +223,8 @@ const Dodge = () => {
 
 	const createBullet = function () {
 		const sides = ['top', 'left', 'right', 'bottom'];
-		const bulletCount = Phaser.Math.Between(1, 2);
+		const choices = [1, 1, 1, 1, 1, 2];
+		const bulletCount = Phaser.Math.RND.pick(choices);
 
 		for (let i = 0; i < bulletCount; i++) {
 			const side = Phaser.Math.RND.pick(sides);
@@ -256,7 +257,7 @@ const Dodge = () => {
 				this.player.x,
 				this.player.y
 			);
-			bullet.setVelocity(Math.cos(angle) * 90, Math.sin(angle) * 90);
+			bullet.setVelocity(Math.cos(angle) * 50, Math.sin(angle) * 50);
 
 			const createFlame = () => {
 				const flame = this.add
@@ -491,7 +492,7 @@ const Dodge = () => {
 
 		// 총알 생성 이벤트
 		this.time.addEvent({
-			delay: 400, // 총알 생성 주기
+			delay: 600, // 총알 생성 주기
 			callback: createBullet,
 			callbackScope: this,
 			loop: true,
@@ -529,18 +530,15 @@ const Dodge = () => {
 			>
 				<div
 					style={{
-						position: 'absolute',
+						position: 'relative',
+						width: '15%',
+						margin: ' 0 auto',
 						top: '2%',
-						left: '50%', // 화면의 가로 중앙
-						transform: 'translate(-50%, -50%)', // 정확히 중앙에 배치
 						fontSize: '40px',
 						color: 'white',
 						zIndex: 10,
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						padding: '10px', // 여백을 살짝 늘림
 						borderRadius: '5px',
-						margin: '0 auto',
-						cursor: 'none',
 						textAlign: 'center', // 텍스트 정렬
 					}}
 				>
@@ -549,13 +547,10 @@ const Dodge = () => {
 					{timeLeft <= 0 && (
 						<div
 							style={{
-								position: 'absolute',
-								top: 80,
-								left: 33,
+								position: 'relative',
 								color: 'red',
 								zIndex: 10,
 								backgroundColor: 'rgba(0, 0, 0, 0.5)',
-								padding: '5px',
 								borderRadius: '5px',
 							}}
 						>
@@ -563,33 +558,28 @@ const Dodge = () => {
 						</div>
 					)}
 				</div>
-				``
+
 				<div
 					style={{
-						position: 'absolute',
-						top: '93%',
-						left: '50%', // 화면의 가로 중앙
-						transform: 'translate(-50%, -50%)', // 정확히 중앙에 배치
+						position: 'relative',
 						fontSize: '40px',
+						width: '10%',
+						top: '80%',
 						color: 'white',
 						zIndex: 10,
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						padding: '10px', // 여백을 살짝 늘림
 						borderRadius: '5px',
 						margin: '0 auto',
 						cursor: 'none',
 						textAlign: 'center', // 텍스트 정렬
-						verticalAlign: 'center',
-						display: 'flex' /* Flexbox 사용 */,
-						alignItems: 'center' /* 수직 중앙 정렬 */,
+						alignContent: 'center',
 					}}
 				>
 					<img
 						src="/UI/water.png"
 						style={{ width: '40px', height: '40px' }}
 					></img>
-					: {`${water}`}
-					<br></br>
+					: {`${water}   `}
 					<img
 						src="/UI/food.png"
 						style={{ width: '40px', height: '40px' }}

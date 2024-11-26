@@ -1,0 +1,89 @@
+.tutorialContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  /* 전체 화면 크기 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  /* 배경 색 */
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+}
+
+.tutorialImage {
+  width: 100%;
+  max-width: 800px;
+  /* 이미지 크기 제한 */
+  height: auto;
+  opacity: 0;
+  /* 초기 상태에서 숨김 */
+  transition: opacity 0.3s ease-in-out;
+  /* 투명도 변경 부드럽게 */
+}
+
+.fadeIn {
+  opacity: 1;
+  /* 보이도록 설정 */
+}
+
+.fadeOut {
+  opacity: 0;
+  /* 사라지도록 설정 */
+}
+
+.arrowButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  /* 화살표 크기 키우기 */
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 20px;
+  /* 클릭 범위 확대 */
+  width: 60px;
+  /* 클릭 범위 확장 */
+  height: 60px;
+  /* 클릭 범위 확장 */
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftArrow {
+  left: 10px;
+}
+
+.rightArrow {
+  right: 10px;
+}
+
+.actionButton {
+  position: absolute;
+  bottom: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  /* 버튼 색 */
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  background-color: #0056b3;
+  /* 마우스를 올렸을 때 배경색 */
+  transform: scale(1.05);
+  /* 살짝 확대되는 효과 */
+}

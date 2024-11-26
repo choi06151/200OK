@@ -58,7 +58,7 @@ function Game() {
 		if (!userId) {
 			userId = await initUser();
 			sessionStorage.setItem('userId', userId);
-			//await initStory(userId);
+			await initStory(userId);
 			storedUserId = userId;
 		}
 		await getUser(storedUserId).then((response) => {
@@ -69,23 +69,23 @@ function Game() {
 			setDay(response.data.day);
 		});
 
-		// await getStory(storedUserId).then((response) => {
-		// 	setContent(response.data.content);
-		// 	setChoices([
-		// 		response.data.choice1,
-		// 		response.data.choice2,
-		// 		response.data.choice3,
-		// 	]);
-		// 	let link = atob(response.data.image);
-		// 	link = JSON.parse(link);
-		// 	dispatch(setImg(link.image_url));
-		// 	console.log(check);
-		// 	setImageUrl(link.image_url);
-		// });
-		// await getUser(storedUserId).then((response) => {
-		// 	setWater(response.data.water);
-		// 	setFood(response.data.food);
-		// });
+		await getStory(storedUserId).then((response) => {
+			setContent(response.data.content);
+			setChoices([
+				response.data.choice1,
+				response.data.choice2,
+				response.data.choice3,
+			]);
+			let link = atob(response.data.image);
+			link = JSON.parse(link);
+			dispatch(setImg(link.image_url));
+			console.log(check);
+			setImageUrl(link.image_url);
+		});
+		await getUser(storedUserId).then((response) => {
+			setWater(response.data.water);
+			setFood(response.data.food);
+		});
 	}
 
 	const modalOff = () => {
@@ -121,6 +121,7 @@ function Game() {
 
 	async function eatWater() {
 		const userId = sessionStorage.getItem('userId');
+		dispatch(addWater());
 		editWater(userId, -1).then((response) => {
 			console.log(response);
 			setFood(response.data.food);
@@ -131,6 +132,7 @@ function Game() {
 	}
 	async function eatFood() {
 		const userId = sessionStorage.getItem('userId');
+		dispatch(addFood());
 		editFood(userId, -1).then((response) => {
 			setFood(response.data.food);
 			setWater(response.data.water);
@@ -148,7 +150,7 @@ function Game() {
 		let userId = sessionStorage.getItem('userId');
 
 		setModal(true); // 모달 열기
-		await getUser(sessionStorage.getItem('userId')).then((response) => {
+		await getUser(userId).then((response) => {
 			if (response.data.alive == false) {
 				setTimeout(() => {
 					navigate('/end');
@@ -158,15 +160,15 @@ function Game() {
 
 		(async () => {
 			try {
-				//await getNextStory(sessionStorage.getItem('userId'), obj);
+				await getNextStory(userId, obj);
 				await fetchOrCreateUser();
 			} catch (error) {
 			} finally {
-				//const monologue = await getMonologue(sessionStorage.getItem('userId'));
+				const monologue = await getMonologue(userId);
 				setTimeout(() => {
 					modalOff();
 				}, 1000);
-				//	setText(monologue.data.monologue);
+				setText(monologue.data.monologue);
 			}
 		})();
 	};
@@ -186,7 +188,7 @@ function Game() {
 					</div>
 					<div className={styles.imgdiv}>
 						{' '}
-						<img alt="img" className={styles.img} src={'dog.png'}></img>
+						<img alt="img" className={styles.img} src={imageUrl}></img>
 						<div
 							className={styles.muteIconContainer}
 							onClick={() => setMute(!mute)}
