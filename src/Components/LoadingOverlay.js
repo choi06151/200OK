@@ -28,7 +28,7 @@ const LoadingOverlay = ({ fadingOut, text }) => {
           isTextFadingOut ? styles.fade_out : styles.fade_in
         }`}
       >
-        <h1>{text[index]}</h1>
+        {fadingOut ? '' : <h1>{text[index]}</h1>}
       </div>
       <div className={styles.image_container}>
         {[

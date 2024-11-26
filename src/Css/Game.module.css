@@ -1,3 +1,32 @@
+@font-face {
+  font-family: 'SeoulHangangM';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'KBIZHanmaumMyungjo';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KBIZHanmaumMyungjo.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Jeonju_gakR';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/Jeonju_gakR.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Gyeonggi_Title_Medium';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-3@1.0/Title_Medium.woff')
+    format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
 .img {
   width: 44%;
   height: 70%;
@@ -15,11 +44,9 @@
   margin-left: 27%;
   color: white;
 }
-
 .innertext {
   width: 70%;
-  height: 12vh;
-  pad: 10%;
+  height: 65%;
   margin: 0 auto;
   overflow: auto; /* 콘텐츠가 넘치면 스크롤바가 나타남 */
 }
@@ -41,24 +68,24 @@
 .textdiv {
   width: 100%;
   height: 30vh;
+  padding-top: 10%;
+  box-sizing: border-box; /* padding을 height에 포함시킴 */
   margin: 0 auto;
-  box-sizing: border-box;
-  align-content: center;
   border-radius: 8px;
-  color: #fff;
+  font-size: 1.5rem;
+  color: bisque;
   background-image: url('/public/UI/backpanel.png'); /* public 경로일 경우 */
   background-size: contain;
   background-repeat: no-repeat; /* 이미지 반복 방지 */
 }
 
 .choiceContainer {
-  margin-top: 4%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 50%;
-  height: 50vh;
+  height: 60vh;
   /* 양쪽 padding 추가 */
   border-radius: 8px;
 }
@@ -69,26 +96,24 @@
   background-image: url('/public/UI/choice.png');
   background-size: contain;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  width: calc(100% - 20px);
-  /* 오른쪽 여백을 확보 */
-  margin-left: 5%;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding-left: 15%; /* 텍스트와 버튼 간 거리 확보 */
   border-radius: 5px;
-  color: white;
+  margin-block-end: 3%;
+  color: saddlebrown;
   cursor: pointer;
   transition: background-color 0.3s ease;
   position: relative;
 }
 
-/* Custom radio button styling */
 .choice input[type='radio'] {
   appearance: none;
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background-color: #333;
-  margin-right: 10px;
+  margin-right: 10px; /* 버튼과 텍스트 사이 간격 */
   cursor: pointer;
   position: relative;
   transition: background-color 0.3s ease;
@@ -119,16 +144,18 @@
 /* Label styling */
 .choice label {
   flex: 1;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 수직 중앙 정렬 */
   cursor: pointer;
+  font-size: 1rem; /* 텍스트 크기 조정 */
 }
-
 .userdiv {
   display: flex;
   width: 100%;
   height: 30vh;
   box-sizing: border-box;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   line-height: 1.5;
   color: #fff;
   align-items: center;
@@ -252,4 +279,19 @@
   /* 마우스 오버 시 확대 */
   color: lightgray;
   /* 마우스 오버 시 색상 변경 */
+}
+
+.div {
+  position: relative;
+  font-family: 'Gyeonggi_Title_Medium', sans-serif;
+  min-height: 100vh;
+  width: 60%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.45);
+  /* 어두운 배경색 (검정색, 50% 투명도) */
+  z-index: 1;
+  /* 배경 위에 보이도록 설정 */
+  align-items: center;
+  text-align: center;
 }
