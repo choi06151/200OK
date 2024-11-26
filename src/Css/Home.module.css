@@ -74,16 +74,14 @@
   /* 오버레이는 모달보다 뒤에 있도록 설정 */
 }
 
-
 /* 오버레이가 활성화되었을 때 */
 .overlay.show {
   opacity: 1;
   /* 오버레이를 보이도록 설정 */
 }
 
-
 .logo {
-  width: 70%;
+  width: 50%;
   height: 20%;
   margin: 0 auto;
   height: 40vh;
