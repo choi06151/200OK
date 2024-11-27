@@ -85,73 +85,116 @@
   opacity: 1;
   z-index: 90;
 }
+
 .shake {
-  animation: shakeAnimation 2s cubic-bezier(0.25, 0.1, 0.25, 1); /* 서서히 멈추는 효과를 위한 cubic-bezier */
+  animation: shakeAnimation 2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  /* 서서히 멈추는 효과를 위한 cubic-bezier */
 }
 
 @keyframes shakeAnimation {
   0% {
-    transform: translateX(0); /* 시작은 원위치 */
+    transform: translateX(0);
+    /* 시작은 원위치 */
   }
+
   5% {
-    transform: translateX(-5px); /* 왼쪽으로 약간 */
+    transform: translateX(-5px);
+    /* 왼쪽으로 약간 */
   }
+
   10% {
-    transform: translateX(10px); /* 오른쪽으로 약간 */
+    transform: translateX(10px);
+    /* 오른쪽으로 약간 */
   }
+
   15% {
-    transform: translateX(-15px); /* 왼쪽으로 더 강하게 */
+    transform: translateX(-15px);
+    /* 왼쪽으로 더 강하게 */
   }
+
   20% {
-    transform: translateX(20px); /* 오른쪽으로 더 강하게 */
+    transform: translateX(20px);
+    /* 오른쪽으로 더 강하게 */
   }
+
   25% {
-    transform: translateX(-25px); /* 왼쪽으로 더 강하게 */
+    transform: translateX(-25px);
+    /* 왼쪽으로 더 강하게 */
   }
+
   30% {
-    transform: translateX(30px); /* 오른쪽으로 더 강하게 */
+    transform: translateX(30px);
+    /* 오른쪽으로 더 강하게 */
   }
+
   35% {
-    transform: translateX(-35px); /* 왼쪽으로 더 강하게 */
+    transform: translateX(-35px);
+    /* 왼쪽으로 더 강하게 */
   }
+
   40% {
-    transform: translateX(40px); /* 오른쪽으로 더 강하게 */
+    transform: translateX(40px);
+    /* 오른쪽으로 더 강하게 */
   }
+
   45% {
-    transform: translateX(-45px); /* 왼쪽으로 더 강하게 */
+    transform: translateX(-45px);
+    /* 왼쪽으로 더 강하게 */
   }
+
   50% {
-    transform: translateX(50px); /* 오른쪽으로 더 강하게 */
+    transform: translateX(50px);
+    /* 오른쪽으로 더 강하게 */
   }
+
   55% {
-    transform: translateX(-45px); /* 최대 왼쪽 */
+    transform: translateX(-45px);
+    /* 최대 왼쪽 */
   }
+
   60% {
-    transform: translateX(40px); /* 최대 오른쪽 */
+    transform: translateX(40px);
+    /* 최대 오른쪽 */
   }
+
   65% {
-    transform: translateX(-35px); /* 왼쪽으로 점차 줄어들기 */
+    transform: translateX(-35px);
+    /* 왼쪽으로 점차 줄어들기 */
   }
+
   70% {
-    transform: translateX(30px); /* 오른쪽으로 점차 줄어들기 */
+    transform: translateX(30px);
+    /* 오른쪽으로 점차 줄어들기 */
   }
+
   75% {
-    transform: translateX(-25px); /* 왼쪽으로 점차 줄어들기 */
+    transform: translateX(-25px);
+    /* 왼쪽으로 점차 줄어들기 */
   }
+
   80% {
-    transform: translateX(20px); /* 오른쪽으로 점차 줄어들기 */
+    transform: translateX(20px);
+    /* 오른쪽으로 점차 줄어들기 */
   }
+
   85% {
-    transform: translateX(-15px); /* 왼쪽으로 점차 줄어들기 */
+    transform: translateX(-15px);
+    /* 왼쪽으로 점차 줄어들기 */
   }
+
   90% {
-    transform: translateX(10px); /* 오른쪽으로 점차 줄어들기 */
+    transform: translateX(10px);
+    /* 오른쪽으로 점차 줄어들기 */
   }
+
   95% {
-    transform: translateX(-5px); /* 왼쪽으로 점차 줄어들기 */
+    transform: translateX(-5px);
+    /* 왼쪽으로 점차 줄어들기 */
   }
+
   100% {
-    transform: translateX(0); /* 원위치로 서서히 복귀 */
+    transform: translateX(0);
+    /* 원위치로 서서히 복귀 */
   }
 }
 
@@ -183,4 +226,13 @@
 
 .rightArrow {
   right: 10px;
+}
+
+.hint {
+  position: absolute;
+  bottom: 10%;
+  color: gray;
+  font-size: 0.9rem;
+  animation: fadeInOut 1.5s infinite;
+  /* 점멸 애니메이션 */
 }
