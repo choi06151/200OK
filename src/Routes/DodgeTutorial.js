@@ -29,48 +29,49 @@ export default function DodgeTutorial() {
 	const [fadeOut, setFadeOut] = useState(false);
 
 	return (
-		<div className={styles.tutorialContainer}>
-			<div className={styles.imageWrapper}>
-				<img
-					src={images[currentPage]}
-					alt={`Page ${currentPage + 1}`}
-					className={`${styles.tutorialImage} ${
-						fadeOut ? styles.fadeOut : styles.fadeIn
-					}`}
-				/>
+		<>
+			<div className={styles.tutorialContainer}>
+				<div className={styles.imageWrapper}>
+					<img
+						src={images[currentPage]}
+						alt={`Page ${currentPage + 1}`}
+						className={`${styles.tutorialImage} ${
+							fadeOut ? styles.fadeOut : styles.fadeIn
+						}`}
+					/>
+				</div>
+				{/* 마지막 페이지 버튼 */}
+				{currentPage === images.length - 1 && (
+					<div className={styles.buttonWrapper}>
+						<img
+							src="/UI/gamestart.png"
+							className={styles.gamestart}
+							onClick={() => {
+								navigate('/dodge');
+							}}
+						></img>
+					</div>
+				)}
+				{/* 왼쪽 화살표 */}
+				{currentPage > 0 && (
+					<button
+						className={`${styles.arrowButton} ${styles.leftArrow}`}
+						onClick={() => handleArrowClick('left')}
+					>
+						&#8592;
+					</button>
+				)}
+
+				{/* 오른쪽 화살표 */}
+				{currentPage < images.length - 1 && (
+					<button
+						className={`${styles.arrowButton} ${styles.rightArrow}`}
+						onClick={() => handleArrowClick('right')}
+					>
+						&#8594;
+					</button>
+				)}
 			</div>
-
-			{/* 왼쪽 화살표 */}
-			{currentPage > 0 && (
-				<button
-					className={`${styles.arrowButton} ${styles.leftArrow}`}
-					onClick={() => handleArrowClick('left')}
-				>
-					&#8592;
-				</button>
-			)}
-
-			{/* 오른쪽 화살표 */}
-			{currentPage < images.length - 1 && (
-				<button
-					className={`${styles.arrowButton} ${styles.rightArrow}`}
-					onClick={() => handleArrowClick('right')}
-				>
-					&#8594;
-				</button>
-			)}
-
-			{/* 마지막 페이지 버튼 */}
-			{currentPage === images.length - 1 && (
-				<button
-					className={styles.actionButton}
-					onClick={() => {
-						navigate('/dodge');
-					}}
-				>
-					Game Start
-				</button>
-			)}
-		</div>
+		</>
 	);
 }

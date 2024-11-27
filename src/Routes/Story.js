@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../Css/Story.module.css';
 import { useNavigate } from 'react-router-dom';
 import Contract from '../Components/Contract';
@@ -8,6 +8,9 @@ function Story() {
 	const [modalComplete, setModalComplete] = useState(false); // 모달 완료 상태
 	const [shakeState, setShakeState] = useState(false); // 흔들림 상태 추가
 	const navigate = useNavigate();
+
+	const [showHint, setShowHint] = useState(true); // 힌트 표시 여부
+	const [hintTimeout, setHintTimeout] = useState(null); // 힌트 타이머 관리
 
 	// 이미지 배열
 	const images = [
@@ -28,6 +31,22 @@ function Story() {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [fadeState, setFadeState] = useState(false); // 페이드 애니메이션 상태
 
+	useEffect(() => {
+		// 마지막 텍스트까지 도달하면 3초 후에 힌트 표시
+		const timeout = setTimeout(() => {
+			setShowHint(true); // 3초 뒤 힌트 표시
+		}, 3000);
+		setHintTimeout(timeout); // 타이머 저장
+	}, [currentIndex]); // currentLine이 바뀔 때마다 실행
+
+	useEffect(() => {
+		return () => {
+			if (hintTimeout) {
+				clearTimeout(hintTimeout);
+			}
+		};
+	}, [hintTimeout]);
+
 	// 모달 완료 상태 업데이트 함수
 	const handleContractComplete = (e) => {
 		setModal(false); // 모달 닫기
@@ -37,6 +56,8 @@ function Story() {
 
 	// 클릭 이벤트 처리 함수
 	const handleClick = async (event) => {
+		setShowHint(false);
+
 		const clickX = event.clientX;
 		const screenWidth = window.innerWidth;
 		if (shakeState) {
@@ -119,7 +140,7 @@ function Story() {
 					&#8594;
 				</button>
 			)}
-			<div className={styles.hint}>클릭하여 계속...</div>
+			{showHint ? <div className={styles.hint}>클릭하여 계속...</div> : ''}
 		</div>
 	);
 }

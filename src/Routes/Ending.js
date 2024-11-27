@@ -8,69 +8,49 @@ import Panorama from '../Components/Panorama';
 import { useSelector } from 'react-redux';
 
 function Ending() {
-  const [modal, setModal] = useState(false); // 모달 상태
-  const [rankingData, setRankingData] = useState([]);
-  const navigate = useNavigate();
+	const [modal, setModal] = useState(false); // 모달 상태
+	const [rankingData, setRankingData] = useState([]);
+	const navigate = useNavigate();
 
-  const { water, food } = useSelector((state) => state.status);
-  const [day, setDay] = useState();
+	const { water, food } = useSelector((state) => state.status);
+	const [day, setDay] = useState();
 
-  useEffect(() => {
-    const id = sessionStorage.getItem('userId');
-    getUser(id).then((response) => {
-      setDay(response.data.day);
-    });
+	useEffect(() => {
+		const id = sessionStorage.getItem('userId');
+		getUser(id).then((response) => {
+			setDay(response.data.day);
+		});
 
-    getRanking().then((response) => {
-      setRankingData(response.data);
-    });
-  }, []);
+		getRanking().then((response) => {
+			setRankingData(response.data);
+		});
+	}, []);
 
-  return (
-    <div className={`${mainstyle.div} flex flex-col items-center`}>
-      <div style={{ color: 'white ', marginTop: '5%' }}>
-        <div
-          style={{ fontWeight: '500', fontSize: '20px' }}
-        >{`당신은 ${day}일간 살아남았으며, ${water}만큼의 물을 마시고 ${food}만큼의 음식을 섭취하였습니다. 당신의 (헛)고생은 많은 이들에게 기억될것입니다...`}</div>
-        <div>{}</div>
-        <br />
+	return (
+		<div className={`${mainstyle.div} flex flex-col items-center`}>
+			<div style={{ color: 'white ', marginTop: '5%' }}>
+				<div
+					style={{ fontWeight: '500', fontSize: '20px' }}
+				>{`당신은 ${day}일간 살아남았으며, ${water}만큼의 물을 마시고 ${food}만큼의 음식을 섭취하였습니다. 당신의 (헛)고생은 많은 이들에게 기억될것입니다...`}</div>
+				<div>{}</div>
+				<br />
+			</div>
 
-        <div style={{ width: '100%', height: '30%', marginTop: '5px' }}>
-          <div
-            style={{ color: 'white ', fontWeight: '500', fontSize: '20px' }}
-          >{`<지난날의 기억>`}</div>
-        </div>
-        <Panorama></Panorama>
-      </div>
+			<Ranking rankingData={rankingData} onClose={() => setModal(false)} />
 
-      {/* 모달 표시 */}
-      {modal && (
-        <Ranking rankingData={rankingData} onClose={() => setModal(false)} />
-      )}
-
-      <div className={styles.button_container}>
-        {/* 홈으로 버튼 */}
-        <button
-          className={`${styles.modern_button} ${styles.home_button}`}
-          onClick={() => {
-            navigate('/');
-          }}
-        >
-          홈으로
-        </button>
-
-        {/* 랭킹 보기 버튼 */}
-        <button
-          className={`${styles.modern_button} ${styles.ranking_button}`}
-          onClick={() => {
-            setModal(true);
-          }}
-        >
-          랭킹 보기
-        </button>
-      </div>
-    </div>
-  );
+			<div className={styles.button_container}>
+				{/* 홈으로 버튼 */}
+				<button
+					className={`${styles.modern_button} ${styles.home_button}`}
+					onClick={() => {
+						navigate('/');
+					}}
+				>
+					홈으로
+				</button>
+			</div>
+		</div>
+	);
 }
 
 export default Ending;
