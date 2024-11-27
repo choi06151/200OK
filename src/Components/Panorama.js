@@ -16,36 +16,39 @@ export default function Panorama() {
     slidesToScroll: 1, // 한 번에 넘길 슬라이드 수
   };
 
-  const { imgs } = useSelector((state) => state.status);
-  console.log(imgs);
+  const { convimgs } = useSelector((state) => state.status);
+  console.log(convimgs);
 
   return (
     <div style={{ width: '100%', position: 'relative', paddingTop: '5%' }}>
       <Slider {...settings}>
-        {imgs.map((img, index) => (
-          <div
-            key={index}
-            style={{
-              width: '90%',
-              height: '90%',
-              position: 'absolute', // 부모 크기 맞춤
-              top: 0,
-              left: 0,
-              overflow: 'hidden',
-            }}
-          >
-            <img
-              src={img}
-              alt={`slider-img-${index}`}
+        {convimgs.map((img, index) => {
+          console.log(img);
+          return (
+            <div
+              key={index}
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                borderRadius: '10px',
+                width: '90%',
+                height: '90%',
+                position: 'absolute', // 부모 크기 맞춤
+                top: 0,
+                left: 0,
+                overflow: 'hidden',
               }}
-            />
-          </div>
-        ))}
+            >
+              <img
+                src={img}
+                alt={`slider-img-${index}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  borderRadius: '10px',
+                }}
+              />
+            </div>
+          );
+        })}
       </Slider>
     </div>
   );

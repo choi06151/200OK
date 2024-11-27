@@ -1,0 +1,43 @@
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75); /* 반투명 검정색 */
+  color: white; /* 글자 색상 */
+  padding: 5px 10px; /* 여백 */
+  border-radius: 5px; /* 둥근 모서리 */
+  font-size: 0.8rem; /* 작은 글씨 크기 */
+  white-space: nowrap; /* 한 줄로 유지 */
+  z-index: 1000; /* 다른 요소 위에 표시 */
+  visibility: hidden; /* 기본적으로 숨김 */
+  opacity: 0; /* 투명도 0 */
+  transition: opacity 0.2s ease-in-out; /* 부드러운 나타남 효과 */
+}
+
+.tooltipVisible {
+  visibility: visible; /* 보이게 설정 */
+  opacity: 1; /* 투명도 100% */
+}
+
+/* Tooltip 위치 */
+.top {
+  transform: translate(-50%, -100%); /* 위쪽으로 이동 */
+  bottom: 100%;
+  left: 50%;
+}
+
+.bottom {
+  transform: translate(-50%, 0); /* 아래쪽으로 이동 */
+  top: 100%;
+  left: 50%;
+}
+
+.left {
+  transform: translate(-100%, -50%); /* 왼쪽으로 이동 */
+  right: 100%;
+  top: 50%;
+}
+
+.right {
+  transform: translate(0, -50%); /* 오른쪽으로 이동 */
+  left: 100%;
+  top: 50%;
+}
