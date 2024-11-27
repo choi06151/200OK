@@ -1,0 +1,72 @@
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  white-space: normal;
+  /* 줄바꿈 허용 */
+  word-wrap: break-word;
+  /* 긴 단어도 줄바꿈 */
+  max-width: 200px;
+  height: 5vh;
+  /* 최대 너비 제한 */
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  transform: translate(-50%, -100%);
+  overflow: hidden;
+  /* 스크롤 제거 */
+}
+
+
+.tooltipVisible {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 여러 줄 텍스트 처리 */
+.tooltipMultiline {
+  white-space: normal;
+  /* 줄바꿈 허용 */
+  word-wrap: break-word;
+  /* 단어가 넘칠 경우 줄바꿈 */
+  max-width: 200px;
+  /* 최대 너비 */
+  overflow: hidden;
+  /* 넘친 텍스트 숨기기 */
+  text-overflow: ellipsis;
+  /* 스크롤 제거 후 말줄임표 */
+}
+
+
+/* Tooltip 위치 */
+.top {
+  transform: translate(-50%, -100%);
+  /* 위쪽으로 이동 */
+  bottom: 100%;
+  left: 50%;
+}
+
+.bottom {
+  transform: translate(-50%, 0);
+  /* 아래쪽으로 이동 */
+  top: 100%;
+  left: 50%;
+}
+
+.left {
+  transform: translate(-100%, -50%);
+  /* 왼쪽으로 이동 */
+  right: 100%;
+  top: 50%;
+}
+
+.right {
+  transform: translate(0, -50%);
+  /* 오른쪽으로 이동 */
+  left: 100%;
+  top: 50%;
+}

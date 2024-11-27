@@ -6,8 +6,8 @@ import Contract from '../Components/Contract';
 function Story() {
 	const [modal, setModal] = useState(false); // 모달 상태
 	const [modalComplete, setModalComplete] = useState(false); // 모달 완료 상태
+	const [shakeState, setShakeState] = useState(false); // 흔들림 상태 추가
 	const navigate = useNavigate();
-
 
 	// 이미지 배열
 	const images = [
@@ -39,6 +39,9 @@ function Story() {
 	const handleClick = async (event) => {
 		const clickX = event.clientX;
 		const screenWidth = window.innerWidth;
+		if (shakeState) {
+			return;
+		}
 
 		if (clickX < screenWidth / 2) {
 			// 왼쪽 클릭 (이전 페이지로 이동)
@@ -57,6 +60,14 @@ function Story() {
 					setModal(true); // 모달 열기
 					return; // 모달이 닫히기 전까지 진행하지 않음
 				}
+
+				if (currentIndex === 6) {
+					// 7번 페이지에 도달했을 때 흔들림 효과
+					setTimeout(() => {
+						setShakeState(true); // 흔들림 효과 시작
+					}, 600); // 0.3초 뒤에 흔들림 시작
+					setTimeout(() => setShakeState(false), 2000); // 흔들림 애니메이션 지속시간 설정
+				}
 				setModalComplete(false);
 				// 모달 완료 후 다음 슬라이드로 진행
 				setFadeState(true);
@@ -65,7 +76,7 @@ function Story() {
 					setFadeState(false);
 				}, 300);
 			} else {
-				// 마지막 페이지면 /dodge로 이동
+				// 마지막 페이지면 /dodgetuto로 이동
 				navigate('/dodgetutorial');
 			}
 		}
@@ -80,7 +91,7 @@ function Story() {
 					alt={`Page ${currentIndex + 1}`}
 					className={`${styles.image} ${
 						fadeState ? styles.fadeOut : styles.fadeIn
-					}`}
+					}  ${shakeState ? styles.shake : ''}`}
 				/>
 			</div>
 
@@ -94,6 +105,21 @@ function Story() {
 					</div>
 				</>
 			)}
+
+			{/* 왼쪽 화살표 */}
+			{currentIndex > 0 && (
+				<button className={`${styles.arrowButton} ${styles.leftArrow}`}>
+					&#8592;
+				</button>
+			)}
+
+			{/* 오른쪽 화살표 */}
+			{currentIndex < images.length - 1 && (
+				<button className={`${styles.arrowButton} ${styles.rightArrow}`}>
+					&#8594;
+				</button>
+			)}
+			<div className={styles.hint}>클릭하여 계속...</div>
 		</div>
 	);
 }

@@ -16,6 +16,7 @@ import {
 	editFood,
 	editWater,
 } from '../service/service';
+import Tooltip from '../Components/Tooltip';
 
 import { HiOutlineSpeakerWave, HiOutlineSpeakerXMark } from 'react-icons/hi2';
 import { addFood, addWater, setImg } from '../store/gameSlice';
@@ -41,6 +42,31 @@ function Game() {
 	let [prob, setProb] = useState();
 	let [day, setDay] = useState();
 
+	const [tooltip, setTooltip] = useState({
+		visible: false,
+		message: '',
+		position: { x: 0, y: 0 },
+	});
+
+	const handleMouseEnter = (message, event) => {
+		const rect = event.target.getBoundingClientRect();
+		const tooltipWidth = 300; // 툴팁의 예상 너비 (CSS에 맞게 설정)
+		const tooltipHeight = 30; // 툴팁의 예상 높이 (CSS에 맞게 설정)
+
+		setTooltip({
+			visible: true,
+			message,
+			position: {
+				x: rect.left - 300,
+				y: rect.top + 50,
+			},
+		});
+	};
+
+	const handleMouseLeave = () => {
+		setTooltip({ ...tooltip, visible: false });
+	};
+
 	const [modal, setModal] = useState(false);
 	const [fadingOut, setFadingOut] = useState(false);
 	const [text, setText] = useState(['Loading...']);
@@ -58,7 +84,7 @@ function Game() {
 		if (!userId) {
 			userId = await initUser();
 			sessionStorage.setItem('userId', userId);
-			await initStory(userId);
+			// await initStory(userId);
 			storedUserId = userId;
 		}
 		await getUser(storedUserId).then((response) => {
@@ -69,19 +95,19 @@ function Game() {
 			setDay(response.data.day);
 		});
 
-		await getStory(storedUserId).then((response) => {
-			setContent(response.data.content);
-			setChoices([
-				response.data.choice1,
-				response.data.choice2,
-				response.data.choice3,
-			]);
-			let link = atob(response.data.image);
-			link = JSON.parse(link);
-			dispatch(setImg(link.image_url));
-			console.log(check);
-			setImageUrl(link.image_url);
-		});
+		// await getStory(storedUserId).then((response) => {
+		//   setContent(response.data.content);
+		//   setChoices([
+		//     response.data.choice1,
+		//     response.data.choice2,
+		//     response.data.choice3,
+		//   ]);
+		//   let link = atob(response.data.image);
+		//   link = JSON.parse(link);
+		//   dispatch(setImg(link.image_url));
+		//   console.log(check);
+		//   setImageUrl(link.image_url);
+		// });
 		await getUser(storedUserId).then((response) => {
 			setWater(response.data.water);
 			setFood(response.data.food);
@@ -114,15 +140,16 @@ function Game() {
 		setModal(true);
 		fetchOrCreateUser().then(() => {
 			setTimeout(() => {
-				setModal(false);
+				modalOff();
 			}, 1000);
 		});
 	}, []);
 
 	async function eatWater() {
+		console.log(globwater);
 		const userId = sessionStorage.getItem('userId');
 		dispatch(addWater());
-		editWater(userId, -1).then((response) => {
+		await editWater(userId, -1).then((response) => {
 			console.log(response);
 			setFood(response.data.food);
 			setWater(response.data.water);
@@ -131,13 +158,18 @@ function Game() {
 		});
 	}
 	async function eatFood() {
+		console.log(globfood);
 		const userId = sessionStorage.getItem('userId');
 		dispatch(addFood());
-		editFood(userId, -1).then((response) => {
+		await editFood(userId, -1).then((response) => {
+			console.log(response);
 			setFood(response.data.food);
 			setWater(response.data.water);
 			setHp(response.data.hp);
 			setProb(response.data.probability);
+			if (response.data.alive == false) {
+				navigate('/endstory');
+			}
 		});
 	}
 
@@ -149,26 +181,27 @@ function Game() {
 
 		let userId = sessionStorage.getItem('userId');
 
+		//navigate('/endstory');
 		setModal(true); // 모달 열기
 		await getUser(userId).then((response) => {
 			if (response.data.alive == false) {
 				setTimeout(() => {
-					navigate('/end');
+					navigate('/endstory');
 				}, [3000]);
 			}
 		});
 
 		(async () => {
 			try {
-				await getNextStory(userId, obj);
-				await fetchOrCreateUser();
+				//  await getNextStory(userId, obj);
+				//  await fetchOrCreateUser();
 			} catch (error) {
 			} finally {
-				const monologue = await getMonologue(userId);
+				// const monologue = await getMonologue(userId);
 				setTimeout(() => {
 					modalOff();
 				}, 1000);
-				setText(monologue.data.monologue);
+				//setText(monologue.data.monologue);
 			}
 		})();
 	};
@@ -179,11 +212,24 @@ function Game() {
 			<div className={styles.div}>
 				<div style={{ display: 'flex' }}>
 					<div className={styles.gamediv}>
-						<div className={styles.daydiv}>Day : {day}</div>
+						<div className={styles.daydiv}>
+							<div className={styles.daytxt}>Day : {day}</div>
+						</div>
+
 						<div className={styles.infodiv}>
-							{`사망 확률 : ${prob}%`}
-							<br />
-							{`남은 HP : ${hp}`}
+							<div
+								className={styles.infotxt}
+								onMouseEnter={(e) =>
+									handleMouseEnter(
+										'사망 확률은 선택지를 고른 후 체력부족으로 인해 사망할 확률을 나타냅니다.',
+										e
+									)
+								}
+								onMouseLeave={handleMouseLeave}
+							>
+								{`사망 확률 : ${prob}%`}
+								<br />
+							</div>
 						</div>
 					</div>
 					<div className={styles.imgdiv}>
@@ -214,11 +260,42 @@ function Game() {
 						<div className={styles.userdiv}>
 							<div className={styles.statusDiv}>
 								{/* Water Status */}
+
+								<div className={styles.statusItem}>
+									<img
+										src="/UI/heart.png"
+										alt="heart"
+										className={styles.statusImage}
+									/>
+									<div style={{ color: 'white', marginLeft: '8px' }}>{hp}</div>
+									<div className={styles.barContainer}>
+										<div
+											className={styles.bar}
+											style={{
+												width: `${(hp / 10) * 100}%`, // water 상태에 따라 너비 조정
+												backgroundColor: 'red',
+											}}
+										></div>
+									</div>
+								</div>
+
 								<div className={styles.statusItem}>
 									<img
 										src="/UI/water.png"
 										alt="Water"
 										className={styles.statusImage}
+										onClick={() => {
+											if (water > 0) {
+												eatWater();
+											}
+										}}
+										onMouseEnter={(e) =>
+											handleMouseEnter(
+												'물은 생존에 필수적인 자원입니다. 소모 시 체력을 1 회복합니다.',
+												e
+											)
+										}
+										onMouseLeave={handleMouseLeave}
 									/>
 									<div style={{ color: 'white', marginLeft: '8px' }}>
 										{water}
@@ -233,15 +310,6 @@ function Game() {
 											}}
 										></div>
 									</div>
-									<img
-										src="/UI/plus.png"
-										className={styles.quantity_button}
-										onClick={() => {
-											if (water > 0) {
-												eatWater();
-											}
-										}}
-									></img>
 								</div>
 
 								{/* Food Status */}
@@ -250,6 +318,18 @@ function Game() {
 										src="/UI/food.png"
 										alt="Food"
 										className={styles.statusImage}
+										onClick={() => {
+											if (food > 0) {
+												eatFood();
+											}
+										}}
+										onMouseEnter={(e) =>
+											handleMouseEnter(
+												'정글에서 구하기 힘든 식량입니다. 소모 시 -1에서 +2 사이의 체력을 얻습니다. 운이 나쁘다면 먹은 후...?',
+												e
+											)
+										}
+										onMouseLeave={handleMouseLeave}
 									/>
 									<div style={{ color: 'white', marginLeft: '8px' }}>
 										{food}
@@ -264,27 +344,7 @@ function Game() {
 											}}
 										></div>
 									</div>
-
-									<img
-										src="/UI/plus.png"
-										className={styles.quantity_button}
-										onClick={() => {
-											if (food > 0) {
-												eatFood();
-											}
-										}}
-									></img>
 								</div>
-							</div>
-
-							<div>
-								<img
-									src={`/UI/next.png`}
-									className={styles.next_button}
-									onClick={() => {
-										handleButtonClick();
-									}}
-								></img>
 							</div>
 						</div>
 					</div>
@@ -297,7 +357,10 @@ function Game() {
 							}}
 						>
 							<input type="radio" id="choice1" name="choices" defaultChecked />
-							<label htmlFor="choice1">{`${choices[0]}`}</label>
+							<label
+								className={styles.choicetxt}
+								htmlFor="choice1"
+							>{`${choices[0]}`}</label>
 						</div>
 						<div
 							className={styles.choice}
@@ -306,7 +369,10 @@ function Game() {
 							}}
 						>
 							<input type="radio" id="choice2" name="choices" />
-							<label htmlFor="choice2">{`${choices[1]}`}</label>
+							<label
+								className={styles.choicetxt}
+								htmlFor="choice2"
+							>{`${choices[1]}`}</label>
 						</div>
 						<div
 							className={styles.choice}
@@ -315,7 +381,18 @@ function Game() {
 							}}
 						>
 							<input type="radio" id="choice3" name="choices" />
-							<label htmlFor="choice3">{`${choices[2]}`}</label>
+							<label
+								className={styles.choicetxt}
+								htmlFor="choice3"
+							>{`${choices[2]}`}</label>
+						</div>
+						<div
+							className={styles.nextdiv}
+							onClick={() => {
+								handleButtonClick();
+							}}
+						>
+							<div className={styles.nexttxt}>Next</div>
 						</div>
 					</div>
 				</div>
@@ -323,6 +400,17 @@ function Game() {
 					mute={mute}
 					modal={modal}
 				></BackgroundMusicController>
+				{/* Tooltip */}
+				<Tooltip
+					visible={tooltip.visible}
+					message={tooltip.message}
+					position="top"
+					style={{
+						position: 'absolute',
+						left: tooltip.position.x,
+						top: tooltip.position.y,
+					}}
+				/>
 			</div>
 		</>
 	);

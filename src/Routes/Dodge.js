@@ -518,28 +518,34 @@ const Dodge = () => {
 		<div
 			style={{
 				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
+				flexDirection: 'column', // 세로 방향 정렬
+				alignItems: 'center', // 가로 정렬 (중앙 정렬)
+				justifyContent: 'space-between', // 위아래로 공간 분배
 				height: '100vh',
 				backgroundColor: 'green',
 			}}
 		>
 			<div
 				id="phaser-game-container"
-				style={{ width: '100%', height: '100%', position: 'relative' }}
+				style={{
+					width: '100%',
+					height: '100vh',
+					position: 'relative',
+				}}
 			>
+				{/* 타이머 정보 */}
 				<div
 					style={{
-						position: 'relative',
+						position: 'absolute',
+						left: '50%', // 화면 가로 중앙
+						transform: 'translateX(-50%)', // 가로 중앙 정렬
 						width: '15%',
-						margin: ' 0 auto',
-						top: '2%',
 						fontSize: '40px',
 						color: 'white',
 						zIndex: 10,
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
 						borderRadius: '5px',
-						textAlign: 'center', // 텍스트 정렬
+						textAlign: 'center',
 					}}
 				>
 					Time Left : {timeLeft}
@@ -547,49 +553,46 @@ const Dodge = () => {
 					{timeLeft <= 0 && (
 						<div
 							style={{
-								position: 'relative',
-								color: 'red',
 								zIndex: 10,
 								backgroundColor: 'rgba(0, 0, 0, 0.5)',
 								borderRadius: '5px',
 							}}
 						>
-							게임 종료!
+							떨어진다...!
 						</div>
 					)}
 				</div>
 
+				{/* 물/음식 정보 */}
 				<div
 					style={{
-						position: 'relative',
+						position: 'absolute',
+						bottom: '2%',
+						left: '50%', // 화면 가로 중앙
+						transform: 'translateX(-50%)', // 가로 중앙 정렬
 						fontSize: '40px',
-						width: '10%',
-						top: '80%',
+						width: '15%',
 						color: 'white',
 						zIndex: 10,
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
 						borderRadius: '5px',
-						margin: '0 auto',
-						cursor: 'none',
-						textAlign: 'center', // 텍스트 정렬
-						alignContent: 'center',
+						textAlign: 'center',
 					}}
 				>
 					<img
 						src="/UI/water.png"
-						style={{ width: '40px', height: '40px' }}
-					></img>
+						style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
+					/>
 					: {`${water}   `}
 					<img
 						src="/UI/food.png"
-						style={{ width: '40px', height: '40px' }}
-					></img>
+						style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
+					/>
 					: {food}
 				</div>
 			</div>
 		</div>
 	);
-
 };
 
 export default Dodge;
