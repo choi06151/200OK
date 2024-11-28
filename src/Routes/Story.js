@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../Css/Story.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,6 +12,7 @@ function Story() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let { name } = useSelector((state) => state.status);
+
   // 이미지 배열
   const images = [
     '1.png',
@@ -32,6 +33,9 @@ function Story() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // 현재 이미지 인덱스
+  useEffect(() => {
+    console.log(name);
+  }, [name]);
 
   // 클릭 이벤트 처리 함수
   const handleClick = async (event) => {
@@ -39,14 +43,17 @@ function Story() {
     const screenWidth = window.innerWidth;
     const leftBound = screenWidth * 0.3; // 좌측 클릭 상한 (30%)
     const rightBound = screenWidth * 0.7; // 우측 클릭 하한 (70%)
+    console.log(currentIndex);
+
     if (shakeState || zoomInState) {
-      return;
-    }
-    if (currentIndex == 4) {
       return;
     }
 
     if (clickX <= leftBound) {
+      if (currentIndex == 6) {
+        return;
+      }
+
       // 왼쪽 클릭 (이전 페이지로 이동)
       if (currentIndex > 0) {
         setFadeState(true);
@@ -61,31 +68,40 @@ function Story() {
       // 오른쪽 클릭 (다음 페이지로 진행)
       if (currentIndex < images.length - 1) {
         // 특정 페이지에서 흔들림 + 확대
-
         if (currentIndex === 9) {
           setTimeout(() => {
             setShakeState(true); // 흔들림 효과 시작
           }, 600);
           setTimeout(() => setShakeState(false), 1000); // 흔들림 애니메이션 지속시간
         }
-        if (currentIndex === 4) {
-          // 이름 저장 로직 추가
-          dispatch(setName(inputValue)); // Redux 상태에 이름 저장
+        if (currentIndex === 5) {
+          // 이름 입력 폼이 표시된 상태에서 오른쪽 클릭
+          if (!inputValue.trim()) {
+            alert('이름을 입력해주세요!'); // 이름이 비어있으면 저장하지 않음
+            return;
+          }
+          setInputValue(''); // 입력 초기화
+          setCurrentIndex((prevIndex) => prevIndex + 1); // 다음 페이지로 이동
+        } else {
+          // 일반 페이지 전환 로직
+          setFadeState(true);
+          setTimeout(() => {
+            setCurrentIndex((prevIndex) => prevIndex + 1);
+            setFadeState(false);
+          }, 300);
         }
         if (currentIndex === 3) {
           // 흔들림 시작
-          //setShakeState(true);
           setTimeout(() => {
             // 흔들림 종료 후 확대 시작
-            //setShakeState(false);
             setZoomInState(true);
 
             // 확대 상태 유지 후 페이지 전환
             setTimeout(() => {
               setZoomInState(false); // 확대 종료
               setCurrentIndex((prevIndex) => prevIndex + 1); // 다음 인덱스로 이동
-            }, 3000); // 확대 효과 지속 시간 (1초)
-          }, 1000); // 흔들림 효과 지속 시간 (2초)
+            }, 3000); // 확대 효과 지속 시간 (3초)
+          }, 1000); // 흔들림 효과 지속 시간 (1초)
         } else if (currentIndex !== 9) {
           // 확대 없이 일반 전환
           setZoomInState(false);
@@ -95,8 +111,6 @@ function Story() {
             setFadeState(false);
           }, 300);
         }
-
-        // 특정 페이지에서 흔들림 없이 진행
         setFadeState(true);
         setTimeout(() => {
           setCurrentIndex(currentIndex + 1);
@@ -119,8 +133,12 @@ function Story() {
       alert('이름을 입력해주세요!');
     }
   };
+
   return (
-    <div className={styles.container} onClick={handleClick}>
+    <div
+      className={`${styles.container}`}
+      onClick={handleClick}
+    >
       <div className={styles.imageWrapper}>
         {/* 이미지와 애니메이션 효과 */}
         <img
@@ -139,7 +157,10 @@ function Story() {
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              dispatch(setName(e.target.value));
+            }}
             className={styles.inputField}
           />
         </div>
@@ -153,7 +174,7 @@ function Story() {
       )}
 
       {/* 오른쪽 화살표 */}
-      {currentIndex < images.length - 1 && (
+      {currentIndex < images.length && (
         <button className={`${styles.arrowButton} ${styles.rightArrow}`}>
           &#8594;
         </button>

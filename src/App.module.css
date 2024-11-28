@@ -41,6 +41,7 @@ body {
   height: 100vh;
   overflow: hidden;
   cursor: url('/public/UI/cursor.png'), auto;
+  z-index: 100;
 }
 
 .shadow {
