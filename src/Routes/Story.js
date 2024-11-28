@@ -147,7 +147,7 @@ function Story() {
 			)}
 
 			{/* 오른쪽 화살표 */}
-			{currentIndex < images.length - 1 && (
+			{currentIndex < images.length && (
 				<button className={`${styles.arrowButton} ${styles.rightArrow}`}>
 					&#8594;
 				</button>

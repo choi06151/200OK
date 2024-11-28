@@ -74,7 +74,7 @@ export default function StatusModal({
 			} else {
 				return (
 					<h1 className={styles.text}>
-						당신은 오늘 생존했습니다.<br></br>Day : {day}
+						당신은 오늘도 무사히 살아남았습니다.<br></br>Day : {day}
 					</h1>
 				);
 			}
