@@ -1,8 +1,3 @@
-:root {
-  --modal-width: 400px;
-  /* 모달의 너비를 변수로 정의 */
-}
-
 /* Container styles */
 .container {
   display: flex;
@@ -30,8 +25,8 @@
 
 /* Image styles */
 .image {
-  max-width: 100%;
-  max-height: 80vh;
+  max-width: 140;
+  max-height: 100vh;
   object-fit: contain;
   position: absolute;
   transition: opacity 0.3s ease-in-out;
@@ -46,32 +41,6 @@
 /* Fade-out effect */
 .fadeOut {
   opacity: 0;
-}
-
-/* 모달 기본 스타일 */
-.modal {
-  text-align: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(100%, -50%);
-  /* 화면 오른쪽에서 시작 */
-  width: var(--modal-width);
-
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  opacity: 0;
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-  z-index: 100;
-}
-
-/* 모달 활성화 상태 */
-.modal.show {
-  transform: translate(-60%, -50%);
-  /* 화면 중앙으로 이동 */
-  opacity: 1;
-  /* 투명도 설정 */
 }
 
 /* 오버레이 */
@@ -236,14 +205,26 @@
   animation: fadeInOut 1.5s infinite;
   /* 점멸 애니메이션 */
 }
+.image {
+  transition: all 0.3s ease-in-out;
+}
 
-@keyframes fadeInOut {
-  0%,
-  100% {
-    opacity: 0;
-  }
+.zoomIn {
+  transform-origin: center 60%; /* 중심을 아래로 이동 (중앙에서 아래 60%) */
+  transform: scale(3); /* 확대 비율 */
+  transition: transform 3s ease-in-out; /* 부드러운 확대 효과 */
+  z-index: 1;
+}
 
-  50% {
-    opacity: 1;
-  }
+.inputForm {
+  position: absolute; /* 이미지 위에 겹치도록 설정 */
+  top: 87.5%; /* 이미지 중앙에 배치 */
+  left: 53%;
+  transform: translate(-50%, -50%); /* 정확히 중앙 정렬 */
+  background: none; /* 반투명 배경 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  border-radius: 0; /* 둥근 모서리 제거 */
+  box-shadow: none; /* 그림자 제거 */
+  text-align: center;
+  z-index: 1000; /* 이미지보다 위에 표시되도록 설정 */
 }

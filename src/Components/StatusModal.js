@@ -61,7 +61,7 @@ export default function StatusModal({
           state: { causeOfDeath: causeOfDeath, imageUrl: imageUrl },
         });
       } else {
-        return <h1 className={styles.text}>Day - {day + 1}</h1>;
+        return <h1 className={styles.text}>Day - {day}</h1>;
       }
     } else if (currentStep === 2) {
       return (
