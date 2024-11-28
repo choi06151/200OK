@@ -147,8 +147,15 @@ function Game() {
 	}, [modal]);
 
 	async function initUser() {
+		let tmpname;
+		if (name == '') {
+			tmpname = 'Guest';
+		} else {
+			tmpname = name;
+		}
+
 		let user = {
-			name,
+			name: tmpname,
 			water: state.water,
 			food: state.food,
 			alive: true,

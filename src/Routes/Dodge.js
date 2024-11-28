@@ -8,7 +8,7 @@ const Dodge = () => {
   const [timeLeft, setTimeLeft] = useState(30);
   const [water, setWater] = useState(5);
   const [food, setFood] = useState(5);
-
+  const [rectangleY, setRectangleY] = useState(0); // Y 좌표 상태
   const [gameStarted, setGameStarted] = useState(false);
   const [timerEvent, setTimerEvent] = useState(null);
   const navigate = useNavigate();
@@ -53,6 +53,7 @@ const Dodge = () => {
     this.load.image('bullet', 'trash.png');
     this.load.image('background', 'galaxy.png');
     this.load.image('World', 'World.jpeg');
+    this.load.image('rocket', 'explosion.png');
     this.load.image('box', 'box.png');
     this.load.image('waterI', 'water.png');
     this.load.image('foodI', 'food.png');
@@ -66,21 +67,121 @@ const Dodge = () => {
     this.load.audio('PlayerComing', 'Sounds/PlayerComing.mp3');
     this.load.audio('PlayerDie', 'Sounds/playerdie.mp3');
     this.load.audio('PlayerFall', 'Sounds/playerfall.mp3');
+    this.load.image('rectangleImage', 'player.png');
 
     this.registry.set('water', 5); // water 초기 값 5
     this.registry.set('food', 5); // food 초기 값 5
   };
 
+ 
+
+
+ 
+
+    
   const create = function () {
+    this.timeLeft = 30;
     this.background1 = this.add
       .image(400, 300, 'background')
       .setOrigin(0.5, 0.5);
     this.background2 = this.add
       .image(400, 900, 'background')
       .setOrigin(0.5, 0.5);
+      this.movingRectangle = this.add
+      .image(760, 150, 'rectangleImage') // PNG 이미지 사용
+      .setOrigin(0.5, 0.5)
+      .setScale(0.05)
+      .setDepth(1);
+// 텍스트 추가
+// 텍스트 추가 (크기 줄임)
+// 텍스트 추가 (크기 줄임)
+// 기준 위치 (고도 가로선의 새로운 Y 좌표)
+// 기준 위치 (고도 가로선의 새로운 Y 좌표)
+// 기준 위치 (고도 가로선의 새로운 Y 좌표)
+// 기준 위치 (고도 가로선의 새로운 Y 좌표)
+const altitudeLineY = 150; // "고도" 가로선 기준 위치
+const offsetX = 30; // 우측으로 이동할 거리
+const earthLineY = altitudeLineY + 150; // "지구" 가로선 기준 위치
+const numHorizontalLines = 10; // 추가할 가로선 개수
+const lineSpacing = (earthLineY - altitudeLineY) / (numHorizontalLines + 1); // 간격 계산
+const fullLineWidth = 40; // "고도"와 "지구" 가로선 길이
+const minLineWidth = 5; // 가장 짧은 가로선 길이 (줄어드는 폭 증가)
+const maxLineWidth = fullLineWidth / 2; // 가장 긴 가로선 길이
+
+this.rocketImage = this.add
+.image(700+50 + offsetX, altitudeLineY , 'rocket') // 'rocket' 이미지를 로드한 키 사용
+.setOrigin(1, 0.5) // 우측 정렬
+.setScale(0.02); // 크기 조정
+/*
+// 텍스트 추가 (Y 좌표를 조금 더 위로 올림)
+this.altitudeText = this.add.text(720 + offsetX, altitudeLineY - 20, '출발', {
+  font: '15px Arial', // 텍스트 크기를 절반으로 줄임
+  fill: '#ffffff', // 텍스트 색상
+  align: 'right',
+});
+this.altitudeText.setOrigin(1, 0); // 우측 정렬
+*/
+
+this.earthText = this.add.text(720 + offsetX, earthLineY - 20, '대기권 진입', {
+  font: '15px Arial', // 텍스트 크기를 절반으로 줄임
+  fill: '#ffffff', // 텍스트 색상
+  align: 'right',
+});
+this.earthText.setOrigin(1, 0); // 우측 정렬
+
+// 그래픽 선 추가
+this.lineGraphics = this.add.graphics();
+this.lineGraphics.lineStyle(1, 0xffffff, 1); // 선 두께를 줄임
+
+// 세로선
+this.lineGraphics.beginPath();
+this.lineGraphics.moveTo(730 + offsetX, altitudeLineY); // "고도" 텍스트 아래 시작점
+this.lineGraphics.lineTo(730 + offsetX, earthLineY); // "지구" 텍스트 위 끝점
+this.lineGraphics.strokePath(); // 선 그리기
+
+// "고도" 텍스트 아래의 가로선 (기존 길이 유지)
+this.lineGraphics.beginPath();
+this.lineGraphics.moveTo(720 + offsetX - fullLineWidth / 2, altitudeLineY); // 왼쪽으로 절반 길이
+this.lineGraphics.lineTo(720 + offsetX + fullLineWidth / 2, altitudeLineY); // 오른쪽으로 절반 길이
+this.lineGraphics.strokePath();
+
+// "지구" 텍스트 위의 가로선 (기존 길이 유지)
+this.lineGraphics.beginPath();
+this.lineGraphics.moveTo(720 + offsetX - fullLineWidth / 2, earthLineY); // 왼쪽으로 절반 길이
+this.lineGraphics.lineTo(720 + offsetX + fullLineWidth / 2, earthLineY); // 오른쪽으로 절반 길이
+this.lineGraphics.strokePath();
+
+// 추가 가로선 (10개, 중앙 기준으로 길이 조정)
+const midIndex = Math.ceil(numHorizontalLines / 2); // 중앙 인덱스 계산
+for (let i = 1; i <= numHorizontalLines; i++) {
+  const y = altitudeLineY + i * lineSpacing; // 각 가로선의 Y 좌표 계산
+
+  // 길이 계산 (위에서 중앙까지 줄어드는 폭 증가, 중앙부터 아래로 길어짐)
+  const isUpperHalf = i <= midIndex; // 현재 선이 상반부인지 확인
+  const progress = isUpperHalf
+    ? i / midIndex // 상반부: 진행률
+    : (i - midIndex) / (numHorizontalLines - midIndex); // 하반부: 진행률
+  const lineWidth = isUpperHalf
+    ? maxLineWidth - (maxLineWidth - minLineWidth) * Math.pow(progress, 1.5) // 줄어드는 폭 증가
+    : minLineWidth + (maxLineWidth - minLineWidth) * Math.pow(progress, 1.5); // 길어지는 폭 증가
+
+  // 중앙 정렬 유지하며 가로선 그리기
+  this.lineGraphics.beginPath();
+  this.lineGraphics.moveTo(730 + offsetX - lineWidth / 2, y); // 왼쪽으로 절반 길이
+  this.lineGraphics.lineTo(730 + offsetX + lineWidth / 2, y); // 오른쪽으로 절반 길이
+  this.lineGraphics.strokePath();
+}
+
+
+
+
+      
+    
+
 
     // 블랙 스크린 추가 (배경 위에)
     this.blackScreen = this.add
+      
       .rectangle(400, 300, 800, 600, 0x000000)
       .setOrigin(0.5, 0.5);
     this.blackScreen.setAlpha(1); // 처음에는 완전 불투명
@@ -220,7 +321,9 @@ const Dodge = () => {
       }
     );
   };
+ 
 
+  
   const createBullet = function () {
     const sides = ['top', 'left', 'right', 'bottom'];
     const choices = [1, 1, 1, 1, 1, 2];
@@ -282,6 +385,17 @@ const Dodge = () => {
         },
         loop: true,
       });
+      if (this.movingRectangle) {
+        this.time.addEvent({
+          delay: 1000, // 0.05초마다 이동
+          callback: () => {
+            if (bullet.active) {
+              this.movingRectangle.y += 0.2; // Y 좌표를 증가시킴
+            }
+          },
+          loop: true,
+        });
+      }
     }
   };
 
@@ -475,21 +589,29 @@ const Dodge = () => {
   };
 
   const update = function () {
+    // 배경 이동
     this.background1.y += 5;
     this.background2.y += 5;
-
+    
     if (this.background1.y > 600) {
       this.background1.y = this.background2.y - 600;
     }
     if (this.background2.y > 600) {
       this.background2.y = this.background1.y - 600;
     }
+  
+    // React 상태에 따라 사각형 Y 좌표 업데이트
+   
+  
+    if (timeLeft <= 0) {
+      endGame.call(this); // timeLeft가 0이 되면 게임 종료
+    }
   };
-
+  
   const startGame = function () {
     this.backgroundMusic.play();
     setGameStarted(true);
-
+  
     // 총알 생성 이벤트
     this.time.addEvent({
       delay: 600, // 총알 생성 주기
@@ -497,22 +619,30 @@ const Dodge = () => {
       callbackScope: this,
       loop: true,
     });
-
+  
+    // 타이머 이벤트
     const event = this.time.addEvent({
-      delay: 1000,
+      delay: 1000, // 1초마다
       callback: () => {
+        // Phaser의 타이머를 통해 React 상태값 업데이트
         setTimeLeft((prevTime) => {
-          if (prevTime <= 1) {
-            endGame.call(this);
-            return 0;
+          const newTime = prevTime <= 1 ? 0 : prevTime - 1;
+          
+          // React 상태값에 맞게 Y좌표 업데이트
+          setRectangleY(newTime * 5);
+  
+          if (newTime === 0) {
+            endGame.call(this); // 시간 다 되면 게임 종료
           }
-          return prevTime - 1;
+  
+          return newTime;
         });
       },
       loop: true,
     });
-    setTimerEvent(event);
+    setTimerEvent(event); // 타이머 이벤트를 React 상태에 저장
   };
+  
 
   return (
     <div
@@ -533,29 +663,6 @@ const Dodge = () => {
           position: 'relative',
         }}
       >
-        {/* 타이머 정보 */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%', // 화면 가로 중앙
-            transform: 'translateX(-50%)', // 가로 중앙 정렬
-            width: '35%',
-            fontSize: '40px',
-            color: 'white',
-            zIndex: 10,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            borderRadius: '5px',
-            textAlign: 'center',
-          }}
-        >
-          {(timeLeft == 0 || (food == 0 && water == 0)) <= 0 ? (
-            <div>{timeLeft}</div>
-          ) : (
-            <div>떨어진다...!</div>
-          )}
-          <br />
-        </div>
-
         {/* 물/음식 정보 */}
         <div
           style={{
@@ -573,12 +680,12 @@ const Dodge = () => {
           }}
         >
           <img
-            src="/UI/water.png"
+            src="/water.png"
             style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
           />
           : {`${water}   `}
           <img
-            src="/UI/food.png"
+            src="/food.png"
             style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
           />
           : {food}
@@ -586,6 +693,6 @@ const Dodge = () => {
       </div>
     </div>
   );
-};
+};  
 
 export default Dodge;
