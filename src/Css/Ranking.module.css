@@ -38,6 +38,7 @@
   border-radius: 8px;
   overflow: hidden;
   color: #cfd8dc;
+  height: 60vh;
   /* 부드러운 밝은 회색 */
 }
 
@@ -90,7 +91,6 @@
     box-shadow: 0 0 5px #d4af37;
   }
 }
-
 
 .modalContainer::-webkit-scrollbar {
   display: none;
