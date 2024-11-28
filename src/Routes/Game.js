@@ -199,7 +199,10 @@ function Game() {
 			setProb(response.data.probability);
 			if (response.data.alive == false) {
 				navigate('/endstory', {
-					state: { causeOfDeath: response.data.causeOfDeath },
+					state: {
+						causeOfDeath: response.data.causeOfDeath,
+						imgUrl: '/eatFoodDie.png',
+					},
 				});
 			}
 		});
