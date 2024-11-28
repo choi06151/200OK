@@ -46,16 +46,14 @@ function Game() {
   const [alive, setAlive] = useState(true);
   const [causeOfDeath, setCauseOfDeath] = useState();
   const [monologue, setMonologue] = useState();
+  const [tag, setTag] = useState('peaceful');
+  const [mainMusic, setMainMusic] = useState(true);
 
   let [statModal, setStatModal] = useState(false);
   const [statFadingOut, setStatFadingOut] = useState(false);
   const [modal, setModal] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [text, setText] = useState(['Loading...']);
-
-  const [isHovered, setIsHovered] = useState(false); // 마우스 호버 상태
-
-  //자동 스크롤 훅
 
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -120,9 +118,10 @@ function Game() {
       setWater(response.data.water);
       setFood(response.data.food);
     });
-    // await getMonologue(storedUserId).then((response) => {
-    //   setMonologue(response.data.monologue);
-    // });
+    await getMonologue(storedUserId).then((response) => {
+      setMonologue(response.data.monologue);
+      setTag(response.data.tag);
+    });
   }
 
   const modalOff = () => {
@@ -162,11 +161,13 @@ function Game() {
   }
   useEffect(() => {
     setModal(true);
+    setMainMusic(false);
 
     fetchOrCreateUser().then(() => {
       setTimeout(async () => {
         setFadingOut(true);
         modalOff();
+        setMainMusic(true);
       }, 1000);
     });
   }, []);
@@ -204,28 +205,29 @@ function Game() {
 
     let userId = sessionStorage.getItem('userId');
 
-    //navigate('/endstory');
     setModal(true); // 모달 열기
+    setMainMusic(false);
     setFadingOut(false);
 
     (async () => {
       try {
-        // await getNextStory(userId, obj).then((response) => {
-        //   if (response.data.user.alive == false) {
-        //     setAlive(false);
-        //     setCauseOfDeath(response.data.causeOfDeath);
-        //   }
-        //   setDamage(response.data.damage);
-        //   setDifWater(response.data.difWater);
-        //   setDifFood(response.data.difFood);
-        //   setDifHp(response.data.difHp);
-        // });
-        // await fetchOrCreateUser();
+        await getNextStory(userId, obj).then((response) => {
+          if (response.data.user.alive == false) {
+            setAlive(false);
+            setCauseOfDeath(response.data.causeOfDeath);
+          }
+          setDamage(response.data.damage);
+          setDifWater(response.data.difWater);
+          setDifFood(response.data.difFood);
+          setDifHp(response.data.difHp);
+        });
+        await fetchOrCreateUser();
       } catch (error) {
       } finally {
         setTimeout(async () => {
           setModal(false);
           setStatModal(true); // 2번 모달 켜기
+          setMainMusic(true);
         }, 1000);
       }
     })();
@@ -295,11 +297,7 @@ function Game() {
         >
           <div style={{ width: '70%' }}>
             <div className={styles.textdiv}>
-              <div
-                className={styles.innertext}
-                onMouseEnter={() => setIsHovered(true)} // 마우스 호버 시 스크롤 멈춤
-                onMouseLeave={() => setIsHovered(false)} // 마우스 나가면 자동 스크롤 재개
-              >{`${content}`}</div>
+              <div className={styles.innertext}>{`${content}`}</div>
             </div>
             <div className={styles.userdiv}>
               <div className={styles.statusDiv}>
@@ -453,7 +451,8 @@ function Game() {
         </div>
         <BackgroundMusicController
           mute={mute}
-          modal={modal}
+          mainMusic={mainMusic}
+          tag={tag}
         ></BackgroundMusicController>
         {/* Tooltip */}
         <Tooltip
