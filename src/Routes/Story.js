@@ -29,8 +29,8 @@ function Story() {
     '12.png',
     '13.png',
   ];
-
   const [currentIndex, setCurrentIndex] = useState(0);
+
 
   // 현재 이미지 인덱스
 
