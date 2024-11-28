@@ -27,8 +27,8 @@
 
 /* Image styles */
 .image {
-  max-width: 100%;
-  max-height: 80vh;
+  max-width: 140;
+  max-height: 100vh;
   object-fit: contain;
   position: absolute;
   transition: opacity 0.3s ease-in-out;
@@ -215,8 +215,8 @@
 
 .zoomIn {
 	transform-origin: center 60%; /* 중심을 아래로 이동 (중앙에서 아래 60%) */
-  transform: scale(6); /* 확대 비율 */
-	transition: transform 6s ease-in-out; /* 부드러운 확대 효과 */
+  transform: scale(3); /* 확대 비율 */
+	transition: transform 3s ease-in-out; /* 부드러운 확대 효과 */
   z-index: 1;
  
 }
@@ -225,8 +225,8 @@
 
 .inputForm {
 	position: absolute; /* 이미지 위에 겹치도록 설정 */
-	top: 75.5%; /* 이미지 중앙에 배치 */
-	left: 49%;
+	top: 87.5%; /* 이미지 중앙에 배치 */
+	left: 53%;
 	transform: translate(-50%, -50%); /* 정확히 중앙 정렬 */
 	background: none; /* 반투명 배경 제거 */
 	padding: 0; /* 내부 여백 제거 */
