@@ -50,6 +50,8 @@
 
 /* 이미지 스타일 */
 .image {
+  width: 40%;
+  height: 40%;
   max-width: 50%; /* 이미지 크기 조정 */
   margin-bottom: 20px;
   object-fit: contain;

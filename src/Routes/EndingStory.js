@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../Css/EndingStory.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 import { getUser } from '../service/service';
 import { useSelector } from 'react-redux';
 
@@ -13,6 +13,8 @@ export default function EndingStory() {
 
   const [day, setDay] = useState();
   const { water, food } = useSelector((state) => state.status);
+  const [url, setUrl] = useState();
+  const { state } = useLocation();
 
   useEffect(() => {
     const id = sessionStorage.getItem('userId');
@@ -21,10 +23,17 @@ export default function EndingStory() {
     });
   }, []);
 
+  useEffect(() => {
+    if (state) {
+      console.log(state);
+      setUrl(state.imageUrl);
+    }
+  }, [state]);
+
   const textLines = [
     '당신은 열심히 발버둥쳐보았지만 결국 사망에 이르렀습니다..',
-    `사망사유 : 추가예정`,
-    `당신은 n일동안 생존하였으며,`,
+    `사망사유 : ${state.causeOfDeath}`,
+    `당신은 ${day}일동안 생존하였으며,`,
     `그동안 ${water}병의 물을마시고 ${food}개의 음식을 먹었습니다.`,
     `Game Over.`,
   ]; // 텍스트 줄
@@ -44,6 +53,7 @@ export default function EndingStory() {
 
   // 마지막 텍스트까지 다 보았을 때 타이머 시작
   useEffect(() => {
+    setShowHint(false);
     // 마지막 텍스트까지 도달하면 3초 후에 힌트 표시
     const timeout = setTimeout(() => {
       setShowHint(true); // 3초 뒤 힌트 표시
@@ -71,7 +81,7 @@ export default function EndingStory() {
     <div className={`${styles.container} ${fadeClass}`} onClick={handleClick}>
       {/* 중앙 이미지 */}
       <img
-        src="/path/to/your/image.png"
+        src={state.imageUrl}
         alt="Ending Illustration"
         className={styles.image}
       />
@@ -86,7 +96,7 @@ export default function EndingStory() {
       </div>
 
       {/* 힌트 메시지 */}
-      <div className={styles.hint}>클릭하여 계속...</div>
+      {showHint ? <div className={styles.hint}>클릭하여 계속...</div> : ''}
     </div>
   );
 }

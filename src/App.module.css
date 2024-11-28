@@ -1,31 +1,34 @@
 @font-face {
   font-family: 'SeoulHangangM';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff') format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KBIZHanmaumMyungjo';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KBIZHanmaumMyungjo.woff') format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KBIZHanmaumMyungjo.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Jeonju_gakR';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/Jeonju_gakR.woff') format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/Jeonju_gakR.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Gyeonggi_Title_Medium';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-3@1.0/Title_Medium.woff') format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-3@1.0/Title_Medium.woff')
+    format('woff');
   font-weight: 500;
   font-style: normal;
 }
-
 
 body {
   background-image: url('/public/jungle.jpg');
@@ -37,6 +40,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
+  cursor: url('/public/UI/cursor.png'), auto;
 }
 
 .shadow {

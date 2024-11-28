@@ -1,72 +1,47 @@
 .tooltip {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.75);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  white-space: normal;
-  /* 줄바꿈 허용 */
-  word-wrap: break-word;
-  /* 긴 단어도 줄바꿈 */
-  max-width: 200px;
-  height: 5vh;
-  /* 최대 너비 제한 */
-  z-index: 1000;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  transform: translate(-50%, -100%);
-  overflow: hidden;
-  /* 스크롤 제거 */
+  position: absolute; /* 툴팁을 자유롭게 위치 */
+  background-color: rgba(0, 0, 0, 0.8); /* 어두운 배경색 */
+  color: white; /* 텍스트 색상 */
+  border-radius: 8px; /* 모서리를 둥글게 */
+  padding: 10px 6px; /* 충분한 여백 추가 */
+  font-size: 14px; /* 텍스트 크기 */
+  line-height: 1.5; /* 텍스트 줄 간격 */
+  max-width: 300px; /* 툴팁 최대 너비 제한 */
+  min-height: 8vh;
+  max-height: 10vh;
+  word-wrap: break-word; /* 긴 단어를 줄바꿈 처리 */
+  white-space: normal; /* 텍스트 줄바꿈 허용 */
+  display: inline-block; /* 텍스트 크기에 따라 높이와 너비가 조정되도록 설정 */
+  opacity: 0; /* 기본적으로 숨김 */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  pointer-events: none; /* 마우스 이벤트 방지 */
 }
-
 
 .tooltipVisible {
   visibility: visible;
-  opacity: 1;
+  opacity: 1; /* 툴팁을 보이게 설정 */
 }
 
-/* 여러 줄 텍스트 처리 */
-.tooltipMultiline {
-  white-space: normal;
-  /* 줄바꿈 허용 */
-  word-wrap: break-word;
-  /* 단어가 넘칠 경우 줄바꿈 */
-  max-width: 200px;
-  /* 최대 너비 */
-  overflow: hidden;
-  /* 넘친 텍스트 숨기기 */
-  text-overflow: ellipsis;
-  /* 스크롤 제거 후 말줄임표 */
-}
-
-
-/* Tooltip 위치 */
 .top {
   transform: translate(-50%, -100%);
-  /* 위쪽으로 이동 */
   bottom: 100%;
   left: 50%;
 }
 
 .bottom {
   transform: translate(-50%, 0);
-  /* 아래쪽으로 이동 */
   top: 100%;
   left: 50%;
 }
 
 .left {
   transform: translate(-100%, -50%);
-  /* 왼쪽으로 이동 */
   right: 100%;
   top: 50%;
 }
 
 .right {
   transform: translate(0, -50%);
-  /* 오른쪽으로 이동 */
   left: 100%;
   top: 50%;
 }

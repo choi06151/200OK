@@ -1,83 +1,97 @@
-/* 배경 */
-.modalBackground {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
 /* 모달 컨테이너 */
 .modalContainer {
-  background-color: #222;
+  background: linear-gradient(135deg, #102a1c, #1b3b2d);
+  /* 어두운 초록 그라데이션 */
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  /* 더 어두운 그림자 */
   width: 90%;
-  max-width: 400px;
-  color: white;
+  max-width: 500px;
+  color: #d7ccc8;
+  /* 연한 베이지 텍스트 */
   text-align: center;
-  transform: translateY(100%);
-  /* 초기 위치 (화면 아래) */
-  transition: transform 0.3s ease-in-out;
+  margin: 0 auto;
+  border: 2px solid #4e342e;
+  /* 카키색 테두리 */
+  font-family: 'Press Start 2P', sans-serif;
+  /* 픽셀 폰트 */
 }
 
-/* 아래에서 위로 등장 */
-.slideUp {
-  transform: translateY(0);
-  /* 화면 중앙 */
-}
-
-/* 위에서 아래로 사라짐 */
-.slideDown {
-  transform: translateY(100%);
-  /* 화면 아래 */
+/* 제목 스타일 */
+.modalContainer h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #d4af37;
+  /* 골드 */
+  text-shadow: 0 2px 5px rgba(212, 175, 55, 0.6);
+  /* 금빛 부드러운 그림자 */
 }
 
 /* 테이블 스타일 */
 .rankingTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 15px;
+  background-color: rgba(18, 18, 18, 0.9);
+  /* 어두운 배경 */
+  border-radius: 8px;
+  overflow: hidden;
+  color: #cfd8dc;
+  /* 부드러운 밝은 회색 */
 }
 
 .rankingTable th,
 .rankingTable td {
   padding: 12px;
-  border: 1px solid #444;
-  text-align: left;
+  border: 1px solid #3e2723;
+  /* 어두운 갈색 테두리 */
+  text-align: center;
+  font-size: 1rem;
 }
 
 .rankingTable th {
-  background-color: #333;
+  background: linear-gradient(45deg, #1b3b2d, #2e4f3d);
+  /* 어두운 초록 그라데이션 */
+  color: #d4af37;
+  /* 골드 포인트 */
+  text-transform: uppercase;
+  font-size: 1.1rem;
 }
 
 .rankingTable tr:nth-child(even) {
-  background-color: #2a2a2a;
+  background-color: rgba(63, 81, 66, 0.1);
+  /* 어두운 초록빛 줄무늬 */
 }
 
 .rankingTable tr:nth-child(odd) {
-  background-color: #1e1e1e;
+  background-color: rgba(51, 45, 38, 0.1);
+  /* 어두운 갈색 줄무늬 */
 }
 
-/* 닫기 버튼 */
-.closeBtn {
-  background: none;
-  border: 1px solid #555;
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-top: 15px;
-  font-size: 14px;
+/* 강조된 행 */
+.highlightRow {
+  border: 2px solid #d4af37;
+  /* 골드 테두리 */
+  animation: pulse 1.5s infinite;
 }
 
-.closeBtn:hover {
-  background-color: #444;
+/* 하이라이트 애니메이션 */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px #d4af37;
+  }
+
+  50% {
+    box-shadow: 0 0 15px #d4af37;
+  }
+
+  100% {
+    box-shadow: 0 0 5px #d4af37;
+  }
 }
 
+
+.modalContainer::-webkit-scrollbar {
+  display: none;
+}
