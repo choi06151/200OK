@@ -17,12 +17,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 100%;
+  height: 80vh;
 }
 
 .tutorialImage {
-  width: 100%;
-  max-width: 800px;
+  width: 85%;
   /* 이미지 크기 제한 */
   height: auto;
   opacity: 0;

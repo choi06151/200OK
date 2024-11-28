@@ -36,9 +36,21 @@
   /* 클릭할 때 살짝 줄어드는 효과 */
 }
 
-
 .logo {
   width: 45%;
   height: 40vh;
   margin-top: 10%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 1s ease-in-out;
 }
