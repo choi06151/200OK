@@ -53,6 +53,7 @@ const Dodge = () => {
     this.load.image('bullet', 'trash.png');
     this.load.image('background', 'galaxy.png');
     this.load.image('World', 'World.jpeg');
+    this.load.image('rocket', 'explosion.png');
     this.load.image('box', 'box.png');
     this.load.image('waterI', 'water.png');
     this.load.image('foodI', 'food.png');
@@ -107,16 +108,22 @@ const fullLineWidth = 40; // "고도"와 "지구" 가로선 길이
 const minLineWidth = 5; // 가장 짧은 가로선 길이 (줄어드는 폭 증가)
 const maxLineWidth = fullLineWidth / 2; // 가장 긴 가로선 길이
 
+this.rocketImage = this.add
+.image(700+50 + offsetX, altitudeLineY , 'rocket') // 'rocket' 이미지를 로드한 키 사용
+.setOrigin(1, 0.5) // 우측 정렬
+.setScale(0.02); // 크기 조정
+/*
 // 텍스트 추가 (Y 좌표를 조금 더 위로 올림)
 this.altitudeText = this.add.text(720 + offsetX, altitudeLineY - 20, '출발', {
-  font: '10px Arial', // 텍스트 크기를 절반으로 줄임
+  font: '15px Arial', // 텍스트 크기를 절반으로 줄임
   fill: '#ffffff', // 텍스트 색상
   align: 'right',
 });
 this.altitudeText.setOrigin(1, 0); // 우측 정렬
+*/
 
 this.earthText = this.add.text(720 + offsetX, earthLineY - 20, '대기권 진입', {
-  font: '10px Arial', // 텍스트 크기를 절반으로 줄임
+  font: '15px Arial', // 텍스트 크기를 절반으로 줄임
   fill: '#ffffff', // 텍스트 색상
   align: 'right',
 });
@@ -673,12 +680,12 @@ for (let i = 1; i <= numHorizontalLines; i++) {
           }}
         >
           <img
-            src="/UI/water.png"
+            src="/water.png"
             style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
           />
           : {`${water}   `}
           <img
-            src="/UI/food.png"
+            src="/food.png"
             style={{ width: '40px', height: '40px', verticalAlign: 'middle' }}
           />
           : {food}
