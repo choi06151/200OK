@@ -166,34 +166,54 @@
   /* 이미지 반복 방지 */
   margin-top: -7%;
 }
-
 .choiceContainer {
-  box-sizing: border-box;
+  margin-top: -2%;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 50%;
-  height: 60vh;
-  /* 양쪽 padding 추가 */
+  width: 45%;
+  height: 70vh; /* 전체 컨테이너 높이 설정 */
   border-radius: 8px;
 }
 
 .choicetxt {
-  margin-right: 25%;
+  max-height: 60%; /* 고정된 최대 높이 설정 */
+  word-break: break-word; /* 텍스트 줄 바꿈 설정 */
+  margin-top: 7%; /* 위쪽 여백 */
+  margin-right: 22%; /* 오른쪽 여백 */
+  padding-top: 2%;
+  overflow-y: auto; /* 세로 스크롤 처리 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+.choicetxt::-webkit-scrollbar {
+  width: 5px; /* 스크롤바 두께 */
+}
+
+.choicetxt::-webkit-scrollbar-thumb {
+  background: bisque; /* 스크롤바 색상 */
+  border-radius: 10px; /* 스크롤바 모서리 둥글게 */
+}
+
+.choicetxt::-webkit-scrollbar-thumb:hover {
+  background: rgba(211, 156, 16, 0.8); /* 마우스를 올렸을 때 색상 */
+}
+
+.choicetxt::-webkit-scrollbar-track {
+  background: rgba(200, 200, 255, 0.2); /* 스크롤 트랙 색상 */
 }
 
 .choice {
-  width: 70%;
+  width: 85%;
   height: 15vh;
   background-image: url('/public/UI/choice.png');
-  background-size: contain;
+  background-size: 100% auto;
   background-repeat: no-repeat;
   display: flex;
   /* Flexbox 사용 */
   align-items: center;
   /* 수직 중앙 정렬 */
   padding-left: 15%;
-  margin-top: 10%;
+  margin-top: 5%;
   /* 텍스트와 버튼 간 거리 확보 */
   border-radius: 5px;
   margin: 0 auto;
@@ -202,7 +222,7 @@
   transition: background-color 0.3s ease;
   position: relative;
   margin-left: -5%;
-  margin-top: -5%;
+  margin-top: -3%;
 }
 
 .choice input[type='radio'] {
@@ -211,6 +231,7 @@
   height: 20px;
   border-radius: 50%;
   background-color: #333;
+  margin-top: 7%;
   margin-right: 10px;
   /* 버튼과 텍스트 사이 간격 */
   cursor: pointer;
@@ -326,6 +347,7 @@
   /* 배경 위에 보이도록 설정 */
   align-items: center;
   text-align: center;
+  margin-top: -2%;
 }
 
 .nextdiv {
@@ -334,7 +356,8 @@
   background-repeat: no-repeat;
   width: 50%;
   height: 14vh;
-  margin-left: 10%;
+  margin-left: 20%;
+  margin-bottom: 25%;
   cursor: pointer;
   transition: transform 0.2s ease, translateY 0.2s ease;
   align-content: center;

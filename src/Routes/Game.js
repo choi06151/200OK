@@ -28,9 +28,6 @@ function Game() {
   const dispatch = useDispatch();
 
   let { name } = useSelector((state) => state.status);
-  let check = useSelector((state) => state.status);
-  let globwater = useSelector((state) => state.status.water);
-  let globfood = useSelector((state) => state.status.food);
 
   let [content, setContent] = useState('상황');
   let [choice, setChoice] = useState(1);
@@ -48,6 +45,7 @@ function Game() {
   const [difHp, setDifHp] = useState(0);
   const [alive, setAlive] = useState(true);
   const [causeOfDeath, setCauseOfDeath] = useState();
+  const [monologue, setMonologue] = useState();
 
   let [statModal, setStatModal] = useState(false);
   const [statFadingOut, setStatFadingOut] = useState(false);
@@ -55,37 +53,9 @@ function Game() {
   const [fadingOut, setFadingOut] = useState(false);
   const [text, setText] = useState(['Loading...']);
 
-  const textRef = useRef(null); // 스크롤을 제어할 요소 참조
   const [isHovered, setIsHovered] = useState(false); // 마우스 호버 상태
-  const [scrollDirection, setScrollDirection] = useState('down'); // 스크롤 방향
 
   //자동 스크롤 훅
-  useEffect(() => {
-    let interval;
-
-    // 자동 스크롤 로직
-    if (!isHovered) {
-      interval = setInterval(() => {
-        if (textRef.current) {
-          const element = textRef.current;
-
-          element.scrollTop += 1;
-
-          // 끝까지 스크롤되면 방향 전환
-          if (
-            element.scrollTop + element.clientHeight >=
-            element.scrollHeight
-          ) {
-            setTimeout(() => {
-              element.scrollTop = 0;
-            }, 1000);
-          }
-        }
-      }, 50); // 30ms 간격으로 스크롤
-    }
-
-    return () => clearInterval(interval); // 컴포넌트가 언마운트되거나 호버 상태가 바뀔 때 정리
-  }, [isHovered, scrollDirection]);
 
   const [tooltip, setTooltip] = useState({
     visible: false,
@@ -95,8 +65,6 @@ function Game() {
 
   const handleMouseEnter = (message, event) => {
     const rect = event.target.getBoundingClientRect();
-    const tooltipWidth = 300; // 툴팁의 예상 너비 (CSS에 맞게 설정)
-    const tooltipHeight = 30; // 툴팁의 예상 높이 (CSS에 맞게 설정)
 
     setTooltip({
       visible: true,
@@ -107,10 +75,6 @@ function Game() {
       },
     });
   };
-
-  useEffect(() => {
-    console.log(alive);
-  }, []);
 
   const handleMouseLeave = () => {
     setTooltip({ ...tooltip, visible: false });
@@ -156,6 +120,9 @@ function Game() {
       setWater(response.data.water);
       setFood(response.data.food);
     });
+    // await getMonologue(storedUserId).then((response) => {
+    //   setMonologue(response.data.monologue);
+    // });
   }
 
   const modalOff = () => {
@@ -172,6 +139,14 @@ function Game() {
     }, 1000); // 1초 후 모달 완전히 닫기
   };
 
+  useEffect(() => {
+    if (!modal) {
+      if (monologue) {
+        setText(monologue);
+      }
+    }
+  }, [modal]);
+
   async function initUser() {
     let user = {
       name,
@@ -185,11 +160,12 @@ function Game() {
     const response = await createUser(user);
     return response.data.id;
   }
-
   useEffect(() => {
     setModal(true);
+
     fetchOrCreateUser().then(() => {
-      setTimeout(() => {
+      setTimeout(async () => {
+        setFadingOut(true);
         modalOff();
       }, 1000);
     });
@@ -221,6 +197,7 @@ function Game() {
 
   // 버튼 클릭 시 효과음 재생 및 페이지 이동
   const handleButtonClick = async () => {
+    console.log(text);
     let obj = {
       choice: choices[choice],
     };
@@ -229,24 +206,23 @@ function Game() {
 
     //navigate('/endstory');
     setModal(true); // 모달 열기
+    setFadingOut(false);
 
     (async () => {
       try {
-        await getNextStory(userId, obj).then((response) => {
-          if (response.data.user.alive == false) {
-            setAlive(false);
-            setCauseOfDeath(response.data.causeOfDeath);
-          }
-          setDamage(response.data.damage);
-          setDifWater(response.data.difWater);
-          setDifFood(response.data.difFood);
-          setDifHp(response.data.difHp);
-        });
-        await fetchOrCreateUser();
+        // await getNextStory(userId, obj).then((response) => {
+        //   if (response.data.user.alive == false) {
+        //     setAlive(false);
+        //     setCauseOfDeath(response.data.causeOfDeath);
+        //   }
+        //   setDamage(response.data.damage);
+        //   setDifWater(response.data.difWater);
+        //   setDifFood(response.data.difFood);
+        //   setDifHp(response.data.difHp);
+        // });
+        // await fetchOrCreateUser();
       } catch (error) {
       } finally {
-        const monologue = await getMonologue(userId);
-        setText(monologue.data.monologue);
         setTimeout(async () => {
           setModal(false);
           setStatModal(true); // 2번 모달 켜기
@@ -321,7 +297,6 @@ function Game() {
             <div className={styles.textdiv}>
               <div
                 className={styles.innertext}
-                ref={textRef}
                 onMouseEnter={() => setIsHovered(true)} // 마우스 호버 시 스크롤 멈춤
                 onMouseLeave={() => setIsHovered(false)} // 마우스 나가면 자동 스크롤 재개
               >{`${content}`}</div>

@@ -16,9 +16,9 @@ function Story() {
   const images = [
     '1.png',
     '2.png',
-    '5.png',
     '3.png',
     '4.png',
+    '5.png',
     'contract.png',
     '6.png',
     '7.png',
@@ -31,7 +31,6 @@ function Story() {
   ];
   const [currentIndex, setCurrentIndex] = useState(0);
 
-
   // 현재 이미지 인덱스
 
   // 클릭 이벤트 처리 함수
@@ -41,6 +40,9 @@ function Story() {
     const leftBound = screenWidth * 0.3; // 좌측 클릭 상한 (30%)
     const rightBound = screenWidth * 0.7; // 우측 클릭 하한 (70%)
     if (shakeState || zoomInState) {
+      return;
+    }
+    if (currentIndex == 4) {
       return;
     }
 
@@ -69,7 +71,6 @@ function Story() {
         if (currentIndex === 4) {
           // 이름 저장 로직 추가
           dispatch(setName(inputValue)); // Redux 상태에 이름 저장
-          alert(`이름이 저장되었습니다: ${inputValue}`);
         }
         if (currentIndex === 3) {
           // 흔들림 시작
