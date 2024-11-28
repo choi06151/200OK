@@ -22,6 +22,7 @@ const BackgroundMusicController = ({ mainMusic, mute, tag }) => {
   }, [mute]);
 
   useEffect(() => {
+    console.log(mainMusic, tag);
     // mainMusic과 tag 상태를 기반으로 재생할 음원을 결정
     const nextMusic = mainMusic
       ? `${basePath}gameost.mp3` // mainMusic이 true일 때 메인 OST 재생
@@ -35,7 +36,7 @@ const BackgroundMusicController = ({ mainMusic, mute, tag }) => {
         audioRef.current.load(); // 새 음원 로드
       }
     }
-  }, [mainMusic, tag, nowPlaying]); // mainMusic, tag, nowPlaying 상태를 의존성으로 추가
+  }, [mainMusic]); // mainMusic, tag, nowPlaying 상태를 의존성으로 추가
 
   const handleLoadedData = () => {
     // load 완료 후 play 호출

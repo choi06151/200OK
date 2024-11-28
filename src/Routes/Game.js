@@ -30,7 +30,7 @@ function Game() {
   let { name } = useSelector((state) => state.status);
 
   let [content, setContent] = useState('상황');
-  let [choice, setChoice] = useState(1);
+  let [choice, setChoice] = useState(0);
   let [choices, setChoices] = useState(['선택지', '선택지', '선택지']);
   let [imageUrl, setImageUrl] = useState();
   let [water, setWater] = useState();
@@ -120,7 +120,6 @@ function Game() {
     });
     await getMonologue(storedUserId).then((response) => {
       setMonologue(response.data.monologue);
-      setTag(response.data.tag);
     });
   }
 
