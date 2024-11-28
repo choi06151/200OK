@@ -24,8 +24,12 @@ export default function EndingStory() {
 	}, []);
 
 	useEffect(() => {
+		console.log(url);
+	}, [url]);
+
+	useEffect(() => {
 		if (state) {
-			setUrl(state.imageUrl);
+			setUrl(state.imgUrl);
 		}
 	}, [state]);
 
@@ -72,11 +76,7 @@ export default function EndingStory() {
 	return (
 		<div className={`${styles.container} ${fadeClass}`} onClick={handleClick}>
 			{/* 중앙 이미지 */}
-			<img
-				src={state.imageUrl}
-				alt="Ending Illustration"
-				className={styles.image}
-			/>
+			<img src={url} alt="Ending Illustration" className={styles.image} />
 
 			{/* 텍스트 영역 */}
 			<div className={styles.textArea}>
