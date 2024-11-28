@@ -120,9 +120,9 @@ function Game() {
       setWater(response.data.water);
       setFood(response.data.food);
     });
-    // await getMonologue(storedUserId).then((response) => {
-    //   setMonologue(response.data.monologue);
-    // });
+    await getMonologue(storedUserId).then((response) => {
+      setMonologue(response.data.monologue);
+    });
   }
 
   const modalOff = () => {
@@ -210,17 +210,17 @@ function Game() {
 
     (async () => {
       try {
-        // await getNextStory(userId, obj).then((response) => {
-        //   if (response.data.user.alive == false) {
-        //     setAlive(false);
-        //     setCauseOfDeath(response.data.causeOfDeath);
-        //   }
-        //   setDamage(response.data.damage);
-        //   setDifWater(response.data.difWater);
-        //   setDifFood(response.data.difFood);
-        //   setDifHp(response.data.difHp);
-        // });
-        // await fetchOrCreateUser();
+        await getNextStory(userId, obj).then((response) => {
+          if (response.data.user.alive == false) {
+            setAlive(false);
+            setCauseOfDeath(response.data.causeOfDeath);
+          }
+          setDamage(response.data.damage);
+          setDifWater(response.data.difWater);
+          setDifFood(response.data.difFood);
+          setDifHp(response.data.difHp);
+        });
+        await fetchOrCreateUser();
       } catch (error) {
       } finally {
         setTimeout(async () => {
