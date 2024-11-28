@@ -8,6 +8,7 @@ import Wait from './Routes/Wait';
 import Ending from './Routes/Ending';
 import styles from './App.module.css';
 import DodgeTutorial from './Routes/DodgeTutorial';
+import MainGameTutorial from './Routes/MainGameTutorial';
 import EndingStory from './Routes/EndingStory';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/end" element={<Ending />} />
           <Route path="/story" element={<Story />} />
           <Route path="/dodgetutorial" element={<DodgeTutorial />}></Route>
+          <Route path="/maingametutorial" element={<MainGameTutorial />}></Route>
         </Routes>
       </div>
     </div>

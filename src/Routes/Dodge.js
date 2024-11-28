@@ -434,7 +434,7 @@ const Dodge = () => {
 									onComplete: () => {
 										let waterprop = this.registry.get('water');
 										let foodprop = this.registry.get('food');
-										navigate('/game', {
+										navigate('/maingametutorial', {
 											state: { water: waterprop, food: foodprop },
 										}); // 종료 후 이동
 									},
