@@ -201,7 +201,7 @@ function Game() {
 				navigate('/endstory', {
 					state: {
 						causeOfDeath: response.data.causeOfDeath,
-						imgUrl: '/eatFoodDie.png',
+						imageUrl: '/eatFoodDie.png',
 					},
 				});
 			}
