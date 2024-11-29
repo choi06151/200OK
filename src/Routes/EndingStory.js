@@ -24,12 +24,8 @@ export default function EndingStory() {
 	}, []);
 
 	useEffect(() => {
-		console.log(url);
-	}, [url]);
-
-	useEffect(() => {
 		if (state) {
-			setUrl(state.imgUrl);
+			setUrl(state.imageUrl);
 		}
 	}, [state]);
 
